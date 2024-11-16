@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>Dashboard</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    <%- include('../partials/header') %>
+</head>
+
+<body>
+
+    <!-- ======= Header ======= -->
+    <%- include('../partials/navbar') %>
+        <!-- End Header -->
+
+        <!-- ======= Sidebar ======= -->
+        <%- include('../partials/sidebar') %>
+            <!-- End Sidebar-->
+
+            <main id="main" class="main">
+
+                <div class="pagetitle">
+                    <h1>Dashboard</h1>
+                    <nav>
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="/admin/dashboard">Home</a></li>
+                            <li class="breadcrumb-item">Tour</li>
+                        </ol>
+                    </nav>
+                </div>
+                <!-- End Page Title -->
+
+                <section class="section dashboard">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Tour</h5>
+                                    <form id="submitForm" class="row g-3" enctype="multipart/form-data">
+                                        <input type="hidden" id="updateID">
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <div class="col-12 mb-2">
+                                                    <label for="title" class="form-label">Title</label>
+                                                    <input type="text" name="title" class="form-control" id="title"
+                                                        required>
+                                                </div>
+                                                <div class="col-12 mb-2">
+                                                    <label for="slug" class="form-label">Slug</label>
+                                                    <input type="text" name="slug" class="form-control" id="slug"
+                                                        required>
+                                                </div>
+                                                <div class="col-12 mb-2">
+                                                    <label for="product_category_id" class="form-label">Category</label>
+                                                    <select id="product_category_id" class="form-select"
+                                                        name="product_category_id" aria-label="Default select example"
+                                                        required>
+                                                        <option selected disabled>Select Category</option>
+                                                        <% tour_categories?.forEach(category=> { %>
+                                                            <option value="<%= category._id %>">
+                                                                <%= category.category_name %>
+                                                            </option>
+                                                            <% }) %>
+                                                    </select>
+                                                </div>
+                                                <div class="col-12 mb-2">
+                                                    <label for="product_location_id" class="form-label">Location</label>
+                                                    <select id="product_location_id" class="form-select"
+                                                        name="product_location_id" aria-label="Default select example"
+                                                        required>
+                                                        <option selected disabled>Select Location</option>
+                                                        <% tour_locations?.forEach(location=> { %>
+                                                            <option value="<%= location._id %>">
+                                                                <%= location.location_name %>
+                                                            </option>
+                                                            <% }) %>
+                                                    </select>
+                                                </div>
+                                                <div class="col-12">
+                                                    <!-- featured -->
+                                                    <label for="featured_image" class="form-label">
+                                                        Featured Image</label>
+                                                    <input type="file" name="featured_image" class="form-control"
+                                                        id="tourFeatured_img">
+                                                    <img src="/assets/images/upload_area.png" id="featured_image"
+                                                        class="" alt=""
+                                                        style="width: 200px; height: 200px; object-fit: contain; margin: 10px 0;">
+
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div>
+                                                    <!-- images -->
+                                                    <label for="multipleImagesInput"
+                                                        class="form-label mt-2">Images</label>
+                                                    <input type="file" name="product_images" multiple
+                                                        class="form-control" id="multipleImagesInput">
+                                                    <div id="imagesAlert"
+                                                        class="alert alert-danger alert-dismissible fade show mt-2"
+                                                        role="alert" style="display: none;">
+                                                        Images should be less than 5!
+                                                        <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                                            aria-label="Close"></button>
+                                                    </div>
+                                                </div>
+                                                <div class="d-flex flex-column p-3">
+                                                    <img src="/assets/images/upload_area.png" id="preview_featured_img"
+                                                        style="height: 350px;" alt="upload_area_img" loading="lazy"
+                                                        class="img-fluid object-fit-contain">
+                                                    <div id="previewMultipleImage" class="d-flex flex-wrap gap-2"></div>
+                                                </div>
+                                                <%- include('../partials/alert') %>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                    <label for="deperature_date" class="col-form-label">Deperature
+                                                        Date</label>
+                                                    <input type="date" name="deperature_date" id="deperature_date"
+                                                        class="form-control" required>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <label for="return_date" class="col-form-label">Return
+                                                        Date</label>
+                                                    <input type="date" name="return_date" id="return_date"
+                                                        class="form-control" required>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <label for="status" class="col-form-label">Status</label>
+                                                    <select id="status" class="form-select" name="status"
+                                                        aria-label="Default select example" required>
+                                                        <option selected value="true">Active</option>
+                                                        <option value="false">Disabled</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <label for="price" class="col-form-label">Price Per
+                                                        Person</label>
+                                                    <input type="number" name="price" id="price" class="form-control"
+                                                        min="0" required>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                    <label for="total_Seats" class="col-form-label">Total Seats</label>
+                                                    <input type="number" name="total_Seats" id="total_Seats"
+                                                        class="form-control" min="0" required>
+                                                </div>
+                                            </div>
+                                            <div class="row mt-2 tourTags">
+                                                <div class="col-md-6 ">
+                                                    <label for="included" class="form-label">What's Included</label>
+                                                    <div class="d-flex gap-2">
+                                                        <input type="text" class="form-control" id="included">
+                                                        <button type="button"
+                                                            class="btn btn-primary createIncludedTag">ADD</button>
+                                                    </div>
+                                                    <div id="tourIncludedTags" class="d-flex flex-wrap gap-2 py-2">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label for="excluded" class="form-label">What's Excluded</label>
+                                                    <div class="d-flex gap-2">
+                                                        <input type="text" class="form-control" id="excluded">
+                                                        <button type="button"
+                                                            class="btn btn-primary createExcludedTag">ADD</button>
+                                                    </div>
+                                                    <div id="tourExcludedTags" class="d-flex flex-wrap gap-2 py-2">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 mt-3">
+                                                <div class="card">
+                                                    <div class="card-body pt-3">
+                                                        <h5 class="form-label">Description</h5>
+                                                        <div class="quill-editor-full">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 mt-3">
+                                                <div class="card">
+                                                    <div class="card-body pt-3">
+                                                        <h5 class="form-label">Travelling Plan</h5>
+                                                        <div class="quill-editor-default">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex gap-2 align-items-center justify-content-center">
+                                            <%- include('../partials/formLoader') %>
+                                                <button type="submit" class="btn btn-primary submitbtn">Submit</button>
+                                                <button type="reset" class="btn btn-secondary reset">Reset</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">All Tours</h5>
+                                    <!-- Table with stripped rows -->
+                                    <table class="table datatable">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">#</th>
+                                                <th scope="col">Tour</th>
+                                                <th scope="col">Title</th>
+                                                <th scope="col">Category</th>
+                                                <th scope="col">Location</th>
+                                                <th scope="col">Status</th>
+                                                <th scope="col">Created AT</th>
+                                                <th scope="col">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tour_table">
+                                            <%- include('../partials/loader') %>
+                                        </tbody>
+                                    </table>
+                                    <!-- End Table with stripped rows -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+            </main><!-- End #main -->
+
+            <!-- ======= Footer ======= -->
+            <%- include('../partials/footer') %>
+                <!-- End Footer -->
+
+                <a href="#" class="back-to-top d-flex align-items-center justify-content-center">
+                    <i class="bi bi-arrow-up-short"></i>
+                </a>
+                <%- include('../partials/script') %>
+                    <script>
+                        const EndURL = 'api/tour';
+                        const tourFeaturedImgINput = document.querySelector('#tourFeatured_img')
+                        const tourFeaturedImg = document.querySelector('#featured_image')
+                        tourFeaturedImgINput.onchange = (e) => {
+                            const file = e.target.files[0]
+                            const reader = new FileReader()
+                            reader.onload = () => tourFeaturedImg.src = reader.result;
+                            reader.readAsDataURL(file)
+                        }
+                    </script>
+                    <script async src="/assets/js/index.js" type="module"></script>
+</body>
+
+</html>
