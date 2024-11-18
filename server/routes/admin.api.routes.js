@@ -8,7 +8,8 @@ import { tour_location, tour_category, post_category, post, tour } from '../Midd
 
 const router = express.Router()
 
-router.post('/login', authenticateControllers.getAuthenticate)
+router.get('/login', (req, res) => res.render('login'))
+router.post('/authenticate', authenticateControllers.getAuthenticate)
 router.get('/dashboard', admincontrollers.getAdminDashboard)
 
 
