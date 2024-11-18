@@ -68,6 +68,4 @@ router.route('/api/tour/:id?')
         { name: 'featured_image', maxCount: 1 },
     ]), productControllers.updateTour)
     .delete(productControllers.deleteTour)
-
-
 export default router

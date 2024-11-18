@@ -207,9 +207,9 @@ const productControllers = {
             if (!req.body || !req.files['featured_image'] || !req.files['product_images']) {
                 return res.status(400).json({ error: 'All Fields Are Required' })
             }
-            const { title, slug, product_category_id, product_location_id, deperature_date,
-                return_date, status, price, total_Seats, description, travelling_plan,
-                product_excluded, product_included } = req.body;
+            const { title, slug, product_category_id, product_location_id,
+                deperature_date, return_date, status, price, total_Seats, description,
+                travelling_plan, product_excluded, product_included } = req.body;
             const data = await tourModel.create({
                 title, status, return_date, deperature_date,
                 featured_image: req.files['featured_image'][0].filename,
@@ -332,7 +332,6 @@ const productControllers = {
         } catch (error) {
             console.log('deleteTour : ' + error.message)
         }
-    }
-
+    },
 }
 export default productControllers
