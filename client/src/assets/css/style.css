@@ -25,6 +25,7 @@ body.fh5co-offcanvas {
 }
 
 a {
+  text-decoration: none;
   color: #F78536;
   -webkit-transition: 0.5s, ease;
   -o-transition: 0.5s, ease;
@@ -404,6 +405,7 @@ figure {
   margin-top: 15px;
 }
 #fh5co-menu-wrap .sf-menu a {
+  text-decoration: none;
   padding: 1em .75em;
 }
 

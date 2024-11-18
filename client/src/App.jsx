@@ -1,6 +1,6 @@
 import React from 'react'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import { Index } from './pages/pages'
+import { Index, Posts, Tour } from './pages/pages'
 import SiteLayout from './SiteLayout'
 
 const routes = [
@@ -11,6 +11,14 @@ const routes = [
       {
         path: '/',
         element: <Index />
+      },
+      {
+        path: '/posts',
+        element: <Posts />
+      },
+      {
+        path: '/tours',
+        element: <Tour />
       }
     ]
   }

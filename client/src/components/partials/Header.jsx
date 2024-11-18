@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link, NavLink } from 'react-router-dom'
+import { NavLink, Link } from 'react-router-dom'
 
 
 const Header = () => {
@@ -18,15 +18,17 @@ const Header = () => {
                     </h1>
                     <nav id="fh5co-menu-wrap" role="navigation">
                         <ul className="sf-menu" id="fh5co-primary-menu">
-                            <li className="active"><a href="index.html">Home</a></li>
                             <li>
-                                <a href="vacation.html" className="fh5co-sub-ddown">Vacations</a>
-                                <ul className="fh5co-sub-menu">
-                                    <li><Link to=''>Family</Link></li>
-                                </ul>
+                                <NavLink to='/'>Home</NavLink>
                             </li>
                             <li>
-                                <Link to=''>Flights</Link>
+                                <NavLink to=''
+                                    className={({ isActive }) => `${isActive ? 'active' : ''}`}>
+                                    Tours
+                                </NavLink>
+                            </li>
+                            <li>
+                                <NavLink to='/posts'>Blogs</NavLink>
                             </li>
                         </ul>
                     </nav>
