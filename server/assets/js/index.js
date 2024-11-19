@@ -25,7 +25,6 @@ let includedTagsArray = []
 printTourLocation() // Function That's print tour location on DOM
 printTourCategory() // Function That's print tour Category on DOM
 printPostCategory() // Function That's print Post Category on DOM
-printPosts() // Function That's print Post on DOM
 printToursData() // Function That's print Tour ON DOM
 
 //  preview image on screen
@@ -63,7 +62,7 @@ if (tagscontainer) tagscontainer.onclick = (e) => {
 }
 
 // It's reset the Form State
-ResetForm.onclick = () => {
+if (ResetForm) ResetForm.onclick = () => {
     FormLoader.style.display = 'none';
     Formbtn.id = 'submitForm';
     dataID.value = '';
@@ -84,7 +83,7 @@ ResetForm.onclick = () => {
 }
 
 // Handle Form POST and PUT Operation
-Formbtn.onsubmit = async (e) => {
+if(Formbtn) Formbtn.onsubmit = async (e) => {
     e.preventDefault()
     const method = Formbtn.id === 'submitForm' ? 'POST' : 'PUT';
     const url = Formbtn.id === 'submitForm' ? `${server_url}/${EndURL}` : `${server_url}/${EndURL}/${dataID.value}`;
@@ -120,15 +119,10 @@ Formbtn.onsubmit = async (e) => {
             post_category_table.innerHTML = '';
             printPostCategory()
         }
-        if (posts_table) {
-            posts_table.innerHTML = '';
-            printPosts()
-        }
         if (tours_table) {
             tours_table.innerHTML = '';
             printToursData()
         }
-        FormLoader.style.display = 'none';
     }
 }
 
@@ -154,7 +148,7 @@ async function printTourLocation() {
         <th scope="row">${i + 1}</th>
             <td>
                 <img src="${data.tour_location_img_url}/${location.featured_img}"
-                    style="width: 100px; height: 100px;" alt="" loading='lazy'>
+                    style="width: 100px; height: 100px; object-fit:cover;" alt="" loading='lazy'>
             </td>
             <td> ${location.location_name}</td>
             <td>
@@ -254,33 +248,6 @@ if (posts_table) posts_table.onclick = async (e) => {
         const res = await getSingleData(`${server_url}/${EndURL}/${e.target.dataset.id}`)
         setPostField(res)
     }
-}
-
-// This Function Print the Posts on DOM
-async function printPosts() {
-    Loader.style.display = 'block';
-    const data = await getdata(`${server_url}/api/posts`)
-    const structure = data.posts?.map((post, i) => `<tr class="table-row">
-        <th scope="row">${i + 1}</th>
-            <td>
-                <img src="${data.post_img_url}/${post.post_image}"
-                    style="width: 100px; height: 100px;" alt="" loading='lazy'>
-            </td>
-            <td> ${post.title}</td>
-            <td> ${post.post_slug}</td>
-            <td> ${post.category.category_name}</td>
-            <td> ${post.formattedDate}</td>
-            <td>
-                <div class="d-flex flex-column gap-3">
-                    <button type="button" data-id="${post._id}"
-                        class="btn btn-dark edit">Edit</button>
-                    <button type="button" data-id="${post._id}"
-                        class="btn btn-danger delete">Delete</button>
-                </div>
-                </td>
-        </tr>`).join('')
-    if (posts_table) posts_table.insertAdjacentHTML('afterbegin', structure)
-    Loader.style.display = 'none';
 }
 
 // Inject EventListener

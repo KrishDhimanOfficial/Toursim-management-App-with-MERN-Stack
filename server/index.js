@@ -1,11 +1,11 @@
 import dotenv from 'dotenv'
 import express from 'express'
 import cors from 'cors'
-import multer from 'multer'
 import cluster from 'cluster'
 import numCPUs from 'os'
 import connectDB from './config/mongodb.connection.js'
 import config from './config/config.js'
+import cookieParser from 'cookie-parser'
 import adminRoutes from './routes/admin.api.routes.js'
 import siteRoutes from './routes/site.api.routes.js'
 
@@ -29,6 +29,7 @@ if (cluster.isPrimary) {
             credentials: true,
         }
     ))
+    app.use(cookieParser())
     app.use(express.json())
     app.use(express.urlencoded({ extended: false }))
     app.use('/uploads', express.static('uploads'))

@@ -97,7 +97,6 @@ export const sendDataToServer = async (url, method, formData) => {
     } catch (error) {
         console.error(error)
     } finally {
-        Loader.style.display = 'none'
         FormLoader.style.display = 'none';
     }
 }

@@ -1,2 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit'
-export const store = configureStore({})
+import  TourLocationReducer  from '../features/location'
+
+
+const store = configureStore({
+    reducer: {
+        tourlocations: TourLocationReducer
+    }
+})
+
+export default store

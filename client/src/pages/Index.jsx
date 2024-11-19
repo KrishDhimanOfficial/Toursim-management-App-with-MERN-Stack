@@ -1,12 +1,22 @@
-import React from 'react'
-import {
-    Sec_Heading,
-    Tours, Post,
-    Destination,
-    NaviagteUser
-} from '../components/componets'
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { APILocationsData } from '../features/location'
+import axios from 'axios'
+import config from '../config/config'
+import { Sec_Heading, Tours, Post, Destination, NaviagteUser } from '../components/componets'
 
 const Index = () => {
+    const dispatch = useDispatch()
+    const state = useSelector(state => state.tourlocations)
+    
+
+    useEffect(() => {
+        const fetch = async () => {
+            const response = await axios.get(`${config.server_url}/get/all/locations`)
+            dispatch(APILocationsData(response.data))
+        }
+        fetch()
+    }, [])
     return (
         <>
             <div id="fh5co-tours" className="fh5co-section-gray">
@@ -15,9 +25,9 @@ const Index = () => {
                         heading={'Hot Tours'}
                         description={'Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.'} />
                     <div className="row">
-                        <Tours location={'Paris'} price={1000} />
-                        <Tours location={'London'} price={2000} />
-                        <Tours location={'Russia'} price={8000} />
+                        <Tours location={'Paris'} />
+                        <Tours location={'London'} />
+                        <Tours location={'Russia'} />
                         <NaviagteUser url={'/'} text={'See All Offers'} />
                     </div>
                 </div>
@@ -27,11 +37,17 @@ const Index = () => {
                     <div className="row">
                         <div className="col-md-12">
                             <ul id="fh5co-destination-list" className="animate-box">
-                                <Destination location={'Paris'} />
-                                <Destination location={'London'} />
-                                <Destination location={'Thailand'} />
-                                <Destination location={'Japan'} />
-                                <Destination location={'Goa'} />
+                                {
+                                    state.locations?.map((location, i) => {
+                                        if (i < 5) {
+                                            return <Destination
+                                                key={i}
+                                                location={location.location_name}
+                                                imgPath={`${state.tour_location_img_url}/${location.featured_img}`}
+                                            />
+                                        }
+                                    })
+                                }
                                 <li class="one-half text-center">
                                     <div class="title-bg">
                                         <div class="case-studies-summary">
@@ -40,11 +56,17 @@ const Index = () => {
                                         </div>
                                     </div>
                                 </li>
-                                <Destination location={'Kasauli'} />
-                                <Destination location={'Norway'} />
-                                <Destination location={'China'} />
-                                <Destination location={'Shimla'} />
-                                <Destination location={'Poland'} />
+                                {
+                                    state.locations?.map((location, i) => {
+                                        if (i >= 5 && i < 10) {
+                                            return <Destination
+                                                key={i}
+                                                location={location.location_name}
+                                                imgPath={`${state.tour_location_img_url}/${location.featured_img}`}
+                                            />
+                                        }
+                                    })
+                                }
                             </ul>
                         </div>
                     </div>

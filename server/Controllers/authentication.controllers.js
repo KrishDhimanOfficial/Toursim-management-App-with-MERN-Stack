@@ -17,6 +17,17 @@ const authenticateControllers = {
         } catch (error) {
             console.log('getAuthenticate : ' + error.message)
         }
+    },
+    handleLogout: async (req, res) => {
+        try {
+            const token = req.cookies?.authtoken;
+            if (token) {
+                res.clearCookie('authtoken')
+                return res.redirect('/admin/login')
+            }
+        } catch (error) {
+            console.log('handleLogout : ' + error.message)
+        }
     }
 }
 export default authenticateControllers

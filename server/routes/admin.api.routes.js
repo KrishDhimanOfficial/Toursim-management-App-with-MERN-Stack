@@ -1,4 +1,5 @@
 import express from 'express'
+import { checkAdminIsLogged, checkToken } from '../Middleware/CheckAdminAuthentication.js'
 import authenticateControllers from '../Controllers/authentication.controllers.js'
 import productControllers from '../Controllers/product.contollers.js'
 import admincontrollers from '../Controllers/admin.controllers.js'
@@ -8,17 +9,19 @@ import { tour_location, tour_category, post_category, post, tour } from '../Midd
 
 const router = express.Router()
 
-router.get('/login', (req, res) => res.render('login'))
+router.get('/login', checkToken, (req, res) => res.render('login'))
+router.get('/logout', authenticateControllers.handleLogout)
 router.post('/authenticate', authenticateControllers.getAuthenticate)
-router.get('/dashboard', admincontrollers.getAdminDashboard)
+router.get('/dashboard', checkAdminIsLogged, admincontrollers.getAdminDashboard)
 
 
-router.get('/tour/location', (req, res) => res.render('product/tour_location'))
-router.get('/tour/category', (req, res) => res.render('product/category'))
-router.get('/tour', productControllers.renderTourPage)
+router.get('/tour/location', checkAdminIsLogged, (req, res) => res.render('product/tour_location'))
+router.get('/tour/category', checkAdminIsLogged, (req, res) => res.render('product/category'))
+router.get('/tour', checkAdminIsLogged, productControllers.renderTourPage)
 
-router.get('/post/category', (req, res) => res.render('post/category'))
-router.get('/posts', postControllers.renderPostPage)
+router.get('/post/category', checkAdminIsLogged, (req, res) => res.render('post/category'))
+router.get('/posts', checkAdminIsLogged, postControllers.renderPostPage)
+router.get('/create/post', checkAdminIsLogged, postControllers.renderCreatePost)
 
 // API Routes for Tour Location
 router.get('/api/tour/location', productControllers.getTourLocations)
@@ -30,7 +33,7 @@ router.route('/api/tour/location/:id?')
 
 
 //  API Routes for Tour Category
-router.get('/api/tour/category', productControllers.getTourCategories)
+router.get('/api/tour/category', checkAdminIsLogged, productControllers.getTourCategories)
 router.route('/api/tour/category/:id?')
     .post(tour_category.single('featured_image'), CheckmulterError, productControllers.createTourCategory)
     .get(productControllers.getsingleTourCategory)
@@ -48,7 +51,6 @@ router.route('/api/posts/category/:id?')
 
 
 // API Routes for Posts
-router.get('/api/posts', postControllers.getPosts)
 router.route('/api/post/:id?')
     .post(post.single('post_image'), CheckmulterError, postControllers.createPost)
     .get(postControllers.getSinglePost)

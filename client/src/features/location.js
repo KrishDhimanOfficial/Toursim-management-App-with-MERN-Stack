@@ -1,9 +1,26 @@
 import { createSlice } from "@reduxjs/toolkit"
 
-const initialState = {}
+const initialState = {
+    image_URL: '',
+    tourlocations: [],
+    status: 'idle',
+    error: null
+}
 
 const tourLocationsSlice = createSlice({
-    name: "tourLocations",
+    name: 'tourLocations',
     initialState,
-    reducers: {}
+    reducers: {
+        APILocationsData: (state, action) => {
+            try {
+                return action.payload
+            } catch (error) {
+                console.log(error)
+            }
+        }
+    },
 })
+
+
+export const { APILocationsData } = tourLocationsSlice.actions;
+export default tourLocationsSlice.reducer;

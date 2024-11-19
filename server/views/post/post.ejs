@@ -40,97 +40,57 @@
                         <div class="col-lg-12">
                             <div class="card">
                                 <div class="card-body">
-                                    <h5 class="card-title">Post</h5>
-                                    <form id="submitForm" class="row g-3" enctype="multipart/form-data">
-                                        <input type="hidden" id="updateID">
-                                        <div class="row">
-                                            <div class="col-lg-6">
-                                                <div class="col-12 mb-2">
-                                                    <label for="title" class="form-label">Title</label>
-                                                    <input type="text" name="title" class="form-control title"
-                                                        id="title" required>
-                                                </div>
-                                                <div class="col-12 mb-2">
-                                                    <label for="slug" class="form-label">Slug</label>
-                                                    <input type="text" name="post_slug" class="form-control" id="slug"
-                                                        required>
-                                                </div>
-                                                <div class="col-12 mb-2">
-                                                    <label for="postcategory" class="form-label">Category</label>
-                                                    <select id="categorySelectBox" class="form-select"
-                                                        name="post_category_id" aria-label="Default select example"
-                                                        required>
-                                                        <option selected="true" disabled>category</option>
-                                                        <% categories?.forEach(category=> { %>
-                                                            <option value="<%= category._id %>">
-                                                                <%= category.category_name %>
-                                                            </option>
-                                                            <% }) %>
-                                                    </select>
-                                                </div>
-                                                <div class="col-12 mb-2">
-                                                    <label for="status" class="form-label">Status</label>
-                                                    <select id="status" class="form-select" name="status"
-                                                        aria-label="Default select example" required>
-                                                        <option selected value="true">Active</option>
-                                                        <option value="false">Draft</option>
-                                                    </select>
-                                                </div>
-                                                <div class="col-12 mb-2">
-                                                    <label for="Input_img" class="form-label">Image</label>
-                                                    <input type="file" name="post_image" class="form-control mb-2"
-                                                        id="Input_img">
-                                                    <%- include('../partials/alert') %>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-6">
-                                                <div class="d-flex flex-column p-3">
-                                                    <img src="/assets/images/upload_area.png" id="preview_featured_img"
-                                                        style="height: 300px;" alt="upload_area_img"
-                                                        class="img-fluid object-fit-contain">
-                                                </div>
-                                            </div>
-                                            <div class="col-12 mt-3">
-                                                <div class="card">
-                                                    <div class="card-body pt-3">
-                                                        <h5 class="form-label">Description</h5>
-                                                        <div class="quill-editor-full" id="description">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="d-flex gap-2 align-items-center justify-content-center">
-                                                <%- include('../partials/formLoader') %>
-                                                    <button type="submit"
-                                                        class="btn btn-primary submitbtn">Submit</button>
-                                                    <button type="reset" class="btn btn-secondary reset">Reset</button>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h5 class="card-title">All Posts</h5>
+                                    <div class="w-100 py-3 d-flex justify-content-between">
+                                        <h5 class="card-title p-0">All Posts</h5>
+                                        <a href="/admin/create/post" class="btn btn-primary">Add New</a>
+                                    </div>
                                     <!-- Table with stripped rows -->
-                                    <table class="table datatable">
+                                    <table id="post-table" class="table datatable">
                                         <thead>
                                             <tr>
-                                                <th scope="col">#</th>
-                                                <th scope="col">Post</th>
-                                                <th scope="col">Title</th>
-                                                <th scope="col">Slug</th>
-                                                <th scope="col">Category</th>
-                                                <th scope="col">Created AT</th>
-                                                <th scope="col">Action</th>
+                                                <th>#</th>
+                                                <th>Post</th>
+                                                <th>Title</th>
+                                                <th>Slug</th>
+                                                <th>Category</th>
+                                                <th>Created AT</th>
+                                                <th>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody id="post-table">
                                             <%- include('../partials/loader') %>
+                                                <% posts.forEach((post,i)=> { %>
+                                                    <tr class="table-row">
+                                                        <th scope="row">
+                                                            <%= i + 1 %>
+                                                        </th>
+                                                        <td>
+                                                            <img src="<%= post_img_url %>/<%= post.post_image %>"
+                                                                style="width: 100px; height: 100px;" alt=""
+                                                                loading='lazy'>
+                                                        </td>
+                                                        <td>
+                                                            <%= post.title %>
+                                                        </td>
+                                                        <td>
+                                                            <%= post.post_slug %>
+                                                        </td>
+                                                        <td>
+                                                            <%= post.category.category_name %>
+                                                        </td>
+                                                        <td>
+                                                            <%= post.formattedDate %>
+                                                        </td>
+                                                        <td>
+                                                            <div class="d-flex flex-column gap-3">
+                                                                <button type="button" data-id="<%= post._id %>"
+                                                                    class="btn btn-dark edit">Edit</button>
+                                                                <button type="button" data-id="<%= post._id %>"
+                                                                    class="btn btn-danger delete">Delete</button>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    <% }) %>
                                         </tbody>
                                     </table>
                                     <!-- End Table with stripped rows -->
@@ -150,7 +110,9 @@
                     <i class="bi bi-arrow-up-short"></i>
                 </a>
                 <%- include('../partials/script') %>
-                    <script>const EndURL = 'api/post'; </script>
+                    <script>
+                        const EndURL = 'api/post';
+                    </script>
                     <script async src="/assets/js/index.js" type="module"></script>
 </body>
 

@@ -8,10 +8,43 @@ const ObjectId = mongoose.Types.ObjectId;
 const postControllers = {
     renderPostPage: async (req, res) => {
         try {
-            const categories = await postcategoryModel.find({}, { category_name: 1 })
-            return res.render('post/post', { categories })
+            const posts = await postModel.aggregate([
+                {
+                    $lookup: {
+                        from: 'postcategories',
+                        localField: 'post_category_id',
+                        foreignField: '_id',
+                        as: 'category'
+                    }
+                },
+                { $unwind: '$category' },
+                {
+                    $project: {
+                        post_slug: 1, title: 1, post_image: 1, description: 1,
+                        'category.category_name': 1,
+                        formattedDate: {
+                            $dateToString: {
+                                format: "%Y-%m-%d",
+                                date: "$createdAt"
+                            }
+                        }
+                    }
+                }
+            ])
+            return res.render('post/post', {
+                posts,
+                post_img_url: config.server_post_img_url
+            })
         } catch (error) {
             console.log('renderPostPage : ' + error.message)
+        }
+    },
+    renderCreatePost: async (req, res) => {
+        try {
+            const categories = await postcategoryModel.find({}, { category_name: 1 })
+            return res.render('post/createPost', { categories })
+        } catch (error) {
+            console.log('renderCreatePost : ' + error.message)
         }
     },
     getPostCategories: async (req, res) => {
@@ -86,36 +119,6 @@ const postControllers = {
             }
         } catch (error) {
             console.log('deletePostCategory : ' + error.message)
-        }
-    },
-    getPosts: async (req, res) => {
-        try {
-            const posts = await postModel.aggregate([
-                {
-                    $lookup: {
-                        from: 'postcategories',
-                        localField: 'post_category_id',
-                        foreignField: '_id',
-                        as: 'category'
-                    }
-                },
-                { $unwind: '$category' },
-                {
-                    $project: {
-                        post_slug: 1, title: 1, post_image: 1, description: 1,
-                        'category.category_name': 1,
-                        formattedDate: {
-                            $dateToString: {
-                                format: "%Y-%m-%d",
-                                date: "$createdAt"
-                            }
-                        }
-                    }
-                }
-            ])
-            return res.status(200).json({ posts, post_img_url: config.server_post_img_url })
-        } catch (error) {
-            console.log('getPosts : ' + error.message)
         }
     },
     createPost: async (req, res) => {
