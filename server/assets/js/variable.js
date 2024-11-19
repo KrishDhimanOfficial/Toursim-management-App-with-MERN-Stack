@@ -1,5 +1,5 @@
 export const server_url = `http://localhost:8000/admin`;
-export const Formbtn = document.querySelector('#submitForm')
+export const Formbtn = document.querySelector('#submitForm') || document.querySelector('#updateFormData')
 export const previewImg = document.querySelector('#preview_featured_img')
 export const Input_img = document.querySelector('#Input_img')
 export const multipleImagesInput = document.querySelector('#multipleImagesInput')
@@ -89,9 +89,14 @@ export const sendDataToServer = async (url, method, formData) => {
         if (!response.ok) {
             ErrorAlert.style.display = 'block';
             ErrorAlert.innerHTML = data.error;
+            setTimeout(() => ErrorAlert.style.display = 'none', 2000)
             return;
         } else {
-            ErrorAlert.style.display = 'none';
+            if (data.idlemessage) {
+                ErrorAlert.style.display = 'block';
+                ErrorAlert.innerHTML = data.message;
+                setTimeout(() => ErrorAlert.style.display = 'none', 2000)     
+            }
             return true
         }
     } catch (error) {

@@ -29,7 +29,7 @@
                     <nav>
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="/admin/dashboard">Home</a></li>
-                            <li class="breadcrumb-item active">Category</li>
+                            <li class="breadcrumb-item">Category</li>
                         </ol>
                     </nav>
                 </div>
@@ -42,9 +42,9 @@
                                 <div class="card-body">
                                     <div class="w-100 py-3 d-flex justify-content-between">
                                         <h5 class="card-title p-0">All Category</h5>
-                                        <a href="/admin/create/tour/category" class="btn btn-primary">Add New</a>
+                                        <a href="/admin/create/category" class="btn btn-primary">Add New</a>
                                     </div>
-                                    <table id="tour-category-table" class="table datatable">
+                                    <table id="post-category-table" class="table datatable">
                                         <thead>
                                             <tr>
                                                 <th scope="col">#</th>
@@ -61,18 +61,18 @@
                                                             <%= i + 1 %>
                                                         </th>
                                                         <td>
-                                                            <img src="<%= tour_category_img_url %>/<%= category.featured_image%>"
-                                                                style="width: 100px; height: 100px; object-fit: cover;"
-                                                                alt="" loading='lazy'>
+                                                            <img src="<%= post_category_img_url%>/<%= category.featured_image %>"
+                                                                style="width: 100px; height: 100px;" alt=""
+                                                                loading='lazy'>
                                                         </td>
                                                         <td>
                                                             <%= category.category_name %>
                                                         </td>
                                                         <td>
                                                             <div class="d-flex flex-column gap-3">
-                                                                <a href="/admin/update/tour/category/<%= category._id%>"
+                                                                <a href='/admin/post/category/<%= category._id %>'
                                                                     class="btn btn-dark edit">Edit</a>
-                                                                <button type="button" data-id="<%= category._id%>"
+                                                                <button type="button" data-id="<%= category._id %>"
                                                                     class="btn btn-danger delete">Delete</button>
                                                             </div>
                                                         </td>
@@ -97,7 +97,7 @@
                     <i class="bi bi-arrow-up-short"></i>
                 </a>
                 <%- include('../partials/script') %>
-                    <script> const EndURL = 'api/tour/category'; </script>
+                    <script> const EndURL = 'api/posts/category'; </script>
                     <script async src="/assets/js/index.js" type="module"></script>
 </body>
 

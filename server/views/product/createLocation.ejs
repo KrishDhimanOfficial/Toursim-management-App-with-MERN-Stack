@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>Dashboard</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    <%- include('../partials/header') %>
+</head>
+
+<body>
+
+    <!-- ======= Header ======= -->
+    <%- include('../partials/navbar') %>
+        <!-- End Header -->
+
+        <!-- ======= Sidebar ======= -->
+        <%- include('../partials/sidebar') %>
+            <!-- End Sidebar-->
+
+            <main id="main" class="main">
+
+                <div class="pagetitle">
+                    <h1>Dashboard</h1>
+                    <nav>
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="/admin/dashboard">Home</a></li>
+                            <li class="breadcrumb-item"><a href="/admin/tour/location">Locations</a></li>
+                            <li class="breadcrumb-item active">Create</li>
+                        </ol>
+                    </nav>
+                </div>
+                <!-- End Page Title -->
+
+                <section class="section dashboard">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Tour Location</h5>
+                                    <form id="submitForm" class="row g-3" enctype="multipart/form-data">
+                                        <input type="hidden" id="updateID">
+                                        <div class="col-12">
+                                            <label for="location_img" class="form-label">Image</label>
+                                            <input type="file" name="featured_img" class="form-control" id="Input_img">
+                                        </div>
+                                        <p class="mb-0 mt-2"> File size must be less than 1MB!</p>
+                                        <div class="col-12">
+                                            <label for="textInput" class="form-label">Location</label>
+                                            <input type="text" name="location_name" class="form-control" id="textInput"
+                                                required>
+                                        </div>
+                                        <%- include('../partials/alert') %>
+                                        <div class="d-flex gap-2 align-items-center justify-content-center">
+                                           <%- include('../partials/formLoader') %>
+                                            <button type="submit" class="btn btn-primary submitbtn">Submit</button>
+                                            <button type="reset" class="btn btn-secondary reset">Reset</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="d-flex flex-column p-3">
+                                        <label for="preview_featured_img" class="form-label fw-bold mx-auto"> Preview
+                                            Image</label>
+                                        <img src="/assets/images/upload_area.png" id="preview_featured_img"
+                                            style="height: 400px;" alt="upload_area_img"
+                                            class="img-fluid object-fit-contain">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+            </main><!-- End #main -->
+
+            <!-- ======= Footer ======= -->
+            <%- include('../partials/footer') %>
+                <!-- End Footer -->
+
+                <a href="#" class="back-to-top d-flex align-items-center justify-content-center">
+                    <i class="bi bi-arrow-up-short"></i>
+                </a>
+                <%- include('../partials/script') %>
+                    <script> const EndURL = 'api/tour/location';</script>
+                    <script async src="/assets/js/index.js" type="module"></script>
+</body>
+
+</html>

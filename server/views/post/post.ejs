@@ -53,11 +53,12 @@
                                                 <th>Title</th>
                                                 <th>Slug</th>
                                                 <th>Category</th>
+                                                <th>Status</th>
                                                 <th>Created AT</th>
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
-                                        <tbody id="post-table">
+                                        <tbody>
                                             <%- include('../partials/loader') %>
                                                 <% posts.forEach((post,i)=> { %>
                                                     <tr class="table-row">
@@ -66,7 +67,7 @@
                                                         </th>
                                                         <td>
                                                             <img src="<%= post_img_url %>/<%= post.post_image %>"
-                                                                style="width: 100px; height: 100px;" alt=""
+                                                                style="width: 80px; height: 80px;" alt=""
                                                                 loading='lazy'>
                                                         </td>
                                                         <td>
@@ -76,15 +77,18 @@
                                                             <%= post.post_slug %>
                                                         </td>
                                                         <td>
-                                                            <%= post.category.category_name %>
+                                                            <%= post.category?.category_name %>
+                                                        </td>
+                                                        <td>
+                                                            <%= post.status ? 'Active' : 'Draft' %>
                                                         </td>
                                                         <td>
                                                             <%= post.formattedDate %>
                                                         </td>
                                                         <td>
                                                             <div class="d-flex flex-column gap-3">
-                                                                <button type="button" data-id="<%= post._id %>"
-                                                                    class="btn btn-dark edit">Edit</button>
+                                                                <a href="/admin/update/post/<%= post._id %>"
+                                                                    class="btn btn-dark">Edit</a>
                                                                 <button type="button" data-id="<%= post._id %>"
                                                                     class="btn btn-danger delete">Delete</button>
                                                             </div>
@@ -110,9 +114,7 @@
                     <i class="bi bi-arrow-up-short"></i>
                 </a>
                 <%- include('../partials/script') %>
-                    <script>
-                        const EndURL = 'api/post';
-                    </script>
+                    <script> const EndURL = 'api/post'; </script>
                     <script async src="/assets/js/index.js" type="module"></script>
 </body>
 

@@ -29,8 +29,8 @@
                     <nav>
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="/admin/dashboard">Home</a></li>
-                            <li class="breadcrumb-item">Post</li>
-                            <li class="breadcrumb-item active">Category</li>
+                            <li class="breadcrumb-item"><a href="/admin/tour/category">Category</a></li>
+                            <li class="breadcrumb-item active">Update</li>
                         </ol>
                     </nav>
                 </div>
@@ -41,26 +41,27 @@
                         <div class="col-lg-6">
                             <div class="card">
                                 <div class="card-body">
-                                    <h5 class="card-title">Post Category</h5>
-                                    <form id="submitForm" class="row g-3" enctype="multipart/form-data">
-                                        <input type="hidden" id="updateID">
+                                    <h5 class="card-title">Tour Category</h5>
+                                    <form id="updateFormData" class="row g-3" enctype="multipart/form-data">
+                                        <input type="hidden" id="updateID" value="<%= category._id %>">
                                         <div class="col-12">
                                             <label for="category_img" class="form-label">Image</label>
                                             <input type="file" name="featured_image" class="form-control"
                                                 id="Input_img">
-                                                <p class="mb-0 mt-2"> File size must be less than 1MB!</p>
                                         </div>
+                                        <p class="mb-0 mt-2"> File size must be less than 1MB!</p>
                                         <div class="col-12">
                                             <label for="textInput" class="form-label">Category</label>
                                             <input type="text" name="category_name" class="form-control" id="textInput"
-                                                required>
+                                                value="<%= category.category_name %>" required>
                                         </div>
                                         <%- include('../partials/alert') %>
-                                        <div class="d-flex gap-2 align-items-center justify-content-center">
-                                            <%- include('../partials/formLoader') %>
-                                                <button type="submit" class="btn btn-primary submitbtn">Submit</button>
-                                                <button type="reset" class="btn btn-secondary reset">Reset</button>
-                                        </div>
+                                            <div class="d-flex gap-2 align-items-center justify-content-center">
+                                                <%- include('../partials/formLoader') %>
+                                                    <button type="submit"
+                                                        class="btn btn-primary submitbtn">Submit</button>
+                                                    <button type="reset" class="btn btn-secondary reset">Reset</button>
+                                            </div>
                                     </form>
                                 </div>
                             </div>
@@ -71,33 +72,10 @@
                                     <div class="d-flex flex-column p-3">
                                         <label for="preview_featured_img" class="form-label fw-bold mx-auto"> Preview
                                             Image</label>
-                                        <img src="/assets/images/upload_area.png" id="preview_featured_img"
-                                            style="height: 400px;" alt="upload_area_img"
+                                        <img src="<%= tour_category_img_url %>/<%= category.featured_image %>"
+                                            id="preview_featured_img" style="height: 400px;" alt="upload_area_img"
                                             class="img-fluid object-fit-contain">
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-6">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h5 class="card-title">All Category</h5>
-                                    <table class="table">
-                                        <thead>
-                                            <tr>
-                                                <th scope="col">#</th>
-                                                <th scope="col">Category</th>
-                                                <th scope="col">Name</th>
-                                                <th scope="col">Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="post-category-table">
-                                            <%- include('../partials/loader') %>
-                                        </tbody>
-                                    </table>
-                                    <!-- End Default Table Example -->
                                 </div>
                             </div>
                         </div>
@@ -114,7 +92,7 @@
                     <i class="bi bi-arrow-up-short"></i>
                 </a>
                 <%- include('../partials/script') %>
-                    <script> const EndURL = 'api/posts/category'; </script>
+                    <script> const EndURL = 'api/tour/category'; </script>
                     <script async src="/assets/js/index.js" type="module"></script>
 </body>
 

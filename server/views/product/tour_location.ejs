@@ -37,52 +37,14 @@
 
                 <section class="section dashboard">
                     <div class="row">
-                        <div class="col-lg-6">
+                        <div class="col-lg-12">
                             <div class="card">
                                 <div class="card-body">
-                                    <h5 class="card-title">Tour Location</h5>
-                                    <form id="submitForm" class="row g-3" enctype="multipart/form-data">
-                                        <input type="hidden" id="updateID">
-                                        <div class="col-12">
-                                            <label for="location_img" class="form-label">Image</label>
-                                            <input type="file" name="featured_img" class="form-control" id="Input_img">
-                                        </div>
-                                        <p class="mb-0 mt-2"> File size must be less than 1MB!</p>
-                                        <div class="col-12">
-                                            <label for="textInput" class="form-label">Location</label>
-                                            <input type="text" name="location_name" class="form-control" id="textInput"
-                                                required>
-                                        </div>
-                                        <%- include('../partials/alert') %>
-                                        <div class="d-flex gap-2 align-items-center justify-content-center">
-                                           <%- include('../partials/formLoader') %>
-                                            <button type="submit" class="btn btn-primary submitbtn">Submit</button>
-                                            <button type="reset" class="btn btn-secondary reset">Reset</button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="d-flex flex-column p-3">
-                                        <label for="preview_featured_img" class="form-label fw-bold mx-auto"> Preview
-                                            Image</label>
-                                        <img src="/assets/images/upload_area.png" id="preview_featured_img"
-                                            style="height: 400px;" alt="upload_area_img"
-                                            class="img-fluid object-fit-contain">
+                                    <div class="w-100 py-3 d-flex justify-content-between">
+                                        <h5 class="card-title p-0">All Locations</h5>
+                                        <a href="/admin/create/location" class="btn btn-primary">Add New</a>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-6">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h5 class="card-title">All Location</h5>
-                                    <table class="table datatable">
+                                    <table id="tour-location-table" class="table datatable">
                                         <thead>
                                             <tr>
                                                 <th scope="col">#</th>
@@ -91,8 +53,31 @@
                                                 <th scope="col">Action</th>
                                             </tr>
                                         </thead>
-                                        <tbody id="tour-location-table">
+                                        <tbody>
                                             <%- include('../partials/loader') %>
+                                            <% tour_locations.forEach((location,i)=> { %>
+                                                <tr class="table-row">
+                                                    <th scope="row">
+                                                        <%= i + 1 %>
+                                                    </th>
+                                                    <td>
+                                                        <img src="<%= tour_location_img_url %>/<%= location.featured_img %>"
+                                                            style="width: 80px; height: 80px; object-fit:cover;"
+                                                            alt="" loading='lazy'>
+                                                    </td>
+                                                    <td>
+                                                        <%= location.location_name %>
+                                                    </td>
+                                                    <td>
+                                                        <div class="d-flex flex-column gap-3">
+                                                            <a href="/admin/update/location/<%= location._id %>"
+                                                                class="btn btn-dark edit">Edit</a>
+                                                            <button type="button" data-id="<%= location._id %>"
+                                                                class="btn btn-danger delete">Delete</button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <% }) %>
                                         </tbody>
                                     </table>
                                     <!-- End Default Table Example -->

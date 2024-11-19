@@ -6,53 +6,26 @@ import mongoose from 'mongoose'
 const ObjectId = mongoose.Types.ObjectId;
 
 const postControllers = {
-    renderPostPage: async (req, res) => {
+    renderPostCategories: async (req, res) => {
         try {
-            const posts = await postModel.aggregate([
-                {
-                    $lookup: {
-                        from: 'postcategories',
-                        localField: 'post_category_id',
-                        foreignField: '_id',
-                        as: 'category'
-                    }
-                },
-                { $unwind: '$category' },
-                {
-                    $project: {
-                        post_slug: 1, title: 1, post_image: 1, description: 1,
-                        'category.category_name': 1,
-                        formattedDate: {
-                            $dateToString: {
-                                format: "%Y-%m-%d",
-                                date: "$createdAt"
-                            }
-                        }
-                    }
-                }
-            ])
-            return res.render('post/post', {
-                posts,
-                post_img_url: config.server_post_img_url
+            const categories = await postcategoryModel.find({})
+            return res.render('post/categories', {
+                categories,
+                post_category_img_url: config.server_post_category_img_url
             })
         } catch (error) {
-            console.log('renderPostPage : ' + error.message)
+            console.log('renderPostCategory : ' + error.message)
         }
     },
-    renderCreatePost: async (req, res) => {
+    renderUpdatePostCategory: async (req, res) => {
         try {
-            const categories = await postcategoryModel.find({}, { category_name: 1 })
-            return res.render('post/createPost', { categories })
+            const category = await postcategoryModel.findById({ _id: req.params.id })
+            return res.render('post/updatePostCategory', {
+                category,
+                post_category_img_url: config.server_post_category_img_url
+            })
         } catch (error) {
-            console.log('renderCreatePost : ' + error.message)
-        }
-    },
-    getPostCategories: async (req, res) => {
-        const categories = await postcategoryModel.find({})
-        if (categories) return res.status(200).json({ categories, post_category_img_url: config.server_post_category_img_url })
-        try {
-        } catch (error) {
-            console.log('getPostCategories : ' + error.message)
+            console.log('renderUpdatePostCategory : ' + error.message)
         }
     },
     createPostCategory: async (req, res) => {
@@ -142,29 +115,6 @@ const postControllers = {
             console.log('createPost : ' + error.message)
         }
     },
-    getSinglePost: async (req, res) => {
-        try {
-            const post = await postModel.aggregate([
-                {
-                    $match: {
-                        _id: new ObjectId(req.params.id)
-                    }
-                },
-                {
-                    $lookup: {
-                        from: 'postcategories',
-                        localField: 'post_category_id',
-                        foreignField: '_id',
-                        as: 'category'
-                    }
-                },
-                { $unwind: '$category' }
-            ])
-            return res.status(200).json({ singlePost: post[0], post_img_url: config.server_post_img_url })
-        } catch (error) {
-            console.log('getSinglePost : ' + error.message)
-        }
-    },
     updatePost: async (req, res) => {
         try {
             const image = req.file?.filename;
@@ -198,6 +148,77 @@ const postControllers = {
         } catch (error) {
             console.log('deletePost : ' + error.message)
         }
-    }
+    },
+    renderPostPage: async (req, res) => {
+        try {
+            const posts = await postModel.aggregate([
+                {
+                    $lookup: {
+                        from: 'postcategories',
+                        localField: 'post_category_id',
+                        foreignField: '_id',
+                        as: 'category'
+                    }
+                },
+                { $unwind: '$category' },
+                {
+                    $project: {
+                        post_slug: 1, title: 1, post_image: 1, description: 1,
+                        'category.category_name': 1,
+                        formattedDate: {
+                            $dateToString: {
+                                format: "%Y-%m-%d",
+                                date: "$createdAt"
+                            }
+                        }
+                    }
+                }
+            ])
+            // const posts = await postModel.find({})
+            console.log(posts)
+            return res.render('post/post', {
+                posts,
+                post_img_url: config.server_post_img_url
+            })
+        } catch (error) {
+            console.log('renderPostPage : ' + error.message)
+        }
+    },
+    renderCreatePost: async (req, res) => {
+        try {
+            const categories = await postcategoryModel.find({}, { category_name: 1 })
+            return res.render('post/createPost', { categories })
+        } catch (error) {
+            console.log('renderCreatePost : ' + error.message)
+        }
+    },
+    renderUpdatePostPage: async (req, res) => {
+        try {
+            const categories = await postcategoryModel.find({}, { category_name: 1 })
+            const post = await postModel.aggregate([
+                {
+                    $match: {
+                        _id: new ObjectId(req.params.id)
+                    }
+                },
+                {
+                    $lookup: {
+                        from: 'postcategories',
+                        localField: 'post_category_id',
+                        foreignField: '_id',
+                        as: 'category'
+                    }
+                },
+                { $unwind: '$category' }
+            ])
+            return res.render('post/updatePost', {
+                post: post[0],
+                categories,
+                post_img_url: config.server_post_img_url
+            })
+        } catch (error) {
+            console.log('renderUpdatePostPage : ' + error.message)
+        }
+    },
 }
 export default postControllers

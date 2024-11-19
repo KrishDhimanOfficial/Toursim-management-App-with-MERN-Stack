@@ -16,6 +16,28 @@ const productControllers = {
             console.log('renderTourPage : ' + error.message)
         }
     },
+    renderToursLocations: async (req, res) => {
+        try {
+            const tour_locations = await tourLocationModel.find({})
+            return res.render('product/tour_location', {
+                tour_locations,
+                tour_location_img_url: config.server_tour_location_img_url
+            })
+        } catch (error) {
+            console.log('renderToursLocations : ' + error.message)
+        }
+    },
+    renderUpdateLocation: async (req, res) => {
+        try {
+            const location = await tourLocationModel.findById({ _id: req.params.id })
+            return res.render('product/updateLocation', {
+                location,
+                tour_location_img_url: config.server_tour_location_img_url
+            })
+        } catch (error) {
+            console.log('renderUpdateLocation : ' + error.message)
+        }
+    },
     createLoaction: async (req, res) => {
         try {
             if (!req.file) return res.status(400).json({ error: 'Please upload a image' })
@@ -24,7 +46,7 @@ const productControllers = {
             )
             if (checkTourLocationExists) {
                 await deleteImage(`tour_location_images/${req.file.filename}`)
-                return res.status(200).json({ message: 'value Exists' });
+                return res.status(200).json({ idlemessage: 'value Exists' })
             } else {
                 const data = await tourLocationModel.create({
                     featured_img: req.file.filename,
@@ -47,14 +69,6 @@ const productControllers = {
             if (locations) return res.status(200).json({ locations, tour_location_img_url: config.server_tour_location_img_url })
         } catch (error) {
             console.log('getAllTourLoactions : ' + error.message)
-        }
-    },
-    getsingleTourLocation: async (req, res) => {
-        try {
-            const data = await tourLocationModel.findOne({ _id: req.params.id })
-            return res.status(200).json({ data, tour_location_img_url: config.server_tour_location_img_url })
-        } catch (error) {
-            console.log('getsingleTourLocation : ' + error.message)
         }
     },
     updateTourLocation: async (req, res) => {
@@ -114,20 +128,23 @@ const productControllers = {
             console.log('createTourCategory : ' + error.message)
         }
     },
-    getTourCategories: async (req, res) => {
+    renderTourCategories: async (req, res) => {
         try {
             const categories = await tourCategoryModel.find({})
-            if (categories) return res.status(200).json({ categories, tour_category_img_url: config.server_tour_category_img_url })
+            return res.render('product/category', { categories, tour_category_img_url: config.server_tour_category_img_url })
         } catch (error) {
             console.log('getTourCategories : ' + error.message)
         }
     },
-    getsingleTourCategory: async (req, res) => {
+    renderUpdateCategory: async (req, res) => {
         try {
-            const data = await tourCategoryModel.findOne({ _id: req.params.id })
-            return res.status(200).json({ data, tour_category_img_url: config.server_tour_category_img_url })
+            const category = await tourCategoryModel.findById({ _id: req.params.id })
+            return res.render('product/updatecategory', {
+                category,
+                tour_category_img_url: config.server_tour_category_img_url
+            })
         } catch (error) {
-            console.log('getsingleTourCategory : ' + error.message)
+            console.log('renderUpdateCategory : ' + error.message)
         }
     },
     updateTourCategory: async (req, res) => {

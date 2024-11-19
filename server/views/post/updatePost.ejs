@@ -30,7 +30,7 @@
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="/admin/dashboard">Home</a></li>
                             <li class="breadcrumb-item"><a href="/admin/posts">Posts</a></li>
-                            <li class="breadcrumb-item">Create</li>
+                            <li class="breadcrumb-item">Update</li>
                         </ol>
                     </nav>
                 </div>
@@ -42,39 +42,48 @@
                             <div class="card">
                                 <div class="card-body">
                                     <h5 class="card-title">Post</h5>
-                                    <form id="submitForm" class="row g-3" enctype="multipart/form-data">
-                                        <input type="hidden" id="updateID">
+                                    <form id="updateFormData" class="row g-3" enctype="multipart/form-data">
+                                        <input type="hidden" id="updateID" value="<%= post._id %>">
                                         <div class="row">
                                             <div class="col-lg-6">
                                                 <div class="col-12 mb-2">
                                                     <label for="title" class="form-label">Title</label>
                                                     <input type="text" name="title" class="form-control title"
-                                                        id="title" required>
+                                                        value="<%= post.title %>" id="title" required>
                                                 </div>
                                                 <div class="col-12 mb-2">
                                                     <label for="slug" class="form-label">Slug</label>
                                                     <input type="text" name="post_slug" class="form-control" id="slug"
-                                                        required>
+                                                        value="<%=post.post_slug %>" required>
                                                 </div>
-                                                <div class="col-12 mb-2">
+                                                <div class=" col-12 mb-2">
                                                     <label for="postcategory" class="form-label">Category</label>
                                                     <select id="categorySelectBox" class="form-select"
                                                         name="post_category_id" aria-label="Default select example"
                                                         required>
-                                                        <option selected="true" disabled>category</option>
+                                                        <option selected value="<%= post.category._id %>">
+                                                            <%= post.category.category_name %>
+                                                        </option>
                                                         <% categories?.forEach(category=> { %>
-                                                            <option value="<%= category._id %>">
-                                                                <%= category.category_name %>
-                                                            </option>
-                                                            <% }) %>
+                                                            <% if (post.category.category_name !=category.category_name) { %>
+                                                                <option value="<%= category._id %>">
+                                                                    <%= category.category_name %>
+                                                                </option>
+                                                                <% } %>
+                                                                    <% }) %>
                                                     </select>
                                                 </div>
                                                 <div class="col-12 mb-2">
                                                     <label for="status" class="form-label">Status</label>
                                                     <select id="status" class="form-select" name="status"
                                                         aria-label="Default select example" required>
-                                                        <option selected value="true">Active</option>
-                                                        <option value="false">Draft</option>
+                                                        <% if (post.status) { %>
+                                                            <option selected value="true">Active</option>
+                                                            <option value="false">Draft</option>
+                                                            <% } else { %>
+                                                                <option value="true">Active</option>
+                                                                <option selected value="false">Draft</option>
+                                                                <% } %>
                                                     </select>
                                                 </div>
                                                 <div class="col-12 mb-2">
@@ -86,9 +95,9 @@
                                             </div>
                                             <div class="col-lg-6">
                                                 <div class="d-flex flex-column p-3">
-                                                    <img src="/assets/images/upload_area.png" id="preview_featured_img"
-                                                        style="height: 300px;" alt="upload_area_img"
-                                                        class="img-fluid object-fit-contain">
+                                                    <img src="<%= post_img_url %>/<%= post.post_image %> "
+                                                        id="preview_featured_img" style="height: 300px;"
+                                                        alt="upload_area_img" class="img-fluid object-fit-contain">
                                                 </div>
                                             </div>
                                             <div class="col-12 mt-3">
@@ -96,6 +105,7 @@
                                                     <div class="card-body pt-3">
                                                         <h5 class="form-label">Description</h5>
                                                         <div class="quill-editor-full" id="description">
+                                                            <%- post.description %>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -104,7 +114,6 @@
                                                 <%- include('../partials/formLoader') %>
                                                     <button type="submit"
                                                         class="btn btn-primary submitbtn">Submit</button>
-                                                    <button type="reset" class="btn btn-secondary reset">Reset</button>
                                             </div>
                                         </div>
                                     </form>
@@ -125,7 +134,6 @@
                 </a>
                 <%- include('../partials/script') %>
                     <script>
-                        const Formbtn = document.querySelector('#submitForm')
                         const EndURL = 'api/post';
                     </script>
                     <script async src="/assets/js/index.js" type="module"></script>
