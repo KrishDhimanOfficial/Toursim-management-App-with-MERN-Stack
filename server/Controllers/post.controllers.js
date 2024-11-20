@@ -37,7 +37,7 @@ const postControllers = {
             )
             if (postCategoryExists) {
                 await deleteImage(`post_category_images/${req.file.filename}`)
-                return res.status(200).json({ error: 'value Exists' });
+                return res.status(200).json({ idlemessage: 'value Exists' });
             } else {
                 const data = await postcategoryModel.create({
                     featured_image: req.file.filename,
@@ -164,6 +164,7 @@ const postControllers = {
                 {
                     $project: {
                         post_slug: 1, title: 1, post_image: 1, description: 1,
+                        status: 1,
                         'category.category_name': 1,
                         formattedDate: {
                             $dateToString: {
@@ -174,8 +175,6 @@ const postControllers = {
                     }
                 }
             ])
-            // const posts = await postModel.find({})
-            console.log(posts)
             return res.render('post/post', {
                 posts,
                 post_img_url: config.server_post_img_url
@@ -220,5 +219,34 @@ const postControllers = {
             console.log('renderUpdatePostPage : ' + error.message)
         }
     },
+    // API's For Frontend Site
+    getPostapiData: async (req, res) => {
+        try {
+            const posts = await postModel.aggregate([
+                {
+                    $match: { status: true }
+                },
+                {
+                    $addFields: {
+                        formattedDate: {
+                            $dateToString: {
+                                format: "%Y-%m-%d",
+                                date: "$created_At"
+                            }
+                        }
+                    }
+                },
+                {
+                    $project: { formattedDate: 1, title: 1, post_slug: 1, post_image: 1 }
+                }
+            ])
+            return res.status(200).json({
+                posts,
+                post_img_url: config.server_post_img_url
+            })
+        } catch (error) {
+            console.log('getPostapiData : ' + error.message)
+        }
+    }
 }
 export default postControllers

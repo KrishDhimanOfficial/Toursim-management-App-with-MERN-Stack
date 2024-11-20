@@ -10,7 +10,7 @@ export const checkAdminIsLogged = async (req, res, next) => {
         console.log('checkAdminIsLogged : ' + error.message)
     }
 }
-export const checkToken = (req, res) => {
+export const checkToken = (req, res, next) => {
     try {
         const token = req.cookies?.authtoken;
         if (token) return res.redirect('/admin/dashboard')

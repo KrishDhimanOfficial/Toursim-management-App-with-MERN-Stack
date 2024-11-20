@@ -23,4 +23,4 @@ const tourLocationsSlice = createSlice({
 
 
 export const { APILocationsData } = tourLocationsSlice.actions;
-export default tourLocationsSlice.reducer;
+export default tourLocationsSlice.reducer;// export reducer to store.js

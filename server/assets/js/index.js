@@ -1,8 +1,7 @@
 import {
-    server_url, FormLoader, Formbtn, ErrorAlert, previewImg, Loader, ResetForm, dataID,
-    Input_img, displayPreviewImage, postSelectBox, multipleImagesInput, previewMultipleImage,
-    getdata, deleteDataRequestToServer, getSingleData, setFormField, setTourFields,
-    sendDataToServer, createSlug, setPostField, displayPreviewImages, createTags
+    server_url, FormLoader, Formbtn, ErrorAlert, previewMultipleImage, previewImg, ResetForm, dataID,
+    Input_img, displayPreviewImage, multipleImagesInput, deleteDataRequestToServer,
+    sendDataToServer, createSlug, displayPreviewImages, createTags, clearInputFiles
 } from './variable.js'
 
 const tour_location_table = document.querySelector('#tour-location-table')
@@ -19,17 +18,16 @@ const createExcludedTag = document.querySelector('.createExcludedTag')
 const tagscontainer = document.querySelector('.tourTags')
 const tourInculdedContainer = document.querySelector('#tourIncludedTags')
 const tourExculdedContainer = document.querySelector('#tourExcludedTags')
-let excludedTagsArray = []
-let includedTagsArray = []
-
 
 //  preview image on screen
-if (Input_img) Input_img.onchange = (e) => {
-    displayPreviewImage(e)
-}
+if (Input_img) Input_img.onchange = (e) => { displayPreviewImage(e) }
 //  preview images on screen
 if (multipleImagesInput) multipleImagesInput.onchange = (e) => {
     displayPreviewImages(e)
+}
+// Clear Multiple Input Files
+if (Formbtn.id === 'submitForm') {
+    previewMultipleImage.onclick = (e) => { clearInputFiles(e) }
 }
 // Inject Tour Included Tags 
 if (tour_included) createIncludedTag.onclick = () => {
@@ -66,15 +64,6 @@ if (ResetForm) ResetForm.onclick = () => {
     previewImg.src = '/assets/images/upload_area.png';
     previewImg.classList.remove('d-none')
     if (description) description.innerHTML = ''; // This will clear the content of the editor
-
-    if (tours_table) { // This will clear the Tour Form Content
-        previewMultipleImage.innerHTML = '';
-        description.innerHTML = '';
-        travellingPlan.innerHTML = '';
-        tourInculdedContainer.innerHTML = '';
-        tourExculdedContainer.innerHTML = '';
-        document.querySelector('#featured_image').src = '/assets/images/upload_area.png';
-    }
 }
 
 // Handle Form POST and PUT Operation
@@ -97,20 +86,8 @@ if (Formbtn) Formbtn.onsubmit = async (e) => {
         formData.append('description', description.getHTML())
         formData.append('travelling_plan', travellingPlan.getHTML())
     }
-
-    await sendDataToServer(url, method, formData)
-
-    // This will print the data when you create data
-    // if (response) {
-    //     if (tour_category_table) {
-    //         tour_category_table.innerHTML = '';
-    //         printTourCategory()
-    //     }
-    //     if (tours_table) {
-    //         tours_table.innerHTML = '';
-    //         printToursData()
-    //     }
-    // }
+    const response = await sendDataToServer(url, method, formData)
+    if (response && Formbtn.id === 'updateFormData') { window.location.reload() }
 }
 
 // Inject EventListener
@@ -125,36 +102,6 @@ if (tour_category_table) tour_category_table.onclick = async (e) => {
     if (e.target.closest('.delete')) {
         deleteDataRequestToServer(e, `${server_url}/${EndURL}/${e.target.dataset.id}`)
     }
-    // if (e.target.closest('.edit')) {
-    //     Formbtn.id = 'updateFormData';
-    //     const res = await getSingleData(`${server_url}/${EndURL}/${e.target.dataset.id}`)
-    //     // This will set From Fields
-    //     setFormField(res.data.category_name, res.data._id, `${res.tour_category_img_url}/${res.data.featured_image}`)
-    // }
-}
-
-// Function That's print tour category on DOM
-async function printTourCategory() {
-    Loader.style.display = 'block';
-    const data = await getdata(`${server_url}/api/tour/category`)
-    const structure = data.categories?.map((category, i) => `<tr class="table-row">
-        <th scope="row">${i + 1}</th>
-            <td>
-                <img src="${data.tour_category_img_url}/${category.featured_image}"
-                    style="width: 100px; height: 100px;" alt="" loading='lazy'>
-            </td>
-            <td> ${category.category_name}</td>
-            <td>
-                <div class="d-flex flex-column gap-3">
-                    <button type="button" data-id="${category._id}"
-                        class="btn btn-dark edit">Edit</button>
-                    <button type="button" data-id="${category._id}"
-                        class="btn btn-danger delete">Delete</button>
-                </div>
-                </td>
-        </tr>`).join('')
-    Loader.style.display = 'none';
-    if (tour_category_table) tour_category_table.insertAdjacentHTML('afterbegin', structure)
 }
 
 // Inject EventListener
@@ -177,43 +124,4 @@ if (tours_table) tours_table.onclick = async (e) => {
     if (e.target.closest('.delete')) {
         deleteDataRequestToServer(e, `${server_url}/${EndURL}/${e.target.dataset.id}`)
     }
-    if (e.target.closest('.edit')) {
-        tourInculdedContainer.innerHTML = '';
-        tourExculdedContainer.innerHTML = '';
-        Formbtn.id = 'updateFormData';
-        const res = await getSingleData(`${server_url}/${EndURL}/${e.target.dataset.id}`)
-        setTourFields(res)
-        excludedTagsArray = res.tour.product_excluded;
-        includedTagsArray = res.tour.product_included;
-        tourExculdedContainer.insertAdjacentHTML('afterbegin', createTags(res.tour.product_excluded))
-        tourInculdedContainer.insertAdjacentHTML('afterbegin', createTags(res.tour.product_included))
-    }
-}
-
-// This Function Print the Tours Data on DOM
-async function printToursData() {
-    Loader.style.display = 'block';
-    const data = await getdata(`${server_url}/api/tours`)
-    const structure = data.tours?.map((tour, i) => `<tr class="table-row">
-        <th scope="row">${i + 1}</th>
-            <td>
-                <img src="${data.tour_img_url}/${tour.featured_image}"
-                    style="width: 100px; height: 100px; object-fit:cover;" alt="" loading='lazy'>
-            </td>
-            <td> ${tour.title}</td>
-            <td> ${tour.category.category_name}</td>
-            <td> ${tour.location.location_name}</td>
-            <td> ${tour.status ? 'Active' : 'Hide'}</td>
-            <td> ${tour.formattedDate}</td>
-            <td>
-                <div class="d-flex flex-column gap-3">
-                    <button type="button" data-id="${tour._id}"
-                        class="btn btn-dark edit">Edit</button>
-                    <button type="button" data-id="${tour._id}"
-                        class="btn btn-danger delete">Delete</button>
-                </div>
-                </td>
-        </tr>`).join('')
-    if (tours_table) tours_table.insertAdjacentHTML('afterbegin', structure)
-    Loader.style.display = 'none';
 }

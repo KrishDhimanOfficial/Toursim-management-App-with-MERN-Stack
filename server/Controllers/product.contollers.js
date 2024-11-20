@@ -11,7 +11,40 @@ const productControllers = {
         try {
             const tour_locations = await tourLocationModel.find({}, { location_name: 1 })
             const tour_categories = await tourCategoryModel.find({}, { category_name: 1 })
-            return res.render('product/tour', { tour_locations, tour_categories })
+            const tours = await tourModel.aggregate([
+                {
+                    $lookup: {
+                        from: 'tourcategories',
+                        localField: 'product_category_id',
+                        foreignField: '_id',
+                        as: 'category',
+                    }
+                },
+                { $unwind: '$category' },
+                {
+                    $lookup: {
+                        from: 'tour-locations',
+                        localField: 'product_location_id',
+                        foreignField: '_id',
+                        as: 'location',
+                    }
+                },
+                { $unwind: '$location' },
+                {
+                    $addFields: {
+                        formattedDate: {
+                            $dateToString: {
+                                format: '%d-%m-%Y',
+                                date: '$createdAt'
+                            }
+                        }
+                    }
+                }
+            ])
+            return res.render('product/tour', {
+                tours, tour_locations, tour_categories,
+                tour_img_url: config.server_tour_img_url
+            })
         } catch (error) {
             console.log('renderTourPage : ' + error.message)
         }
@@ -111,7 +144,7 @@ const productControllers = {
             })
             if (checkTourCategoryExists) {
                 await deleteImage(`tour_category_images/${req.file.filename}`)
-                return res.status(200).json({ message: 'value Exists' });
+                return res.status(200).json({ idlemessage: 'value Exists' });
             } else {
                 const data = await tourCategoryModel.create({
                     featured_image: req.file.filename,
@@ -219,37 +252,21 @@ const productControllers = {
             console.log('getAllTours : ' + error.message)
         }
     },
-    createTour: async (req, res) => {
+    renderCreateTour: async (req, res) => {
         try {
-            if (!req.body || !req.files['featured_image'] || !req.files['product_images']) {
-                return res.status(400).json({ error: 'All Fields Are Required' })
-            }
-            const { title, slug, product_category_id, product_location_id,
-                deperature_date, return_date, status, price, total_Seats, description,
-                travelling_plan, product_excluded, product_included } = req.body;
-            const data = await tourModel.create({
-                title, status, return_date, deperature_date,
-                featured_image: req.files['featured_image'][0].filename,
-                product_images: req.files['product_images'].map(file => file.filename),
-                slug: slug[1], price, total_Seats, travelling_plan, description,
-                product_location_id: new Object(product_location_id),
-                product_category_id: new Object(product_category_id),
-                product_excluded: product_excluded.length == 0
-                    ? []
-                    : product_excluded.split(','),
-                product_included: product_included.length == 0
-                    ? []
-                    : product_included.split(','),
-                createdAt: new Date()
+            const tour_categories = await tourCategoryModel.find({})
+            const tour_locations = await tourLocationModel.find({})
+            return res.render('product/createTour', {
+                tour_categories, tour_locations
             })
-            if (!data) return res.status(204).json({ error: 'failed' })
-            return res.status(200).json({ message: 'successfully created' })
         } catch (error) {
-            console.log('createTour : ' + error.message)
+            console.log('renderCreateTour : ' + error.message)
         }
     },
-    getSingleTour: async (req, res) => {
+    renderUpdateTour: async (req, res) => {
         try {
+            const tour_categories = await tourCategoryModel.find({})
+            const tour_locations = await tourLocationModel.find({})
             const data = await tourModel.aggregate([
                 {
                     $match: { _id: new ObjectId(req.params.id) }
@@ -293,18 +310,77 @@ const productControllers = {
                     }
                 }
             ])
-            return res.status(200).json({ tour: data[0], tour_img_url: config.server_tour_img_url })
+
+            return res.render('product/updateTour', {
+                tour: data[0], tour_locations, tour_categories,
+                tour_img_url: config.server_tour_img_url
+            })
+        } catch (error) {
+            console.log('renderUpdateTour : ' + error.message)
+        }
+    },
+    createTour: async (req, res) => {
+        try {
+            if (!req.body || !req.files['featured_image'] || !req.files['product_images']) {
+                return res.status(400).json({ error: 'All Fields Are Required' })
+            }
+            const { title, slug, product_category_id, product_location_id,
+                deperature_date, return_date, status, price, total_Seats, description,
+                travelling_plan, product_excluded, product_included } = req.body;
+            const data = await tourModel.create({
+                title, status, return_date, deperature_date,
+                featured_image: req.files['featured_image'][0].filename,
+                product_images: req.files['product_images'].map(file => file.filename),
+                slug: slug[1], price, total_Seats, travelling_plan, description,
+                product_location_id: new Object(product_location_id),
+                product_category_id: new Object(product_category_id),
+                product_excluded: product_excluded.length == 0
+                    ? []
+                    : product_excluded.split(','),
+                product_included: product_included.length == 0
+                    ? []
+                    : product_included.split(','),
+                createdAt: new Date()
+            })
+            if (!data) return res.status(204).json({ error: 'failed' })
+            return res.status(200).json({ message: 'successfully created' })
+        } catch (error) {
+            console.log('createTour : ' + error.message)
+        }
+    },
+    setPreviewImages: async (req, res) => {
+        try {
+            const tour = await tourModel.findById({ _id: req.params.id })
+            const response = await tourModel.findByIdAndUpdate(
+                { _id: req.params.id },
+                {
+                    product_images: tour.product_images.filter(image => image != req.body.image)
+                },
+                { new: true })
+            deleteImage(`tour_images/${req.body.image}`)
+            if (response) return res.status(200).json({ message: true })
         } catch (error) {
             console.log('getSingleTour : ' + error.message)
         }
     },
     updateTour: async (req, res) => {
         try {
-            if (!req.body) return res.status(400).json({ error: 'All Fields Are Required' })
             const previewImg = await tourModel.findById({ _id: req.params.id })
+            const imagesLength = previewImg.product_images.length + req.files['product_images']?.length || 0
+            if (!req.body) {
+                return res.status(400).json({ error: 'All Fields Are Required' })
+            }
+            if (req.files['featured_image']) {
+                await deleteImage(`tour_images/${previewImg.featured_image}`)
+            }
+            if (imagesLength > 4) {
+                req.files['product_images'].map(file => deleteImage(`tour_images/${file.filename}`))
+            }
             const { title, slug, product_category_id, product_location_id, deperature_date,
                 return_date, status, price, total_Seats, description, travelling_plan,
                 product_excluded, product_included } = req.body;
+
+                
             const data = await tourModel.findByIdAndUpdate(
                 { _id: req.params.id },
                 {
@@ -316,7 +392,10 @@ const productControllers = {
                         ? req.files['featured_image'][0].filename
                         : previewImg.featured_image,
                     product_images: req.files['product_images']
-                        ? req.files['product_images'].map(file => file.filename)
+                        ? [
+                            ...previewImg.product_images,
+                            ...req.files['product_images']?.map(file => file.filename)
+                        ]
                         : previewImg.product_images,
                     product_excluded: product_excluded.length == 0
                         ? []
