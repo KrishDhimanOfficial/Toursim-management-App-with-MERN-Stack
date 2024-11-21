@@ -50,34 +50,44 @@
                                                 <th scope="col">#</th>
                                                 <th scope="col">Location</th>
                                                 <th scope="col">Name</th>
+                                                <th scope="col">Name</th>
                                                 <th scope="col">Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <%- include('../partials/loader') %>
-                                            <% tour_locations.forEach((location,i)=> { %>
-                                                <tr class="table-row">
-                                                    <th scope="row">
-                                                        <%= i + 1 %>
-                                                    </th>
-                                                    <td>
-                                                        <img src="<%= tour_location_img_url %>/<%= location.featured_img %>"
-                                                            style="width: 80px; height: 80px; object-fit:cover;"
-                                                            alt="" loading='lazy'>
-                                                    </td>
-                                                    <td>
-                                                        <%= location.location_name %>
-                                                    </td>
-                                                    <td>
-                                                        <div class="d-flex flex-column gap-3">
-                                                            <a href="/admin/update/location/<%= location._id %>"
-                                                                class="btn btn-dark edit">Edit</a>
-                                                            <button type="button" data-id="<%= location._id %>"
-                                                                class="btn btn-danger delete">Delete</button>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                <% }) %>
+                                                <% tour_locations.forEach((location,i)=> { %>
+                                                    <tr class="table-row">
+                                                        <th scope="row">
+                                                            <%= i + 1 %>
+                                                        </th>
+                                                        <td>
+                                                            <img src="<%= tour_location_img_url %>/<%= location.featured_img %>"
+                                                                style="width: 80px; height: 80px; object-fit:cover;"
+                                                                alt="" loading='lazy'>
+                                                        </td>
+                                                        <td>
+                                                            <%= location.location_name %>
+                                                        </td>
+                                                        <td>
+                                                            <%= i %>
+                                                        </td>
+                                                        <td>
+                                                            <div class="d-flex gap-3">
+                                                                <a href="/admin/update/location/<%= location._id %>"
+                                                                    class="btn btn-success">
+                                                                    <i class="bi bi-pen"></i>
+                                                                    Edit
+                                                                </a>
+                                                                <button type="button" data-id="<%= location._id %>"
+                                                                    class="btn btn-danger delete">
+                                                                    <i class="bi bi-trash3"></i>
+                                                                    Delete
+                                                                </button>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    <% }) %>
                                         </tbody>
                                     </table>
                                     <!-- End Default Table Example -->

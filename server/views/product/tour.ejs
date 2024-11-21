@@ -80,17 +80,26 @@
                                                             <%= tour.location.location_name %>
                                                         </td>
                                                         <td>
-                                                            <%= tour.status ? 'Active' : 'Hide' %>
+                                                            <i class="bi bi-star-fill d-block text-center fs-5 <%= tour.status 
+                                                            ? 'text-success' 
+                                                            : '' %>">
+                                                            </i>
                                                         </td>
                                                         <td>
                                                             <%= tour.formattedDate %>
                                                         </td>
                                                         <td>
-                                                            <div class="d-flex flex-column gap-3">
+                                                            <div class="d-flex gap-3">
                                                                 <a href="/admin/update/tour/<%= tour._id %>"
-                                                                    class="btn btn-dark edit">Edit</a>
+                                                                    class="btn btn-success edit">
+                                                                    <i class="bi bi-pen"></i>
+                                                                    Edit
+                                                                </a>
                                                                 <button type="button" data-id="<%= tour._id %>"
-                                                                    class="btn btn-danger delete">Delete</button>
+                                                                    class="btn btn-danger delete">
+                                                                    <i class="bi bi-trash3"></i>
+                                                                    Delete
+                                                                </button>
                                                             </div>
                                                         </td>
                                                     </tr>

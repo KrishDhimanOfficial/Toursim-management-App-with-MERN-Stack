@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>Dashboard</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    <%- include('../partials/header') %>
+</head>
+
+<body>
+
+    <!-- ======= Header ======= -->
+    <%- include('../partials/navbar') %>
+        <!-- End Header -->
+
+        <!-- ======= Sidebar ======= -->
+        <%- include('../partials/sidebar') %>
+            <!-- End Sidebar-->
+
+            <main id="main" class="main">
+
+                <div class="pagetitle">
+                    <h1>Dashboard</h1>
+                    <nav>
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="/admin/dashboard">Home</a></li>
+                            <li class="breadcrumb-item">General Setting</li>
+                        </ol>
+                    </nav>
+                </div>
+                <!-- End Page Title -->
+
+                <section class="section dashboard">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">General Setting</h5>
+                                    <form id="submitGeneralSetting">
+                                        <!-- set compnay Logo -->
+                                        <div class="row mb-3">
+                                            <div class="col-md-6">
+                                                <label for="companylogo" class="form-label">Company Logo</label>
+                                                <div class="col-sm-10">
+                                                    <input class="form-control" type="file" id="companylogo">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="d-flex justify-content-center"
+                                                    style="width: 100px; height: 80px;">
+                                                    <img src="/uploads/tour_location_images/17320023006336.webp" alt=""
+                                                        style="object-fit: cover;">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <div class="col-md-6">
+                                                <!-- set company name  -->
+                                                <div class="form-group mb-3">
+                                                    <label for="compnayname" class="form-label">Company Name</label>
+                                                    <div class="col-sm-10">
+                                                        <input class="form-control" type="text" id="compnayname">
+                                                    </div>
+                                                </div>
+                                                <!-- Company Address -->
+                                                <div class="form-group mb-3">
+                                                    <label for="compnayaddress" class="form-label">Company
+                                                        Address</label>
+                                                    <div class="col-sm-10">
+                                                        <input class="form-control" type="text" id="compnayaddress">
+                                                    </div>
+                                                </div>
+                                                <!-- compnay copyright -->
+                                                <div class="form-group mb-3">
+                                                    <label for="copyright" class="form-label">Copyright</label>
+                                                    <div class="col-sm-10">
+                                                        <input class="form-control" type="text" id="copyright">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <!-- set company email -->
+                                                <div class="form-group mb-3">
+                                                    <label for="compnayemail" class="form-label">Company Email</label>
+                                                    <div class="col-sm-10">
+                                                        <input class="form-control" type="text" id="compnayemail">
+                                                    </div>
+                                                </div>
+                                                <!-- set company phone -->
+                                                <div class="form-group mb-3">
+                                                    <label for="phone" class="form-label">Phone</label>
+                                                    <div class="col-sm-10">
+                                                        <input class="form-control" type="number" id="phone">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <div class="col-md-11">
+                                                <!-- set description --->
+                                                <label for="description" class="form-label">Description</label>
+                                                <textarea id="description" class="form-control"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <button type="submit" class="btn btn-success bg-gradient">
+                                                    <i class="bi bi-upload"></i>
+                                                    Submit
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+            </main><!-- End #main -->
+
+            <!-- ======= Footer ======= -->
+            <%- include('../partials/footer') %>
+                <!-- End Footer -->
+
+                <a href="#" class="back-to-top d-flex align-items-center justify-content-center">
+                    <i class="bi bi-arrow-up-short"></i>
+                </a>
+                <%- include('../partials/script') %>
+</body>
+
+</html>

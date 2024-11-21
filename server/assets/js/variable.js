@@ -113,13 +113,13 @@ export const clearInputFiles = (e) => {
     const updatedImages = InputImageArray.filter(image => image.name != imageName)
 
     // Create a new FileList
-    const dataTransfer = new DataTransfer();
+    const dataTransfer = new DataTransfer()
     updatedImages.forEach(file => dataTransfer.items.add(file))
 
     // Update the file input
     document.querySelector('#multipleImagesInput').files = dataTransfer.files;
 
-    const previewImages = previewMultipleImage.childNodes.length - 1;
+    const previewImages = previewMultipleImage.children.length - 1;
     if (previewImages == 0) previewImg.style.display = 'block';
     e.target.closest('.imgbox').remove()
 }

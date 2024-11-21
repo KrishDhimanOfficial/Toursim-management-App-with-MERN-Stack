@@ -47,10 +47,10 @@
                                     <table id="post-category-table" class="table datatable">
                                         <thead>
                                             <tr>
-                                                <th scope="col">#</th>
-                                                <th scope="col">Category</th>
-                                                <th scope="col">Name</th>
-                                                <th scope="col">Action</th>
+                                                <th>#</th>
+                                                <th>Category</th>
+                                                <th>Name</th>
+                                                <th>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -61,7 +61,7 @@
                                                             <%= i + 1 %>
                                                         </th>
                                                         <td>
-                                                            <img src="<%= post_category_img_url%>/<%= category.featured_image %>"
+                                                            <img src="<%= post_category_img_url %>/<%= category.featured_image %>"
                                                                 style="width: 100px; height: 100px;" alt=""
                                                                 loading='lazy'>
                                                         </td>
@@ -69,18 +69,23 @@
                                                             <%= category.category_name %>
                                                         </td>
                                                         <td>
-                                                            <div class="d-flex flex-column gap-3">
+                                                            <div class="d-flex gap-3">
                                                                 <a href='/admin/post/category/<%= category._id %>'
-                                                                    class="btn btn-dark edit">Edit</a>
+                                                                    class="btn btn-success">
+                                                                    <i class="bi bi-pen"></i>
+                                                                    Edit
+                                                                </a>
                                                                 <button type="button" data-id="<%= category._id %>"
-                                                                    class="btn btn-danger delete">Delete</button>
+                                                                    class="btn btn-danger delete">
+                                                                    <i class="bi bi-trash3"></i>
+                                                                    Delete
+                                                                </button>
                                                             </div>
                                                         </td>
                                                     </tr>
                                                     <% }) %>
                                         </tbody>
                                     </table>
-                                    <!-- End Default Table Example -->
                                 </div>
                             </div>
                         </div>

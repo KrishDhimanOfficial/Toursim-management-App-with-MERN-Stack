@@ -44,7 +44,6 @@
                                         <h5 class="card-title p-0">All Posts</h5>
                                         <a href="/admin/create/post" class="btn btn-primary">Add New</a>
                                     </div>
-                                    <!-- Table with stripped rows -->
                                     <table id="post-table" class="table datatable">
                                         <thead>
                                             <tr>
@@ -86,18 +85,23 @@
                                                             <%= post.formattedDate %>
                                                         </td>
                                                         <td>
-                                                            <div class="d-flex flex-column gap-3">
+                                                            <div class="d-flex gap-3">
                                                                 <a href="/admin/update/post/<%= post._id %>"
-                                                                    class="btn btn-dark">Edit</a>
+                                                                    class="btn btn-success">
+                                                                    <i class="bi bi-pen"></i>
+                                                                    Edit
+                                                                </a>
                                                                 <button type="button" data-id="<%= post._id %>"
-                                                                    class="btn btn-danger delete">Delete</button>
+                                                                    class="btn btn-danger delete">
+                                                                    <i class="bi bi-trash3"></i>
+                                                                    Delete
+                                                                </button>
                                                             </div>
                                                         </td>
                                                     </tr>
                                                     <% }) %>
                                         </tbody>
                                     </table>
-                                    <!-- End Table with stripped rows -->
                                 </div>
                             </div>
                         </div>

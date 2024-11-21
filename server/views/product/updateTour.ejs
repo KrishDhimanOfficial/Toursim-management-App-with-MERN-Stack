@@ -264,11 +264,12 @@
                     </a>
                     <%- include('../partials/script') %>
                         <script defer>
-                            let excludedTagsArray = '<%= tour.product_excluded %>' 
-                            let includedTagsArray = '<%= tour.product_included %>' 
+                            const serverURL = 'http://localhost:8000/admin'
+                            let excludedTagsArray = '<%= tour.product_excluded %>'
+                            let includedTagsArray = '<%= tour.product_included %>'
                             includedTagsArray = includedTagsArray.split(',')
                             excludedTagsArray = excludedTagsArray.split(',')
-                            
+
 
                             const EndURL = 'api/tour';
                             const tourFeaturedImgINput = document.querySelector('#tourFeatured_img')
@@ -298,7 +299,7 @@
                                     document.querySelector('#multipleImagesInput').value = ''
                                 }
 
-                                const response = await fetch('http://localhost:8000/admin/api/tour/image/<%= tour._id %>', {
+                                const response = await fetch(`${serverURL}/api/tour/image/<%= tour._id %>`, {
                                     method: 'PUT',
                                     headers: { 'Content-Type': 'application/json' },
                                     body: JSON.stringify({ image: image })

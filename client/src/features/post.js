@@ -17,5 +17,5 @@ const postSlice = createSlice({
     }
 })
 
-export const { getPostRequests } = postSlice.actions;
+export const { getPosts } = postSlice.actions;
 export default postSlice.reducer;  // export reducer to store.js

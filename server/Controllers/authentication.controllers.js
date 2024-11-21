@@ -1,4 +1,5 @@
 import authenticateModel from '../models/authenticate.model.js'
+import bcrypt from 'bcrypt'
 import { setUser } from '../services/createToken.js'
 
 const authenticateControllers = {
@@ -6,7 +7,7 @@ const authenticateControllers = {
         try {
             const { email, password } = req.body;
             const admin = await authenticateModel.findOne({ email })
-            const isMatch = password === admin.password;
+            const isMatch = await bcrypt.compare(password, admin.password)
             if (isMatch && admin.role === 'admin') {
                 const token = setUser(admin._id.toString())
                 res.cookie('authtoken', token)

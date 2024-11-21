@@ -26,9 +26,10 @@ if (multipleImagesInput) multipleImagesInput.onchange = (e) => {
     displayPreviewImages(e)
 }
 // Clear Multiple Input Files
-if (Formbtn.id === 'submitForm') {
-    previewMultipleImage.onclick = (e) => { clearInputFiles(e) }
+if (Formbtn?.id === 'submitForm' && previewMultipleImage) {
+    previewMultipleImage.onclick = (e) => clearInputFiles(e)
 }
+
 // Inject Tour Included Tags 
 if (tour_included) createIncludedTag.onclick = () => {
     if (tour_included.value) {
