@@ -6,7 +6,7 @@ import admincontrollers from '../Controllers/admin.controllers.js'
 import postControllers from '../Controllers/post.controllers.js'
 import CheckmulterError from '../Middleware/handleMulterError.js'
 import categorycontrollers from '../Controllers/category.contollers.js'
-import { tour_location, tour_category, post_category, post, tour } from '../Middleware/multer.middleware.js'
+import { tour_location, tour_category, post_category, post, tour, logo } from '../Middleware/multer.middleware.js'
 
 const router = express.Router()
 
@@ -14,6 +14,7 @@ router.get('/login', checkToken, (req, res) => res.render('login'))
 router.get('/logout', authenticateControllers.handleLogout)
 router.post('/authenticate', authenticateControllers.getAuthenticate)
 router.get('/dashboard', checkAdminIsLogged, admincontrollers.getAdminDashboard)
+router.get('/get/admin/details', admincontrollers.adminDetails)
 
 
 // Render Routes for Tour Location
@@ -25,6 +26,7 @@ router.get('/tour/location', checkAdminIsLogged, productControllers.renderToursL
 router.route('/api/tour/location/:id?')
     .post(tour_location.single('featured_img'), CheckmulterError, productControllers.createLoaction)
     .put(tour_location.single('featured_img'), CheckmulterError, productControllers.updateTourLocation)
+    .patch(productControllers.updateLocationStatus)
     .delete(productControllers.deleteTourLocation)
 
 // Render Routes For Tour Category
@@ -36,6 +38,7 @@ router.get('/update/tour/category/:id', checkAdminIsLogged, categorycontrollers.
 router.route('/api/tour/category/:id?')
     .post(tour_category.single('featured_image'), CheckmulterError, categorycontrollers.createTourCategory)
     .put(tour_category.single('featured_image'), CheckmulterError, categorycontrollers.updateTourCategory)
+    .patch(categorycontrollers.updateTourCategoryStatus)
     .delete(categorycontrollers.deleteTourCategory)
 
 // Render Routes Post Category
@@ -48,6 +51,7 @@ router.route('/api/posts/category/:id?')
     .post(post_category.single('featured_image'), CheckmulterError, categorycontrollers.createPostCategory)
     .get(categorycontrollers.getSinglePostCategory)
     .put(post_category.single('featured_image'), CheckmulterError, categorycontrollers.updatePostCategory)
+    .patch(categorycontrollers.updatePostCategoryStatus)
     .delete(categorycontrollers.deletePostCategory)
 
 // Render Routes for Posts
@@ -59,6 +63,7 @@ router.get('/update/post/:id', checkAdminIsLogged, postControllers.renderUpdateP
 router.route('/api/post/:id?')
     .post(post.single('post_image'), CheckmulterError, postControllers.createPost)
     .put(post.single('post_image'), CheckmulterError, postControllers.updatePost)
+    .patch(postControllers.updatePostStatus)
     .delete(postControllers.deletePost)
 
 // Render Routes For Tour
@@ -78,13 +83,19 @@ router.route('/api/tour/:id?')
         { name: 'product_images', maxCount: 4 },
         { name: 'featured_image', maxCount: 1 },
     ]), productControllers.updateTour)
+    .patch(productControllers.updateTourStatus)
     .delete(productControllers.deleteTour)
 
-router.get('/general-settings', checkAdminIsLogged, (req, res) => res.render('settings/general-setting'))
+
 router.get('/site-settings', checkAdminIsLogged, (req, res) => res.render('settings/site-setting'))
 
 // Profile Setting Routes
 router.get('/profile-settings', checkAdminIsLogged, admincontrollers.getAdminDetails)
 router.post('/set/details', admincontrollers.changeAdminDetails)
 router.put('/set/password', admincontrollers.setAdminPassword)
+
+// Admin General Setting
+router.post('/set/general/setting', logo.single('logo'), admincontrollers.setGeneralSetting)
+router.get('/general-settings', checkAdminIsLogged, admincontrollers.renderGeneralSetting)
+
 export default router

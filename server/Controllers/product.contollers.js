@@ -124,6 +124,19 @@ const productControllers = {
             console.log('updateTourLocation : ' + error.message)
         }
     },
+    updateLocationStatus: async (req, res) => {
+        try {
+            const response = await tourLocationModel.findByIdAndUpdate(
+                { _id: req.params.id },
+                { status: req.body.status },
+                { new: true }
+            )
+            if (!response) return res.status(204).json({ message: false })
+            return res.status(200).json({ message: true })
+        } catch (error) {
+            console.log('updateLocationStatus : ' + error.message)
+        }
+    },
     deleteTourLocation: async (req, res) => {
         try {
             const data = await tourLocationModel.findOne({ _id: req.params.id })
@@ -304,7 +317,7 @@ const productControllers = {
                 return_date, status, price, total_Seats, description, travelling_plan,
                 product_excluded, product_included } = req.body;
 
-                
+
             const data = await tourModel.findByIdAndUpdate(
                 { _id: req.params.id },
                 {
@@ -336,6 +349,19 @@ const productControllers = {
             console.log('updateTour : ' + error.message)
         }
     },
+    updateTourStatus: async (req, res) => {
+        try {
+            const response = await tourModel.findByIdAndUpdate(
+                { _id: req.params.id },
+                { status: req.body.status },
+                { new: true }
+            )
+            if (!response) return res.status(204).json({ message: false })
+            return res.status(200).json({ message: true })
+        } catch (error) {
+            console.log('updateTourStatus : ' + error.message)
+        }
+    },
     deleteTour: async (req, res) => {
         try {
             const data = await tourModel.findById({ _id: req.params.id })
@@ -354,4 +380,5 @@ const productControllers = {
         }
     },
 }
+
 export default productControllers

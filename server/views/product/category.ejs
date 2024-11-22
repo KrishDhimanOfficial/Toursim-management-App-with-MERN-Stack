@@ -50,6 +50,7 @@
                                                 <th scope="col">#</th>
                                                 <th scope="col">Category</th>
                                                 <th scope="col">Name</th>
+                                                <th scope="col">Status</th>
                                                 <th scope="col">Action</th>
                                             </tr>
                                         </thead>
@@ -69,9 +70,17 @@
                                                             <%= category.category_name %>
                                                         </td>
                                                         <td>
+                                                            <label class="switch">
+                                                                <input type="checkbox" <%=category.status ? 'checked'
+                                                                    : '' %>
+                                                                class="status" data-id="<%= category._id %>" >
+                                                                    <span class="slider"></span>
+                                                            </label>
+                                                        </td>
+                                                        <td>
                                                             <div class="d-flex gap-3">
                                                                 <a href="/admin/update/tour/category/<%= category._id%>"
-                                                                    class="btn btn-success">
+                                                                    class="rounded px-3 py-2 bg-blue text-white">
                                                                     <i class="bi bi-pen"></i>
                                                                     Edit
                                                                 </a>

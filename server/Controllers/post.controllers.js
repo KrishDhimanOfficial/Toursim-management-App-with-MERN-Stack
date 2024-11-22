@@ -49,6 +49,19 @@ const postControllers = {
             console.log('updatePost : ' + error.message)
         }
     },
+    updatePostStatus: async (req, res) => {
+        try {
+            const response = await postModel.findByIdAndUpdate(
+                { _id: req.params.id },
+                { status: req.body.status },
+                { new: true }
+            )
+            if (!response) return res.status(204).json({ message: false })
+            return res.status(200).json({ message: true })
+        } catch (error) {
+            console.log('updatePostStatus : ' + error.message)
+        }
+    },
     deletePost: async (req, res) => {
         try {
             const previewImg = await postModel.findById({ _id: req.params.id })

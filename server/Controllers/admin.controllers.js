@@ -1,7 +1,9 @@
 import mongoose from 'mongoose'
 import authenticateModel from '../models/authenticate.model.js'
 import tourModel from '../models/product.model.js'
+import general_settingModel from '../models/general_setting.model.js'
 import bcrypt from 'bcrypt'
+import config from '../config/config.js'
 const ObjectId = mongoose.Types.ObjectId;
 
 const admincontrollers = {
@@ -60,6 +62,46 @@ const admincontrollers = {
             return res.json({ message: true })
         } catch (error) {
             console.log('setAdminPassword : ' + error.message)
+        }
+    },
+    adminDetails: async (req, res) => {
+        try {
+            const admin = await authenticateModel.findOne({ role: 'admin' }, { name: 1, role: 1 })
+            return res.json({ admin })
+        } catch (error) {
+            console.log('adminDetails : ' + error.message)
+        }
+    },
+    setGeneralSetting: async (req, res) => {
+        try {
+            if (!req.body) return res.redirect('/admin/general-settings')
+            const { id, company_name, company_address, company_copyright,
+                email, company_phone, company_description } = req.body;
+
+            const response = await general_settingModel.findByIdAndUpdate(
+                { _id: id },
+                {
+                    company_name, company_address, company_copyright,
+                    email, company_phone,
+                    company_description: company_description.trim(),
+                    logo: req.file?.filename
+                }
+            )
+            if (!response) return res.redirect('/admin/general-settings')
+            return res.redirect('/admin/general-settings')
+        } catch (error) {
+            console.log('setGeneralSetting : ' + error.message)
+        }
+    },
+    renderGeneralSetting: async (req, res) => {
+        try {
+            const generalSetting = await general_settingModel.find()
+            return res.render('settings/general-setting', {
+                setting: generalSetting[0],
+                logo_url: config.server_company_logo_img_url
+            })
+        } catch (error) {
+            console.log('renderGeneralSetting : ' + error.message)
         }
     }
 }

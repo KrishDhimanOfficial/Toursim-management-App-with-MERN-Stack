@@ -70,6 +70,19 @@ const categorycontrollers = {
             console.log('updateTourCategory : ' + error.message)
         }
     },
+    updateTourCategoryStatus: async (req, res) => {
+        try {
+            const response = await tourCategoryModel.findByIdAndUpdate(
+                { _id: req.params.id },
+                { status: req.body.status },
+                { new: true }
+            )
+            if (!response) return res.status(204).json({ message: false })
+            return res.status(200).json({ message: true })
+        } catch (error) {
+            console.log('updateTourCategoryStatus : ' + error.message)
+        }
+    },
     deleteTourCategory: async (req, res) => {
         try {
             const data = await tourCategoryModel.findOne({ _id: req.params.id })
@@ -157,6 +170,19 @@ const categorycontrollers = {
             return res.status(200).json({ message: 'updated' })
         } catch (error) {
             console.log('updatePostCategory : ' + error.message)
+        }
+    },
+    updatePostCategoryStatus: async (req, res) => {
+        try {
+            const response = await postcategoryModel.findByIdAndUpdate(
+                { _id: req.params.id },
+                { status: req.body.status },
+                { new: true }
+            )
+            if (!response) return res.status(204).json({ message: false })
+            return res.status(200).json({ message: true })
+        } catch (error) {
+            console.log('updatePostCategoryStatus : ' + error.message)
         }
     },
     deletePostCategory: async (req, res) => {

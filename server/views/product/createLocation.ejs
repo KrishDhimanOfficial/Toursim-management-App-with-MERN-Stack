@@ -54,12 +54,20 @@
                                             <input type="text" name="location_name" class="form-control" id="textInput"
                                                 required>
                                         </div>
-                                        <%- include('../partials/alert') %>
-                                        <div class="d-flex gap-2 align-items-center justify-content-center">
-                                           <%- include('../partials/formLoader') %>
-                                            <button type="submit" class="btn btn-primary submitbtn">Submit</button>
-                                            <button type="reset" class="btn btn-secondary reset">Reset</button>
+                                        <div class="col-12">
+                                            <label for="status" class="form-label">Status</label>
+                                            <select name="status" id="status" class="form-control">
+                                                <option value="true">Active</option>
+                                                <option value="false">Inactive</option>
+                                            </select>
                                         </div>
+                                        <%- include('../partials/alert') %>
+                                            <div class="d-flex gap-2 align-items-center justify-content-center">
+                                                <%- include('../partials/formLoader') %>
+                                                    <button type="submit"
+                                                        class="btn btn-primary submitbtn">Submit</button>
+                                                    <button type="reset" class="btn btn-secondary reset">Reset</button>
+                                            </div>
                                     </form>
                                 </div>
                             </div>

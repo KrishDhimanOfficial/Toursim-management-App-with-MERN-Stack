@@ -79,7 +79,12 @@
                                                             <%= post.category?.category_name %>
                                                         </td>
                                                         <td>
-                                                            <%= post.status ? 'Active' : 'Draft' %>
+                                                            <label class="switch">
+                                                                <input type="checkbox" <%=post.status ? 'checked' : ''
+                                                                    %>
+                                                                class="status" data-id="<%= post._id %>" >
+                                                                    <span class="slider"></span>
+                                                            </label>
                                                         </td>
                                                         <td>
                                                             <%= post.formattedDate %>
@@ -87,7 +92,7 @@
                                                         <td>
                                                             <div class="d-flex gap-3">
                                                                 <a href="/admin/update/post/<%= post._id %>"
-                                                                    class="btn btn-success">
+                                                                    class="rounded px-3 py-2 bg-blue text-white">
                                                                     <i class="bi bi-pen"></i>
                                                                     Edit
                                                                 </a>

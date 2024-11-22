@@ -41,19 +41,22 @@
                             <div class="card">
                                 <div class="card-body">
                                     <h5 class="card-title">General Setting</h5>
-                                    <form id="submitGeneralSetting">
+                                    <form action="/admin/set/general/setting" method="post"
+                                        enctype="multipart/form-data">
+                                        <input type="text" hidden value="<%= setting._id %>" name="id">
                                         <!-- set compnay Logo -->
                                         <div class="row mb-3">
                                             <div class="col-md-6">
                                                 <label for="companylogo" class="form-label">Company Logo</label>
                                                 <div class="col-sm-10">
-                                                    <input class="form-control" type="file" id="companylogo">
+                                                    <input class="form-control" name="logo" type="file"
+                                                        id="companylogo">
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="d-flex justify-content-center"
                                                     style="width: 100px; height: 80px;">
-                                                    <img src="/uploads/tour_location_images/17320023006336.webp" alt=""
+                                                    <img src="<%= logo_url %>/<%= setting.logo %>" alt=""
                                                         style="object-fit: cover;">
                                                 </div>
                                             </div>
@@ -64,7 +67,9 @@
                                                 <div class="form-group mb-3">
                                                     <label for="compnayname" class="form-label">Company Name</label>
                                                     <div class="col-sm-10">
-                                                        <input class="form-control" type="text" id="compnayname">
+                                                        <input class="form-control" name="company_name"
+                                                            value="<%=setting.company_name %>" type="text"
+                                                            id="compnayname">
                                                     </div>
                                                 </div>
                                                 <!-- Company Address -->
@@ -72,14 +77,16 @@
                                                     <label for="compnayaddress" class="form-label">Company
                                                         Address</label>
                                                     <div class="col-sm-10">
-                                                        <input class="form-control" type="text" id="compnayaddress">
+                                                        <input class="form-control" name="company_address" type="text"
+                                                            value="<%= setting.company_address %>" id="compnayaddress">
                                                     </div>
                                                 </div>
                                                 <!-- compnay copyright -->
                                                 <div class="form-group mb-3">
                                                     <label for="copyright" class="form-label">Copyright</label>
                                                     <div class="col-sm-10">
-                                                        <input class="form-control" type="text" id="copyright">
+                                                        <input class="form-control" name="company_copyright" type="text"
+                                                            value="<%= setting.company_copyright %>" id="copyright">
                                                     </div>
                                                 </div>
                                             </div>
@@ -88,14 +95,21 @@
                                                 <div class="form-group mb-3">
                                                     <label for="compnayemail" class="form-label">Company Email</label>
                                                     <div class="col-sm-10">
-                                                        <input class="form-control" type="text" id="compnayemail">
+                                                        <input class="form-control" name="email" type="text"
+                                                            value="<%= setting.email %>" id="compnayemail">
                                                     </div>
                                                 </div>
                                                 <!-- set company phone -->
                                                 <div class="form-group mb-3">
                                                     <label for="phone" class="form-label">Phone</label>
                                                     <div class="col-sm-10">
-                                                        <input class="form-control" type="number" id="phone">
+                                                        <input class="form-control" name="company_phone" type="number"
+                                                            value="<%= setting.company_phone %>" id="phone">
+                                                    </div>
+                                                    <div id="alert"
+                                                        class="alert alert-danger alert-dismissible fade show mt-3"
+                                                        role="alert" style="display: none;">
+                                                        Number Equal to 10
                                                     </div>
                                                 </div>
                                             </div>
@@ -104,12 +118,15 @@
                                             <div class="col-md-11">
                                                 <!-- set description --->
                                                 <label for="description" class="form-label">Description</label>
-                                                <textarea id="description" class="form-control"></textarea>
+                                                <textarea id="description" name="company_description"
+                                                    class="form-control">
+                                                    <%= setting.company_description %>
+                                                </textarea>
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-md-6">
-                                                <button type="submit" class="btn btn-success bg-gradient">
+                                                <button type="submit" class="btn btn-success bg-gradient submit">
                                                     <i class="bi bi-upload"></i>
                                                     Submit
                                                 </button>
@@ -122,7 +139,8 @@
                     </div>
                 </section>
 
-            </main><!-- End #main -->
+            </main>
+            <!-- End #main -->
 
             <!-- ======= Footer ======= -->
             <%- include('../partials/footer') %>
@@ -132,6 +150,18 @@
                     <i class="bi bi-arrow-up-short"></i>
                 </a>
                 <%- include('../partials/script') %>
+                    <script defer>
+                        document.querySelector('#phone').onkeydown = (e) => {
+                            if (e.target.value.length > 10) {
+                                document.querySelector('#alert').style.display = 'block';
+                                document.querySelector('.submit').disabled = true;
+                            }else{
+                                document.querySelector('#alert').style.display = 'none';
+                                document.querySelector('.submit').disabled = false;
+                            }
+                        }
+                    </script>
+                    <script async src="/assets/js/index.js" type="module"></script>
 </body>
 
 </html>

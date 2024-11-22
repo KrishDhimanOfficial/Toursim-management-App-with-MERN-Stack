@@ -6,6 +6,11 @@ const tourcategory = new mongoose.Schema({
         required: true,
         trim: true
     },
+    status: {
+        type: mongoose.Schema.Types.Boolean,
+        required: true,
+        default: true
+    },
     category_name: {
         type: mongoose.Schema.Types.String,
         required: true,

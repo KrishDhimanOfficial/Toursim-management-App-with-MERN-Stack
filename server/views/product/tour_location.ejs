@@ -50,7 +50,7 @@
                                                 <th scope="col">#</th>
                                                 <th scope="col">Location</th>
                                                 <th scope="col">Name</th>
-                                                <th scope="col">Name</th>
+                                                <th scope="col">Status</th>
                                                 <th scope="col">Action</th>
                                             </tr>
                                         </thead>
@@ -70,12 +70,17 @@
                                                             <%= location.location_name %>
                                                         </td>
                                                         <td>
-                                                            <%= i %>
+                                                            <label class="switch">
+                                                                <input type="checkbox" <%=location.status ? 'checked'
+                                                                    : '' %>
+                                                                class="status" data-id="<%= location._id %>" >
+                                                                    <span class="slider"></span>
+                                                            </label>
                                                         </td>
                                                         <td>
                                                             <div class="d-flex gap-3">
                                                                 <a href="/admin/update/location/<%= location._id %>"
-                                                                    class="btn btn-success">
+                                                                    class="rounded px-3 py-2 bg-blue text-white">
                                                                     <i class="bi bi-pen"></i>
                                                                     Edit
                                                                 </a>

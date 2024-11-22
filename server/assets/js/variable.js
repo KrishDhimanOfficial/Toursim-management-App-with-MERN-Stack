@@ -73,7 +73,7 @@ export const displayPreviewImages = (e) => {
     const files = e.target.files;
     if (previewImg) previewImg.style.display = 'none';
     if (Formbtn.id === 'submitForm') previewMultipleImage.innerHTML = '';
-    
+
     if (Array.from(files).length > 4) {
         alert.style.display = 'block';
     } else {
@@ -122,4 +122,16 @@ export const clearInputFiles = (e) => {
     const previewImages = previewMultipleImage.children.length - 1;
     if (previewImages == 0) previewImg.style.display = 'block';
     e.target.closest('.imgbox').remove()
+}
+
+export const updateDataStatus = async (status, url) => {
+    try {
+        await fetch(url, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ status: status })
+        })
+    } catch (error) {
+        console.log('updateDataStatus : ' + error.message)
+    }
 }
