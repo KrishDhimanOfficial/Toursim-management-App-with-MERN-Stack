@@ -89,7 +89,7 @@ if (Formbtn) Formbtn.onsubmit = async (e) => {
         formData.append('travelling_plan', travellingPlan.getHTML())
     }
     const response = await sendDataToServer(url, method, formData)
-    if (response && Formbtn.id === 'updateFormData') { window.location.reload() }
+    if (response && Formbtn.id === 'updateFormData') window.location.reload()
 }
 
 // Inject EventListener
