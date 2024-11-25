@@ -9,7 +9,7 @@ const tourLocationsSlice = createSlice({
     name: 'tourLocations',
     initialState,
     reducers: {
-        APIToursLocation: (state, action) => {
+        HotToursAPI: (state, action) => {
             try {
                 return action.payload
             } catch (error) {
@@ -20,5 +20,5 @@ const tourLocationsSlice = createSlice({
 })
 
 
-export const { APIToursLocation } = tourLocationsSlice.actions;
+export const { HotToursAPI } = tourLocationsSlice.actions;
 export default tourLocationsSlice.reducer;// export reducer to store.js

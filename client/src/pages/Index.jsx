@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { APIToursLocation } from '../features/location'
+import { HotToursAPI } from '../features/location'
 import axios from 'axios'
 import config from '../config/config'
 import { Sec_Heading, Tours, Post, Destination, NaviagteUser } from '../components/componets'
@@ -10,11 +10,11 @@ const Index = () => {
     const state = useSelector(state => state.tourlocations)
 
     useEffect(() => {
-        const fetchTourDestination = async () => {
+        const fetchHotToursAPI = async () => {
             const response = await axios.get(`${config.server_url}/get/tours`)
-            dispatch(APIToursLocation(response.data))
+            dispatch(HotToursAPI(response.data))
         }
-        fetchTourDestination()
+        fetchHotToursAPI()
     }, [])
     return (
         <>
