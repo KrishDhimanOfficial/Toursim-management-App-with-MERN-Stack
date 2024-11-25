@@ -96,14 +96,6 @@ const productControllers = {
             console.log('createLoaction : ' + error.message)
         }
     },
-    getTourLocations: async (req, res) => {
-        try {
-            const locations = await tourLocationModel.find({})
-            if (locations) return res.status(200).json({ locations, tour_location_img_url: config.server_tour_location_img_url })
-        } catch (error) {
-            console.log('getAllTourLoactions : ' + error.message)
-        }
-    },
     updateTourLocation: async (req, res) => {
         try {
             const image = req.file?.filename;

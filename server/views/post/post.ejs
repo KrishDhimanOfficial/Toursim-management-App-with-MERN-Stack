@@ -17,114 +17,116 @@
     <!-- ======= Header ======= -->
     <%- include('../partials/navbar') %>
         <!-- End Header -->
+        <%- include('../partials/modal') %>
 
-        <!-- ======= Sidebar ======= -->
-        <%- include('../partials/sidebar') %>
-            <!-- End Sidebar-->
+            <!-- ======= Sidebar ======= -->
+            <%- include('../partials/sidebar') %>
+                <!-- End Sidebar-->
 
-            <main id="main" class="main">
+                <main id="main" class="main">
 
-                <div class="pagetitle">
-                    <h1>Dashboard</h1>
-                    <nav>
-                        <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="/admin/dashboard">Home</a></li>
-                            <li class="breadcrumb-item">Post</li>
-                        </ol>
-                    </nav>
-                </div>
-                <!-- End Page Title -->
+                    <div class="pagetitle">
+                        <h1>Dashboard</h1>
+                        <nav>
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="/admin/dashboard">Home</a></li>
+                                <li class="breadcrumb-item">Post</li>
+                            </ol>
+                        </nav>
+                    </div>
+                    <!-- End Page Title -->
 
-                <section class="section dashboard">
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="w-100 py-3 d-flex justify-content-between">
-                                        <h5 class="card-title p-0">All Posts</h5>
-                                        <a href="/admin/create/post" class="btn btn-primary">Add New</a>
+                    <section class="section dashboard">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="w-100 py-3 d-flex justify-content-between">
+                                            <h5 class="card-title p-0">All Posts</h5>
+                                            <a href="/admin/create/post" class="btn btn-primary">Add New</a>
+                                        </div>
+                                        <table id="post-table" class="table datatable">
+                                            <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>Post</th>
+                                                    <th>Title</th>
+                                                    <th>Slug</th>
+                                                    <th>Category</th>
+                                                    <th>Status</th>
+                                                    <th>Created AT</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <%- include('../partials/loader') %>
+                                                    <% posts.forEach((post,i)=> { %>
+                                                        <tr class="table-row">
+                                                            <th scope="row">
+                                                                <%= i + 1 %>
+                                                            </th>
+                                                            <td>
+                                                                <img src="<%= post_img_url %>/<%= post.post_image %>"
+                                                                    style="width: 80px; height: 80px;" alt=""
+                                                                    loading='lazy'>
+                                                            </td>
+                                                            <td>
+                                                                <%= post.title %>
+                                                            </td>
+                                                            <td>
+                                                                <%= post.post_slug %>
+                                                            </td>
+                                                            <td>
+                                                                <%= post.category?.category_name %>
+                                                            </td>
+                                                            <td>
+                                                                <label class="switch">
+                                                                    <input type="checkbox" <%=post.status ? 'checked'
+                                                                        : '' %>
+                                                                    class="status" data-id="<%= post._id %>" >
+                                                                        <span class="slider"></span>
+                                                                </label>
+                                                            </td>
+                                                            <td>
+                                                                <%= post.formattedDate %>
+                                                            </td>
+                                                            <td>
+                                                                <div class="d-flex gap-3">
+                                                                    <a href="/admin/update/post/<%= post._id %>"
+                                                                        class="rounded px-3 py-2 bg-blue text-white">
+                                                                        <i class="bi bi-pen"></i>
+                                                                        Edit
+                                                                    </a>
+                                                                    <button type="button" data-id="<%= post._id %>"
+                                                                        data-bs-toggle="modal" data-bs-target=".modal"
+                                                                        class="btn btn-danger openModal">
+                                                                        <i class="bi bi-trash3"></i>
+                                                                        Delete
+                                                                    </button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <% }) %>
+                                            </tbody>
+                                        </table>
                                     </div>
-                                    <table id="post-table" class="table datatable">
-                                        <thead>
-                                            <tr>
-                                                <th>#</th>
-                                                <th>Post</th>
-                                                <th>Title</th>
-                                                <th>Slug</th>
-                                                <th>Category</th>
-                                                <th>Status</th>
-                                                <th>Created AT</th>
-                                                <th>Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <%- include('../partials/loader') %>
-                                                <% posts.forEach((post,i)=> { %>
-                                                    <tr class="table-row">
-                                                        <th scope="row">
-                                                            <%= i + 1 %>
-                                                        </th>
-                                                        <td>
-                                                            <img src="<%= post_img_url %>/<%= post.post_image %>"
-                                                                style="width: 80px; height: 80px;" alt=""
-                                                                loading='lazy'>
-                                                        </td>
-                                                        <td>
-                                                            <%= post.title %>
-                                                        </td>
-                                                        <td>
-                                                            <%= post.post_slug %>
-                                                        </td>
-                                                        <td>
-                                                            <%= post.category?.category_name %>
-                                                        </td>
-                                                        <td>
-                                                            <label class="switch">
-                                                                <input type="checkbox" <%=post.status ? 'checked' : ''
-                                                                    %>
-                                                                class="status" data-id="<%= post._id %>" >
-                                                                    <span class="slider"></span>
-                                                            </label>
-                                                        </td>
-                                                        <td>
-                                                            <%= post.formattedDate %>
-                                                        </td>
-                                                        <td>
-                                                            <div class="d-flex gap-3">
-                                                                <a href="/admin/update/post/<%= post._id %>"
-                                                                    class="rounded px-3 py-2 bg-blue text-white">
-                                                                    <i class="bi bi-pen"></i>
-                                                                    Edit
-                                                                </a>
-                                                                <button type="button" data-id="<%= post._id %>"
-                                                                    class="btn btn-danger delete">
-                                                                    <i class="bi bi-trash3"></i>
-                                                                    Delete
-                                                                </button>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                    <% }) %>
-                                        </tbody>
-                                    </table>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </section>
+                    </section>
 
-            </main><!-- End #main -->
+                </main><!-- End #main -->
 
-            <!-- ======= Footer ======= -->
-            <%- include('../partials/footer') %>
-                <!-- End Footer -->
+                <!-- ======= Footer ======= -->
+                <%- include('../partials/footer') %>
+                    <!-- End Footer -->
 
-                <a href="#" class="back-to-top d-flex align-items-center justify-content-center">
-                    <i class="bi bi-arrow-up-short"></i>
-                </a>
-                <%- include('../partials/script') %>
-                    <script> const EndURL = 'api/post'; </script>
-                    <script async src="/assets/js/index.js" type="module"></script>
+                    <a href="#" class="back-to-top d-flex align-items-center justify-content-center">
+                        <i class="bi bi-arrow-up-short"></i>
+                    </a>
+                    <%- include('../partials/script') %>
+                        <script> const EndURL = 'api/post'; </script>
+                        <script async src="/assets/js/index.js" type="module"></script>
 </body>
 
 </html>

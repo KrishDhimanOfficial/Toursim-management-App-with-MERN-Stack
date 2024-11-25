@@ -144,34 +144,5 @@ const postControllers = {
             console.log('renderUpdatePostPage : ' + error.message)
         }
     },
-    // API's For Frontend Site
-    getPostapiData: async (req, res) => {
-        try {
-            const posts = await postModel.aggregate([
-                {
-                    $match: { status: true }
-                },
-                {
-                    $addFields: {
-                        formattedDate: {
-                            $dateToString: {
-                                format: "%Y-%m-%d",
-                                date: "$created_At"
-                            }
-                        }
-                    }
-                },
-                {
-                    $project: { formattedDate: 1, title: 1, post_slug: 1, post_image: 1 }
-                }
-            ])
-            return res.status(200).json({
-                posts,
-                post_img_url: config.server_post_img_url
-            })
-        } catch (error) {
-            console.log('getPostapiData : ' + error.message)
-        }
-    }
 }
 export default postControllers

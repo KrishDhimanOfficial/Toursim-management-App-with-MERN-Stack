@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { APILocationsData } from '../features/location'
+import { APIToursLocation } from '../features/location'
 import axios from 'axios'
 import config from '../config/config'
 import { Sec_Heading, Tours, Post, Destination, NaviagteUser } from '../components/componets'
@@ -8,14 +8,13 @@ import { Sec_Heading, Tours, Post, Destination, NaviagteUser } from '../componen
 const Index = () => {
     const dispatch = useDispatch()
     const state = useSelector(state => state.tourlocations)
-    
 
     useEffect(() => {
-        const fetch = async () => {
-            const response = await axios.get(`${config.server_url}/get/all/locations`)
-            dispatch(APILocationsData(response.data))
+        const fetchTourDestination = async () => {
+            const response = await axios.get(`${config.server_url}/get/tours`)
+            dispatch(APIToursLocation(response.data))
         }
-        fetch()
+        fetchTourDestination()
     }, [])
     return (
         <>
@@ -24,12 +23,20 @@ const Index = () => {
                     <Sec_Heading
                         heading={'Hot Tours'}
                         description={'Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.'} />
-                    <div className="row">
-                        <Tours location={'Paris'} />
-                        <Tours location={'London'} />
-                        <Tours location={'Russia'} />
-                        <NaviagteUser url={'/'} text={'See All Offers'} />
+                    <div className="row" style={{ display: 'flex', alignItems: 'stretch' }}>
+                        {
+                            state.hottours?.map((tour, i) => (
+                                <Tours
+                                    key={i}
+                                    location={tour.location.location_name}
+                                    imgPath={`${state.location_img_url}/${tour.location.featured_img}`}
+                                    slug={`${tour.tourplan.slug}`}
+                                    price={tour.tourplan.price}
+                                />
+                            ))
+                        }
                     </div>
+                    <NaviagteUser url={'/'} text={'See All Offers'} />
                 </div>
             </div>
             <div id="fh5co-destination">

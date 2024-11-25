@@ -1,8 +1,8 @@
 import {
-    server_url, FormLoader, Formbtn, ErrorAlert, previewMultipleImage, previewImg, ResetForm, dataID,
-    Input_img, displayPreviewImage, multipleImagesInput, deleteDataRequestToServer,
-    sendDataToServer, createSlug, displayPreviewImages, createTags, clearInputFiles,
-    updateDataStatus
+    server_url, FormLoader, Formbtn, ErrorAlert, previewMultipleImage, previewImg,
+    ResetForm, dataID, Input_img, displayPreviewImage, multipleImagesInput,
+    openModalToDeleteRequest, sendDataToServer, createSlug, displayPreviewImages,
+    createTags, clearInputFiles, updateDataStatus
 } from './variable.js'
 
 const tour_location_table = document.querySelector('#tour-location-table')
@@ -49,12 +49,12 @@ if (tour_excluded) createExcludedTag.onclick = () => {
         tour_excluded.value = '';
     }
 }
-// Delete Tour Tags
+// openModal Tour Tags
 if (tagscontainer) tagscontainer.onclick = (e) => {
-    const tag = e.target.closest('.deleteTag')?.innerText.trim();
+    const tag = e.target.closest('.openModalTag')?.innerText.trim();
     includedTagsArray = includedTagsArray.filter(currentTag => currentTag != tag)
     excludedTagsArray = excludedTagsArray.filter(currentTag => currentTag != tag)
-    if (e.target.closest('.deleteTag')) e.target.closest('.deleteTag').remove()
+    if (e.target.closest('.openModalTag')) e.target.closest('.openModalTag').remove()
 }
 
 // It's reset the Form State
@@ -65,7 +65,10 @@ if (ResetForm) ResetForm.onclick = () => {
     previewImg.style.display = 'block';
     previewImg.src = '/assets/images/upload_area.png';
     previewImg.classList.remove('d-none')
-    if (description) description.innerHTML = ''; // This will clear the content of the editor
+    if (description) description.innerHTML = '';
+    if (EndURL == 'api/tour') {
+        travellingPlan.innerHTML = '';
+    }
 }
 
 // Handle Form POST and PUT Operation
@@ -94,8 +97,8 @@ if (Formbtn) Formbtn.onsubmit = async (e) => {
 
 // Inject EventListener
 if (tour_location_table) tour_location_table.onclick = async (e) => {
-    if (e.target.closest('.delete')) {
-        deleteDataRequestToServer(e, `${server_url}/${EndURL}/${e.target.dataset.id}`)
+    if (e.target.closest('.openModal')) {
+        openModalToDeleteRequest(e, `${server_url}/${EndURL}/${e.target.dataset.id}`)
     }
     if (e.target.closest('.status')) {
         updateDataStatus(e.target.checked, `${server_url}/${EndURL}/${e.target.dataset.id}`)
@@ -104,8 +107,8 @@ if (tour_location_table) tour_location_table.onclick = async (e) => {
 
 // Inject EventListener
 if (tour_category_table) tour_category_table.onclick = async (e) => {
-    if (e.target.closest('.delete')) {
-        deleteDataRequestToServer(e, `${server_url}/${EndURL}/${e.target.dataset.id}`)
+    if (e.target.closest('.openModal')) {
+        openModalToDeleteRequest(e, `${server_url}/${EndURL}/${e.target.dataset.id}`)
     }
     if (e.target.closest('.status')) {
         updateDataStatus(e.target.checked, `${server_url}/${EndURL}/${e.target.dataset.id}`)
@@ -114,8 +117,8 @@ if (tour_category_table) tour_category_table.onclick = async (e) => {
 
 // Inject EventListener
 if (post_category_table) post_category_table.onclick = async (e) => {
-    if (e.target.closest('.delete')) {
-        deleteDataRequestToServer(e, `${server_url}/${EndURL}/${e.target.dataset.id}`)
+    if (e.target.closest('.openModal')) {
+        openModalToDeleteRequest(e, `${server_url}/${EndURL}/${e.target.dataset.id}`)
     }
     if (e.target.closest('.status')) {
         updateDataStatus(e.target.checked, `${server_url}/${EndURL}/${e.target.dataset.id}`)
@@ -125,8 +128,8 @@ if (post_category_table) post_category_table.onclick = async (e) => {
 
 // Inject EventListener
 if (posts_table) posts_table.onclick = async (e) => {
-    if (e.target.closest('.delete')) {
-        deleteDataRequestToServer(e, `${server_url}/${EndURL}/${e.target.dataset.id}`)
+    if (e.target.closest('.openModal')) {
+        openModalToDeleteRequest(e, `${server_url}/${EndURL}/${e.target.dataset.id}`)
     }
     if (e.target.closest('.status')) {
         updateDataStatus(e.target.checked, `${server_url}/${EndURL}/${e.target.dataset.id}`)
@@ -135,8 +138,8 @@ if (posts_table) posts_table.onclick = async (e) => {
 
 // Inject EventListener
 if (tours_table) tours_table.onclick = async (e) => {
-    if (e.target.closest('.delete')) {
-        deleteDataRequestToServer(e, `${server_url}/${EndURL}/${e.target.dataset.id}`)
+    if (e.target.closest('.openModal')) {
+        openModalToDeleteRequest(e, `${server_url}/${EndURL}/${e.target.dataset.id}`)
     }
     if (e.target.closest('.status')) {
         updateDataStatus(e.target.checked, `${server_url}/${EndURL}/${e.target.dataset.id}`)

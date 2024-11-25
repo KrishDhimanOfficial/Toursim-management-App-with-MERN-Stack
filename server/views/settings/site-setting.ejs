@@ -42,9 +42,68 @@
                             <div class="card">
                                 <div class="card-body">
                                     <h5 class="card-title">Hot Tours</h5>
-                                    <form id="submithotTours">
+                                    <form id="hotToursForm" action="/admin/set/hot/tours" method="post">
+                                        <input type="text" hidden name="id" value="<%= HotTours._id %>">
                                         <div class="row mb-3">
                                             <div class="col-md-11">
+                                                <label for="hottours" class="form-label"> Select only Three</label>
+                                                <select id="hottours" name="hottours" class="form-select" multiple
+                                                    required max="3" aria-label="multiple select example">
+                                                    <% locations.forEach((location,i)=> { %>
+                                                        <% if (HotTours.tours_id.includes(location._id)) { %>
+                                                            <option value="<%= location._id %>" selected>
+                                                                <%= location.location_name %>
+                                                            </option>
+                                                            <% } else { %>
+                                                                <option value="<%= location._id %>">
+                                                                    <%= location.location_name %>
+                                                                </option>
+                                                                <% } %>
+                                                                    <% }) %>
+                                                </select>
+                                                <div class="invalid-feedback">
+                                                    Please select up to 3 tours
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <button type="submit" class="btn btn-success bg-gradient">
+                                                Submit
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </section>
+
+                <!-- Top Destination -->
+                <section class="section dashboard">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Top Destination</h5>
+                                    <form id="Destinationform" action="/admin/set/destinations" method="post">
+                                        <input type="text" hidden name="id" value="<%= top_destination._id %>">
+                                        <div class="row mb-3">
+                                            <div class="col-md-11 mb-3">
+                                                <select id="destinations" class="form-select" multiple
+                                                    name="destinations" aria-label="multiple select example" max="10">
+                                                    <% locations.forEach((location,i)=> { %>
+                                                        <% if (top_destination.destinations_id.includes(location._id)) {  %>
+                                                            <option value="<%= location._id %>" selected>
+                                                                <%= location.location_name %>
+                                                            </option>
+                                                            <% } else { %>
+                                                                <option value="<%= location._id %>">
+                                                                    <%= location.location_name %>
+                                                                </option>
+                                                                <% } %>
+                                                                    <% }) %>
+                                                </select>
                                             </div>
                                             <div class="col-md-6">
                                                 <button type="submit" class="btn btn-success bg-gradient">
@@ -59,16 +118,31 @@
                     </div>
                 </section>
 
-                <!-- Top Destination -->
+                <!-- Recent Posts -->
                 <section class="section dashboard">
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="card">
                                 <div class="card-body">
-                                    <h5 class="card-title">Top Destination</h5>
-                                    <form id="submithotTours">
+                                    <h5 class="card-title">Recent Posts</h5>
+                                    <form id="postsform" action="/admin/set/recent_posts" method="post">
+                                        <input type="text" hidden name="id" value="<%= recents_posts._id %>">
                                         <div class="row mb-3">
-                                            <div class="col-md-11">
+                                            <div class="col-md-11 mb-3">
+                                                <select id="recent_posts" class="form-select" multiple name="recent_posts"
+                                                    aria-label="multiple select example">
+                                                    <% posts.forEach((post,i)=> { %>
+                                                        <% if (recents_posts.posts_id.includes(post._id)) { %>
+                                                            <option selected value="<%= post._id %>">
+                                                                <%= post.title %>
+                                                            </option>
+                                                        <% } else { %>
+                                                            <option value="<%= post._id %>">    
+                                                                <%= post.title %>
+                                                            </option>
+                                                        <% }  %>
+                                                    <% }) %>
+                                                </select>
                                             </div>
                                             <div class="col-md-6">
                                                 <button type="submit" class="btn btn-success bg-gradient">
@@ -93,7 +167,40 @@
                     <i class="bi bi-arrow-up-short"></i>
                 </a>
                 <%- include('../partials/script') %>
-                <script async src="/assets/js/index.js" type="module"></script>
+                    <script async src="/assets/js/index.js" type="module"></script>
+                    <script defer>
+                        document.addEventListener('DOMContentLoaded', () => {
+                            const hotToursSelect = document.getElementById('hottours')
+                            const form = document.getElementById('hotToursForm')
+                            const hotDestinationSelect = document.getElementById('destinations')
+                            const Destinationform = document.getElementById('Destinationform')
+                            const postForm = document.getElementById('postsform')
+                            const postSelect = document.getElementById('recent_posts')
+                            const alert = document.querySelectorAll('.invalid-feedback')
+
+                            form.addEventListener('submit', (e) => {
+                                if (hotToursSelect.selectedOptions.length > 3) {
+                                    e.preventDefault()
+                                    alert[0].classList.add('d-block')
+                                    alert[0].innerHTML = 'Please select only 3 tours';
+                                }
+                            })
+                            Destinationform.addEventListener('submit', (e) => {
+                                if (hotDestinationSelect.selectedOptions.length > 10) {
+                                    e.preventDefault()
+                                    alert[1].classList.add('d-block')
+                                    alert[1].innerHTML = 'Please select only 10 Destinations';
+                                }
+                            })
+                            postForm.addEventListener('submit', (e) => {
+                                if (postSelect.selectedOptions.length > 10) {
+                                    e.preventDefault()
+                                    alert[2].classList.add('d-block')
+                                    alert[2].innerHTML = 'Please select only 10 Destinations';
+                                }
+                            })
+                        })
+                    </script>
 </body>
 
 </html>

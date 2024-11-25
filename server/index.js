@@ -13,7 +13,7 @@ dotenv.config()
 const app = express()
 
 if (cluster.isPrimary) {
-    for (let i = 0; i < numCPUs.availableParallelism(); ++i) { cluster.fork() }
+    for (let i = 0; i < numCPUs.availableParallelism(); ++i)  cluster.fork()
     console.log(`Primary ${process.pid} is running`)
     cluster.fork().on('online', () => console.log(`worker online`))
     cluster.on('exit', (worker, code, signal) => console.log(`worker ${worker.process.pid} died`))
@@ -43,9 +43,7 @@ if (cluster.isPrimary) {
     // Routes
     app.use('/api', siteRoutes)
     app.use('/admin', adminRoutes)
-    app.use('/*', (req, res) => {
-        return res.render('partials/404')
-    })
+    app.use('/*', (req, res) => res.render('partials/404'))
 
     app.listen(config.port, () => {
         try {

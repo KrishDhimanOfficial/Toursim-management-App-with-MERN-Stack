@@ -8,6 +8,7 @@ export const checkAdminIsLogged = async (req, res, next) => {
         next()
     } catch (error) {
         console.log('checkAdminIsLogged : ' + error.message)
+        return res.redirect('/admin/login')
     }
 }
 export const checkToken = (req, res, next) => {
@@ -17,5 +18,6 @@ export const checkToken = (req, res, next) => {
         next()
     } catch (error) {
         console.log('checkToken : ' + error.message)
+        return res.redirect('/admin/login')
     }
 }

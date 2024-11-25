@@ -16,7 +16,8 @@
 
     <!-- ======= Header ======= -->
     <%- include('../partials/navbar') %>
-        <!-- End Header -->
+    <!-- End Header -->
+    <%- include('../partials/modal') %>
 
         <!-- ======= Sidebar ======= -->
         <%- include('../partials/sidebar') %>
@@ -85,7 +86,8 @@
                                                                     Edit
                                                                 </a>
                                                                 <button type="button" data-id="<%= category._id%>"
-                                                                    class="btn btn-danger delete">
+                                                                    data-bs-toggle="modal" data-bs-target=".modal"
+                                                                    class="btn btn-danger openModal">
                                                                     <i class="bi bi-trash3"></i>
                                                                     Delete
                                                                 </button>

@@ -10,6 +10,7 @@ export const ResetForm = document.querySelector('.reset')
 export const Loader = document.querySelector('#loader')
 export const FormLoader = document.querySelector('#formLoader')
 export const ErrorAlert = document.querySelector('#errorAlert')
+const confirmDeletRequestBtn = document.querySelector('.delete')
 
 
 export function createSlug(str) {
@@ -48,8 +49,14 @@ export const sendDataToServer = async (url, method, formData) => {
     }
 }
 
+// Function that's  Confirm Delete Request
+export const openModalToDeleteRequest = (e, url) => {
+    confirmDeletRequestBtn.onclick = () => { deleteDataRequestToServer(e, url) }
+    return;
+}
+
 // Function that handle delete request to server
-export const deleteDataRequestToServer = async (e, url) => {
+const deleteDataRequestToServer = async (e, url) => {
     try {
         const response = await fetch(url, { method: 'DELETE' })
         const data = await response.json()

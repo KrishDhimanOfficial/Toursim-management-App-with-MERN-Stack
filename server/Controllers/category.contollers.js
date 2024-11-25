@@ -3,6 +3,7 @@ import postcategoryModel from '../models/post.category.model.js'
 import deleteImage from '../services/deleteImg.js'
 import config from '../config/config.js'
 import mongoose from 'mongoose'
+import postModel from '../models/post.model.js'
 const ObjectId = mongoose.Types.ObjectId;
 
 const categorycontrollers = {
@@ -98,9 +99,13 @@ const categorycontrollers = {
     // Post Category
     renderPostCategories: async (req, res) => {
         try {
+            const posts = await postModel.find({}, { post_category_id: 1,_id:0 })
             const categories = await postcategoryModel.find({})
+            const postSet = new Set()
+            posts.forEach(post => postSet.add(post.post_category_id.toString()))
             return res.render('post/categories', {
                 categories,
+                postSet,
                 post_category_img_url: config.server_post_category_img_url
             })
         } catch (error) {

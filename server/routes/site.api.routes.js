@@ -1,9 +1,8 @@
 import express from 'express'
-import postcontrollers from '../Controllers/post.controllers.js'
-import productControllers from '../Controllers/product.contollers.js'
+import siteControllers from '../Controllers/site.controllers.js'
 const router = express.Router()
 
-router.get('/get/all/locations', productControllers.getTourLocations)
-router.get('/get/posts',postcontrollers.getPostapiData)
+router.get('/get/tours', siteControllers.gethotTours)
+router.get('/get/posts', siteControllers.getPostapiData)
 
 export default router

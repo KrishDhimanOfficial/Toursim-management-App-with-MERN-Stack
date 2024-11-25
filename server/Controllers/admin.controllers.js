@@ -1,7 +1,14 @@
 import mongoose from 'mongoose'
-import authenticateModel from '../models/authenticate.model.js'
+import postModel from '../models/post.model.js'
 import tourModel from '../models/product.model.js'
+import authenticateModel from '../models/authenticate.model.js'
+import tour_locationModel from '../models/tour_location.model.js'
 import general_settingModel from '../models/general_setting.model.js'
+import {
+    hot_tours_model,
+    top_destination_model,
+    recent_post_model
+} from '../models/site_setting.model.js'
 import bcrypt from 'bcrypt'
 import config from '../config/config.js'
 const ObjectId = mongoose.Types.ObjectId;
@@ -103,6 +110,86 @@ const admincontrollers = {
         } catch (error) {
             console.log('renderGeneralSetting : ' + error.message)
         }
+    },
+    renderSiteSetting: async (req, res) => {
+        try {
+            const tours = await hot_tours_model.find({})
+            const destinations = await top_destination_model.find({})
+            const post = await recent_post_model.find({})
+            const locations = await tour_locationModel.find(
+                { status: true },
+                { location_name: 1, _id: 1 }
+            )
+            const posts = await postModel.aggregate([
+                {
+                    $lookup: {
+                        from: 'postcategories', localField: 'post_category_id',
+                        foreignField: '_id', as: 'category'
+                    }
+                },
+                { $match: { 'category.status': true } },
+                { $match: { status: true } },
+                { $project: { title: 1 } }
+            ])
+            return res.render('settings/site-setting', {
+                locations,
+                HotTours: tours[0],
+                top_destination: destinations[0],
+                posts,
+                recents_posts :post[0]
+            })
+        } catch (error) {
+            console.log('renderSiteSetting : ' + error.message)
+        }
+    },
+    setHotTours: async (req, res) => {
+        try {
+            const response = await hot_tours_model.findByIdAndUpdate(
+                { _id: req.body.id },
+                {
+                    tours_id: Array.isArray(req.body.hottours)
+                        ? req.body.hottours.map(id => new Object(id))
+                        : [new Object(req.body.hottours)]
+                }
+            )
+            if (!response) return res.redirect('/admin/site-settings')
+            return res.redirect('/admin/site-settings')
+        } catch (error) {
+            console.log('setHotTours : ' + error.message)
+        }
+    },
+    setDestinations: async (req, res) => {
+        try {
+            const response = await top_destination_model.findByIdAndUpdate(
+                { _id: req.body.id },
+                {
+                    destinations_id: Array.isArray(req.body.destinations)
+                        ? req.body.destinations.map(id => new Object(id))
+                        : [new Object(req.body.destinations)]
+                }
+            )
+            if (!response) return res.redirect('/admin/site-settings')
+            return res.redirect('/admin/site-settings')
+        } catch (error) {
+            console.log('setDestinations : ' + error.message)
+        }
+    },
+    setRecentPosts: async (req, res) => {
+        try {
+            const response = await recent_post_model.findByIdAndUpdate(
+                { _id: req.body.id },
+                {
+                    posts_id: Array.isArray(req.body.recent_posts)
+                        ? req.body.recent_posts.map(id => new Object(id))
+                        : [new Object(req.body.recent_posts)]
+                }
+            )
+            if (!response) return res.redirect('/admin/site-settings')
+            return res.redirect('/admin/site-settings')
+        } catch (error) {
+            console.log('setRecentPosts : ' + error.message)
+        }
     }
 }
+
 export default admincontrollers

@@ -87,8 +87,6 @@ router.route('/api/tour/:id?')
     .delete(productControllers.deleteTour)
 
 
-router.get('/site-settings', checkAdminIsLogged, (req, res) => res.render('settings/site-setting'))
-
 // Profile Setting Routes
 router.get('/profile-settings', checkAdminIsLogged, admincontrollers.getAdminDetails)
 router.post('/set/details', admincontrollers.changeAdminDetails)
@@ -97,5 +95,11 @@ router.put('/set/password', admincontrollers.setAdminPassword)
 // Admin General Setting
 router.post('/set/general/setting', logo.single('logo'), admincontrollers.setGeneralSetting)
 router.get('/general-settings', checkAdminIsLogged, admincontrollers.renderGeneralSetting)
+
+// Site Setting
+router.get('/site-settings', checkAdminIsLogged, admincontrollers.renderSiteSetting)
+router.post('/set/hot/tours', admincontrollers.setHotTours)
+router.post('/set/destinations',admincontrollers.setDestinations)
+router.post('/set/recent_posts',admincontrollers.setRecentPosts)
 
 export default router
