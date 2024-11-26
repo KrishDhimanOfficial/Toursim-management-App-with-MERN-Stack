@@ -19,7 +19,7 @@ const routes = [
       {
         path: '/tours',
         element: <Tour />
-      }
+      },
     ]
   }
 ]

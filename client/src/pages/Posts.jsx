@@ -1,9 +1,7 @@
 import React, { useEffect } from 'react'
 import axios from 'axios'
-import { useDispatch, useSelector } from 'react-redux'
 import { Sec_Heading, Post } from '../components/componets'
 import config from '../config/config'
-import { getPosts } from '../features/post'
 
 const Posts = () => {
     return (

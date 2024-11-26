@@ -3,6 +3,7 @@ import {
     top_destination_model,
     recent_post_model
 } from '../models/site_setting.model.js'
+import tourModel from '../models/product.model.js'
 import config from '../config/config.js'
 
 const siteControllers = {
@@ -49,42 +50,94 @@ const siteControllers = {
                     }
                 }
             ])
-            return res.status(200).json(
-                {
-                    hottours,
-                    location_img_url: config.server_tour_location_img_url
-                })
+            return res.status(200).json({
+                hottours,
+                location_img_url: config.server_tour_location_img_url
+            })
         } catch (error) {
             console.log('gethotTours : ' + error.message)
         }
     },
-    // Post API's For Frontend Site
-    getPostapiData: async (req, res) => {
+    getDestionation: async (req, res) => {
         try {
-            const posts = await postModel.aggregate([
+            const response = await top_destination_model.aggregate([
                 {
-                    $match: { status: true }
-                },
-                {
-                    $addFields: {
-                        formattedDate: {
-                            $dateToString: {
-                                format: "%Y-%m-%d",
-                                date: "$created_At"
-                            }
-                        }
+                    $lookup: {
+                        from: 'tour-locations',
+                        localField: 'destinations_id',
+                        foreignField: '_id',
+                        as: 'destinations'
                     }
                 },
                 {
-                    $project: { formattedDate: 1, title: 1, post_slug: 1, post_image: 1 }
+                    $match: {
+                        'destinations.status': true
+                    }
+                }
+            ])
+            return res.status(200).json({ array: response[0].destinations, location_img_url: config.server_tour_location_img_url })
+        } catch (error) {
+            console.log('getDestionation : ' + error.message)
+        }
+    },
+    getAllTOurs: async (req, res) => {
+        try {
+            const response = await tourModel.aggregate([
+                {
+                    $lookup: {
+                        from: 'tour-locations',
+                        localField: 'product_location_id',
+                        foreignField: '_id',
+                        as: 'location'
+                    }
+                },
+                { $unwind: '$location' },
+                {
+                    $project: {
+                        'price': 1,
+                        'slug': 1,
+                        'location.featured_img': 1,
+                        'location.location_name': 1,
+                        formattedDate: {
+                            $dateToString: {
+                                format: "%Y-%m-%d",
+                                date: "$createdAt"
+                            }
+                        }
+                    }
                 }
             ])
             return res.status(200).json({
-                posts,
+                response,
+                location_img_url: config.server_tour_location_img_url
+            })
+        } catch (error) {
+            console.log('getAllTOurs : ' + error.message)
+        }
+    },
+    // Post API's For Frontend Site
+    getTopPosts: async (req, res) => {
+        try {
+            const response = await recent_post_model.aggregate([
+                {
+                    $lookup: {
+                        from: 'posts',
+                        localField: 'posts_id',
+                        foreignField: '_id',
+                        as: 'post'
+                    }
+                },
+                {
+                    $match: { 'post.status': true }
+                }
+            ])
+            // console.log(response[0])
+            return res.status(200).json({
+                array: response[0].post,
                 post_img_url: config.server_post_img_url
             })
         } catch (error) {
-            console.log('getPostapiData : ' + error.message)
+            console.log('getTopPosts : ' + error.message)
         }
     }
 }

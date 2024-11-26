@@ -1,5 +1,6 @@
 import tourCategoryModel from '../models/product_category.model.js'
 import postcategoryModel from '../models/post.category.model.js'
+import tourModel from '../models/product.model.js'
 import deleteImage from '../services/deleteImg.js'
 import config from '../config/config.js'
 import mongoose from 'mongoose'
@@ -35,9 +36,15 @@ const categorycontrollers = {
     renderTourCategories: async (req, res) => {
         try {
             const categories = await tourCategoryModel.find({})
-            return res.render('product/category', { categories, tour_category_img_url: config.server_tour_category_img_url })
+            const tours = await tourModel.find({}, { product_category_id: 1 })
+            const tourSet = new Set()
+            tours.forEach(tour => tourSet.add(tour.product_category_id.toString()))
+            return res.render('product/category', {
+                categories, tourSet,
+                tour_category_img_url: config.server_tour_category_img_url
+            })
         } catch (error) {
-            console.log('getTourCategories : ' + error.message)
+            console.log('renderTourCategories : ' + error.message)
         }
     },
     renderUpdateCategory: async (req, res) => {
@@ -99,7 +106,7 @@ const categorycontrollers = {
     // Post Category
     renderPostCategories: async (req, res) => {
         try {
-            const posts = await postModel.find({}, { post_category_id: 1,_id:0 })
+            const posts = await postModel.find({}, { post_category_id: 1, _id: 0 })
             const categories = await postcategoryModel.find({})
             const postSet = new Set()
             posts.forEach(post => postSet.add(post.post_category_id.toString()))

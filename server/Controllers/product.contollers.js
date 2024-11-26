@@ -52,8 +52,11 @@ const productControllers = {
     renderToursLocations: async (req, res) => {
         try {
             const tour_locations = await tourLocationModel.find({})
+            const tours = await tourModel.find({}, { product_location_id: 1 })
+            const tourSet = new Set()
+            tours.forEach(tour => tourSet.add(tour.product_location_id.toString()))
             return res.render('product/tour_location', {
-                tour_locations,
+                tour_locations,tourSet,
                 tour_location_img_url: config.server_tour_location_img_url
             })
         } catch (error) {

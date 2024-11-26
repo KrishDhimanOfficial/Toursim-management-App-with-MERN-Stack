@@ -125,7 +125,6 @@ if (post_category_table) post_category_table.onclick = async (e) => {
     }
 }
 
-
 // Inject EventListener
 if (posts_table) posts_table.onclick = async (e) => {
     if (e.target.closest('.openModal')) {
@@ -150,12 +149,15 @@ if (tours_table) tours_table.onclick = async (e) => {
 const role = document.querySelector('#profile span')
 const Name = document.querySelector('#profile h6')
 const adminName = document.querySelector('#adminName')
+const copyright = document.querySelector('.copyright')
 
     ; (async () => {
-        const reposne = await fetch(`${server_url}/get/admin/details`, { method: 'GET' })
-        const adminDetails = await reposne.json()
-        role.innerHTML = adminDetails.admin.role
-        Name.innerHTML = adminDetails.admin.name
-        adminName.innerHTML = adminDetails.admin.name
+        const api= await fetch(`${server_url}/get/admin/details`, { method: 'GET' })
+        const response = await api.json()
+        role.innerHTML = response.admin.role
+        Name.innerHTML = response.admin.name
+        adminName.innerHTML = response.admin.name
+        companyName.innerHTML = response.general_setting.company_name
+        copyright.innerHTML = response.general_setting.company_copyright
     }
     )() //IIFE

@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import paris from '../../../assets/images/paris.webp'
+import paris from '../../assets/images/paris.webp'
 
 const Tours = ({ imgPath, location, slug, price }) => {
     return (
@@ -14,7 +14,7 @@ const Tours = ({ imgPath, location, slug, price }) => {
                 />
                 <div className="desc">
                     <h3>{location}</h3>
-                    <span className='price'>${price}</span>
+                    <span className='price'>$ {price}</span>
                     <Link className="btn btn-primary btn-outline" to={`/tour/${slug}`}>
                         Book Now
                         <i className="icon-arrow-right22"></i>

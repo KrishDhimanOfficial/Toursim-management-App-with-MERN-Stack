@@ -73,8 +73,9 @@ const admincontrollers = {
     },
     adminDetails: async (req, res) => {
         try {
+            const general_setting = await general_settingModel.findOne({}, { company_name: 1, company_copyright: 1 })
             const admin = await authenticateModel.findOne({ role: 'admin' }, { name: 1, role: 1 })
-            return res.json({ admin })
+            return res.json({ admin, general_setting })
         } catch (error) {
             console.log('adminDetails : ' + error.message)
         }
@@ -136,7 +137,7 @@ const admincontrollers = {
                 HotTours: tours[0],
                 top_destination: destinations[0],
                 posts,
-                recents_posts :post[0]
+                recents_posts: post[0]
             })
         } catch (error) {
             console.log('renderSiteSetting : ' + error.message)
