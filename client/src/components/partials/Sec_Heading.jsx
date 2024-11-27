@@ -1,6 +1,8 @@
 import React from 'react'
 
 const Sec_Heading = ({ heading, description }) => {
+    console.log("sec-heading")
+    
     return (
         <div className="row">
             <div className="col-md-8 col-md-offset-2 text-center heading-section animate-box">
@@ -11,4 +13,4 @@ const Sec_Heading = ({ heading, description }) => {
     )
 }
 
-export default Sec_Heading
+export default React.memo(Sec_Heading)

@@ -3,6 +3,8 @@ import { NavLink, Link } from 'react-router-dom'
 
 
 const Header = () => {
+    console.log("Header Render");
+    
     return (
         <header id="fh5co-header-section" className="sticky-banner">
             <div className="container">

@@ -4,7 +4,9 @@ import {
     recent_post_model
 } from '../models/site_setting.model.js'
 import tourModel from '../models/product.model.js'
+import postModel from '../models/post.model.js'
 import config from '../config/config.js'
+import handleAggregatePagination from '../services/handlepagination.js'
 
 const siteControllers = {
     gethotTours: async (req, res) => {
@@ -139,7 +141,19 @@ const siteControllers = {
         } catch (error) {
             console.log('getTopPosts : ' + error.message)
         }
-    }
+    },
+    getAllPosts: async (req, res) => {
+        try {
+            const pipeline = [{ $match: { status: true } }]
+            const response = await handleAggregatePagination(postModel, pipeline, req.query)
+            return res.status(200).json({
+                response,
+                post_img_url: config.server_post_img_url
+            })
+        } catch (error) {
+            console.log('getAllPosts : ' + error.message)
+        }
+    },
 }
 
 export default siteControllers

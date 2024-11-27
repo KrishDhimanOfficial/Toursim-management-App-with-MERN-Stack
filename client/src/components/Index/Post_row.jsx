@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import config from '../../config/config'
+import { motion } from "motion/react"
 import { Sec_Heading, ErrorBoundary, Post, NaviagteUser } from '../componets'
 
 const Post_row = () => {
     const [posts, setPosts] = useState({})
-    
+
     const fetchtopPost = async () => {
         const response = await axios.get(`${config.server_url}/top/posts`)
         setPosts(response.data)
@@ -19,22 +20,28 @@ const Post_row = () => {
                     description={'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Velit est facilis maiores, perspiciatis accusamus asperiores sint consequuntur debitis.'} />
                 <div className="row row-bottom-padded-md">
                     <ErrorBoundary>
-                        {
-                            posts.array?.map((post, i) => (
-                                <Post
-                                    key={i}
-                                    title={post.title}
-                                    date={''}
-                                    slug={`/post/${post.post_slug}`}
-                                    imgPath={`${posts.post_img_url}/${post.post_image}`}
-                                    commentLength={21}
-                                    description={post.description}
-                                />
-                            ))
-                        }
+                        <motion.div
+                            initial={{ opacity: 0, y: -20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.5 }}
+                        >
+                            {
+                                posts.array?.map((post, i) => (
+                                    <Post
+                                        key={i}
+                                        title={post.title}
+                                        date={post.createdAt}
+                                        slug={`/post/${post.post_slug}`}
+                                        imgPath={`${posts.post_img_url}/${post.post_image}`}
+                                        commentLength={21}
+                                        description={post.description}
+                                    />
+                                ))
+                            }
+                        </motion.div>
                     </ErrorBoundary>
                 </div>
-                <NaviagteUser url={'/'} text={'See All Offers'} />
+                <NaviagteUser url={'/posts'} text={'See All Offers'} />
             </div>
         </div>
     )

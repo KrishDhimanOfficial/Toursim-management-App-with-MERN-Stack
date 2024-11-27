@@ -1,4 +1,5 @@
 import mongoose from 'mongoose'
+import aggregatePaginate from 'mongoose-aggregate-paginate-v2'
 const postSchema = new mongoose.Schema({
     title: {
         type: mongoose.Schema.Types.String,
@@ -36,4 +37,5 @@ const postSchema = new mongoose.Schema({
     }
 })
 
+postSchema.plugin(aggregatePaginate)
 export default mongoose.model('post', postSchema)

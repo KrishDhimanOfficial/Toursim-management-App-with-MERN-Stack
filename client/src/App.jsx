@@ -1,7 +1,8 @@
 import React from 'react'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import { Index, Posts, Tour } from './pages/pages'
+import { Index, Posts, Tour, SinglePost } from './pages/pages'
 import SiteLayout from './SiteLayout'
+import Layout from './Layout'
 
 const routes = [
   {
@@ -20,6 +21,16 @@ const routes = [
         path: '/tours',
         element: <Tour />
       },
+    ]
+  },
+  {
+    path: '/',
+    element: <Layout />,
+    children: [
+      {
+        path: '/post/:post_slug',
+        element: <SinglePost />
+      }
     ]
   }
 ]

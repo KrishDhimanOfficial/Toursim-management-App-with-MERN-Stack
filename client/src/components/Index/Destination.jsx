@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-const Destination = ({ location, imgPath,slug }) => {
+const Destination = ({ location, imgPath, slug }) => {
     return (
         <li className="one-forth text-center" style={{
             backgroundImage: `url(${imgPath})`,

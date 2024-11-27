@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
 import config from '../../config/config'
-import { ErrorBoundary,Destination } from '../componets'
+import { ErrorBoundary, Destination } from '../componets'
+
 
 const Destinations_row = () => {
     const [destinations, setdestination] = useState({})

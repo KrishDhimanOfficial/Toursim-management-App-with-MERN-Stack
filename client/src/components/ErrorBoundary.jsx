@@ -14,7 +14,7 @@ export default class ErrorBoundary extends Component {
         if (this.state.hasError) {
             return (
                 <div className="container">
-                    <div className="row" style={{margin :'30px 0'}}>
+                    <div className="row" style={{ margin: '30px 0' }}>
                         <div className="col-12">
                             <h2 className='text-center'>Oops! Something went wrong.</h2>
                         </div>

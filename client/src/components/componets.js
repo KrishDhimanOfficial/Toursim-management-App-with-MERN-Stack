@@ -11,6 +11,7 @@ import ErrorBoundary from "./ErrorBoundary"
 import Tour_row from "./Index/Tour_row"
 import Destinations_row from "./Index/Destinations_row"
 import Post_row from "./Index/Post_row"
+import Pagination from "./partials/Pagination"
 
 export {
     Header,
@@ -25,5 +26,6 @@ export {
     ErrorBoundary,
     Tour_row,
     Destinations_row,
-    Post_row
+    Post_row,
+    Pagination
 }

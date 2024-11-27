@@ -43,7 +43,7 @@ if (cluster.isPrimary) {
     // Routes
     app.use('/api', siteRoutes)
     app.use('/admin', adminRoutes)
-    app.use('/*', (req, res) => res.render('partials/404'))
+    app.use('/*', (req, res) => res.render('404'))
 
     app.listen(config.port, () => {
         try {
