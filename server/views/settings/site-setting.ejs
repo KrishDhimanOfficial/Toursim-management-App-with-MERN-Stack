@@ -47,7 +47,7 @@
                                         <div class="row mb-3">
                                             <div class="col-md-11">
                                                 <label for="hottours" class="form-label"> Select only Three</label>
-                                                <select id="hottours" name="hottours" class="form-select" multiple
+                                                <select id="hottours" name="hottours" class="form-select" multiple style="height: 200px;"
                                                     required max="3" aria-label="multiple select example">
                                                     <% locations.forEach((location,i)=> { %>
                                                         <% if (HotTours.tours_id.includes(location._id)) { %>
@@ -90,7 +90,7 @@
                                         <input type="text" hidden name="id" value="<%= top_destination._id %>">
                                         <div class="row mb-3">
                                             <div class="col-md-11 mb-3">
-                                                <select id="destinations" class="form-select" multiple
+                                                <select id="destinations" class="form-select" multiple style="height: 200px;"
                                                     name="destinations" aria-label="multiple select example" max="10">
                                                     <% locations.forEach((location,i)=> { %>
                                                         <% if (top_destination.destinations_id.includes(location._id)) {  %>
@@ -129,7 +129,7 @@
                                         <input type="text" hidden name="id" value="<%= recents_posts._id %>">
                                         <div class="row mb-3">
                                             <div class="col-md-11 mb-3">
-                                                <select id="recent_posts" class="form-select" multiple name="recent_posts"
+                                                <select id="recent_posts" class="form-select" multiple name="recent_posts" style="height: 200px;"
                                                     aria-label="multiple select example">
                                                     <% posts.forEach((post,i)=> { %>
                                                         <% if (recents_posts.posts_id.includes(post._id)) { %>

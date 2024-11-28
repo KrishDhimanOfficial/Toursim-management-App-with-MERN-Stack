@@ -3,15 +3,22 @@ import { Link } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import axios from 'axios'
 import config from '../../config/config'
-import { allPosts } from '../../features/post.slice'
+import { allPosts, categoryPost } from '../../features/post.slice'
 
-const Pagination = () => {
+const Pagination = ({ url, paginateurl, slug }) => {
+    console.log('Pagination Render');
+    
     const dispatch = useDispatch()
     const pagination = useSelector(state => state.posts)
 
     const fetchpostswithPagination = async (i) => {
-        const response = await axios.get(`${config.server_url}/all/posts?page=${i}`)
-        dispatch(allPosts(response.data))
+        const response = await axios.get(`${url}?page=${i}`)
+        if (url === `${config.server_url}/all/posts`) {
+            dispatch(allPosts(response.data))
+        }
+        if (url === `${config.server_url}/category/posts/${slug}`) {
+            dispatch(categoryPost(response.data))
+        }
     }
 
     return (
@@ -25,18 +32,18 @@ const Pagination = () => {
                                     <Link
                                         className="page-link"
                                         onClick={() => fetchpostswithPagination(pagination.response?.page - 1)}
-                                        to={`/posts?page=${pagination.response?.page - 1}`}>
+                                        to={`${paginateurl}?page=${pagination.response?.page - 1}`}>
                                         Previous
                                     </Link>
                                 </li>
-                                : null
+                                : ''
                         }
                         {
                             Array.from({ length: pagination.response?.totalPages }, (_, i) => (
                                 <li key={i} className="page-item">
                                     <Link
                                         className="page-link"
-                                        to={`/posts?page=${i + 1}`}
+                                        to={`${paginateurl}?page=${i + 1}`}
                                         onClick={() => fetchpostswithPagination(i + 1)}
                                     >
                                         {i + 1}
@@ -50,14 +57,14 @@ const Pagination = () => {
                                     <Link
                                         className="page-link"
                                         onClick={() => fetchpostswithPagination(pagination.response?.page + 1)}
-                                        to={`/posts?page=${pagination.response?.page + 1}`}>
+                                        to={`${paginateurl}?page=${pagination.response?.page + 1}`}>
                                         Next
                                     </Link>
                                 </li>
-                                : null
+                                : ''
                         }
                     </ul>
-                    : null
+                    : ''
             }
         </nav>
     )

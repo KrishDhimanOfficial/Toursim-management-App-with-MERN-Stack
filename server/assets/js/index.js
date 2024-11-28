@@ -19,6 +19,7 @@ const createExcludedTag = document.querySelector('.createExcludedTag')
 const tagscontainer = document.querySelector('.tourTags')
 const tourInculdedContainer = document.querySelector('#tourIncludedTags')
 const tourExculdedContainer = document.querySelector('#tourExcludedTags')
+const pCategorySlug = document.querySelector('#slug')
 
 //  preview image on screen
 if (Input_img) Input_img.onchange = (e) => { displayPreviewImage(e) }
@@ -78,6 +79,9 @@ if (Formbtn) Formbtn.onsubmit = async (e) => {
     const url = Formbtn.id === 'submitForm' ? `${server_url}/${EndURL}` : `${server_url}/${EndURL}/${dataID.value}`;
     const formData = new FormData(e.target)
 
+    if (EndURL === 'api/posts/category') {
+        formData.append('slug', createSlug(`${pCategorySlug.value}`))
+    }
     // Create Post
     if (EndURL === 'api/post') {
         formData.append('post_slug', createSlug(`${slug.value}`))
@@ -152,7 +156,7 @@ const adminName = document.querySelector('#adminName')
 const copyright = document.querySelector('.copyright')
 
     ; (async () => {
-        const api= await fetch(`${server_url}/get/admin/details`, { method: 'GET' })
+        const api = await fetch(`${server_url}/get/admin/details`, { method: 'GET' })
         const response = await api.json()
         role.innerHTML = response.admin.role
         Name.innerHTML = response.admin.name

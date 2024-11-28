@@ -170,15 +170,17 @@
                                     headers: { 'Content-Type': 'application/json' },
                                     body: JSON.stringify({
                                         id: document.querySelector('#adminID').value.trim(),
+                                        oldpassword: document.querySelector('#oldpassword').value.trim(),
                                         newpassword: document.querySelector('#cpassword').value.trim()
                                     })
                                 })
                                 const res = await api.json()
                                 if (res.error) {
                                     passwordAlert.style.display = 'block';
-                                    passwordAlert.innerHTML = res.message;
+                                    passwordAlert.innerHTML = res.error;
+                                } else {
+                                    window.location.reload()
                                 }
-                                window.location.reload()
                             }
                         }
                     </script>

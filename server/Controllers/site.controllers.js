@@ -5,6 +5,7 @@ import {
 } from '../models/site_setting.model.js'
 import tourModel from '../models/product.model.js'
 import postModel from '../models/post.model.js'
+import postcategoryModel from '../models/post.category.model.js'
 import config from '../config/config.js'
 import handleAggregatePagination from '../services/handlepagination.js'
 
@@ -152,6 +153,67 @@ const siteControllers = {
             })
         } catch (error) {
             console.log('getAllPosts : ' + error.message)
+        }
+    },
+    getSinglePost: async (req, res) => {
+        try {
+            const response = await postModel.findOne({ post_slug: req.params.post_slug })
+            if (!response) return res.status(200).json({ error: 'Not Found' })
+            return res.status(200).json({ post: response, post_img_url: config.server_post_img_url })
+        } catch (error) {
+            console.log('getSinglePost : ' + error.message)
+        }
+    },
+    getCategories: async (req, res) => {
+        try {
+            // find({ status: true }, { category_name: 1, slug: 1 })
+            const categories = await postcategoryModel.aggregate([
+                {
+                    $match: { status: true }
+                },
+                {
+                    $lookup: {
+                        from: 'posts',
+                        localField: '_id',
+                        foreignField: 'post_category_id',
+                        as: 'post'
+                    }
+                },
+                {
+                    $project: {
+                        'post._id': 1, category_name: 1, slug: 1
+                    }
+                }
+            ])
+            return res.status(200).json(categories)
+        } catch (error) {
+            console.log('getCategories : ' + error.message)
+        }
+    },
+    getpostbyCategory: async (req, res) => {
+        try {
+            const pipeline = [
+                { $match: { slug: req.params.slug } },
+                {
+                    $lookup: {
+                        from: 'posts',
+                        localField: '_id',
+                        foreignField: 'post_category_id',
+                        as: 'post'
+                    }
+                },
+                { $unwind: '$post' },
+                { $match: { 'post.status': true } },
+                {
+                    $project: {
+                        featured_image: 0, category_name: 0, status: 0, slug: 0
+                    }
+                }
+            ]
+            const response = await handleAggregatePagination(postcategoryModel, pipeline, req.query)
+            return res.status(200).json({ response, post_img_url: config.server_post_img_url })
+        } catch (error) {
+            console.log('getpostbyCategory : ' + error.message)
         }
     },
 }

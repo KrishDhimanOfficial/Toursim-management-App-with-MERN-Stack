@@ -57,16 +57,23 @@ const admincontrollers = {
     },
     setAdminPassword: async (req, res) => {
         try {
-            const { id, newpassword } = req.body;
-            // Hashing New Password
-            const hashedpassword = await bcrypt.hash(newpassword, await bcrypt.genSalt(10))
-            const response = await authenticateModel.findByIdAndUpdate(
-                { _id: id },
-                { password: hashedpassword },
-                { new: true }
-            )
-            if (!response) return res.json({ error: 'Failed!' })
-            return res.json({ message: true })
+            const { id, oldpassword, newpassword } = req.body;
+            const admin = await authenticateModel.findById({ _id: id })
+            const isMatch = await bcrypt.compare(oldpassword, admin.password)
+            
+            if (!isMatch) {
+                return res.json({ error: 'Failed!' })
+            } else {
+                // Hashing New Password
+                const hashedpassword = await bcrypt.hash(newpassword, await bcrypt.genSalt(10))
+                const response = await authenticateModel.findByIdAndUpdate(
+                    { _id: id },
+                    { password: hashedpassword },
+                    { new: true }
+                )
+                if (!response) return res.json({ error: 'Failed!' })
+                return res.json({ message: true })
+            }
         } catch (error) {
             console.log('setAdminPassword : ' + error.message)
         }

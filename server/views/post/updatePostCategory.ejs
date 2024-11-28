@@ -55,6 +55,11 @@
                                             <input type="text" name="category_name" class="form-control" id="textInput"
                                                 value="<%= category.category_name %>" required>
                                         </div>
+                                        <div class="col-12">
+                                            <label for="slug" class="form-label">Slug</label>
+                                            <input type="text" class="form-control" id="slug"
+                                                value="<%= category.slug %>" required>
+                                        </div>
                                         <%- include('../partials/alert') %>
                                             <div class="d-flex gap-2 align-items-center justify-content-center">
                                                 <%- include('../partials/formLoader') %>

@@ -12,4 +12,7 @@ router.get('/all/tours', siteControllers.getAllTOurs)
 
 // Post's Page
 router.get('/all/posts', siteControllers.getAllPosts)
+router.get('/single/post/:post_slug', siteControllers.getSinglePost)
+router.get('/post/categories', siteControllers.getCategories)
+router.get('/category/posts/:slug', siteControllers.getpostbyCategory)
 export default router

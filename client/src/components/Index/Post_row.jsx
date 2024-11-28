@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import config from '../../config/config'
-import { motion } from "motion/react"
 import { Sec_Heading, ErrorBoundary, Post, NaviagteUser } from '../componets'
 
 const Post_row = () => {
@@ -20,11 +19,6 @@ const Post_row = () => {
                     description={'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Velit est facilis maiores, perspiciatis accusamus asperiores sint consequuntur debitis.'} />
                 <div className="row row-bottom-padded-md">
                     <ErrorBoundary>
-                        <motion.div
-                            initial={{ opacity: 0, y: -20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.5 }}
-                        >
                             {
                                 posts.array?.map((post, i) => (
                                     <Post
@@ -38,7 +32,6 @@ const Post_row = () => {
                                     />
                                 ))
                             }
-                        </motion.div>
                     </ErrorBoundary>
                 </div>
                 <NaviagteUser url={'/posts'} text={'See All Offers'} />

@@ -12,6 +12,10 @@ import Tour_row from "./Index/Tour_row"
 import Destinations_row from "./Index/Destinations_row"
 import Post_row from "./Index/Post_row"
 import Pagination from "./partials/Pagination"
+import CategoryList from "./post/CategoryList"
+import Loader from "./partials/Loader"
+import CommentInput from "./post/CommentInput"
+import Button from "./partials/Button"
 
 export {
     Header,
@@ -27,5 +31,9 @@ export {
     Tour_row,
     Destinations_row,
     Post_row,
-    Pagination
+    Pagination,
+    CategoryList,
+    Loader,
+    CommentInput,
+    Button
 }

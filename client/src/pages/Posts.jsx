@@ -10,10 +10,13 @@ const Posts = () => {
     console.log('Post Page Render')
     const dispatch = useDispatch()
     const poststate = useSelector(state => state.posts)
+    const apiURL = `${config.server_url}/all/posts`;
+    const paginationURL = '/posts';
+
 
     const fetchPosts = async () => {
-        const response = await axios.get(`${config.server_url}/all/posts`)
-        dispatch(allPosts(response.data))
+        const response = await axios.get(apiURL)
+        if (response && response.status === 200) dispatch(allPosts(response.data))
     }
     useEffect(() => { fetchPosts() }, [])
     return (
@@ -26,25 +29,19 @@ const Posts = () => {
             <div className="container">
                 <div className="row row-bottom-padded-md">
                     <ErrorBoundary>
-                        <motion.div
-                            initial={{ opacity: 0, y: -20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.9 }}
-                        >
-                            {
-                                poststate.response?.collectionData?.map((post, i) => (
-                                    <Post
-                                        key={i}
-                                        title={post.title}
-                                        date={post.createdAt}
-                                        commentLength={21}
-                                        slug={`/post/${post.post_slug}`}
-                                        imgPath={`${poststate.post_img_url}/${post.post_image}`}
-                                        description={post.description}
-                                    />
-                                ))
-                            }
-                        </motion.div>
+                        {
+                            poststate.response?.collectionData?.map((post, i) => (
+                                <Post
+                                    key={i}
+                                    title={post.title}
+                                    date={post.createdAt}
+                                    commentLength={21}
+                                    slug={`/post/${post.post_slug}`}
+                                    imgPath={`${poststate.post_img_url}/${post.post_image}`}
+                                    description={post.description}
+                                />
+                            ))
+                        }
                     </ErrorBoundary>
                 </div>
             </div>
@@ -52,7 +49,7 @@ const Posts = () => {
                 <div className="row">
                     <div className="col-12">
                         <div className="text-center">
-                            <Pagination />
+                            <Pagination url={apiURL} paginateurl={paginationURL} />
                         </div>
                     </div>
                 </div>

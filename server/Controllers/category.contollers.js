@@ -143,7 +143,8 @@ const categorycontrollers = {
             } else {
                 const data = await postcategoryModel.create({
                     featured_image: req.file.filename,
-                    category_name: req.body.category_name
+                    category_name: req.body.category_name,
+                    slug: req.body.slug
                 })
                 if (!data) {
                     await deleteImage(`post_category_images/${req.file.filename}`)
@@ -169,12 +170,12 @@ const categorycontrollers = {
             const image = req.file?.filename;
             const previousimg = await postcategoryModel.findOne({ _id: req.params.id })
             if (image) deleteImage(`post_category_images/${previousimg.featured_image}`)
-
             const data = await postcategoryModel.findByIdAndUpdate(
                 { _id: req.params.id },
                 {
                     featured_image: req.file?.filename,
                     category_name: req.body.category_name,
+                    slug: req.body.slug
                 },
                 { new: true }
             )
