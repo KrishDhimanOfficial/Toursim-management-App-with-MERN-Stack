@@ -1,6 +1,13 @@
 import express from 'express'
 import siteControllers from '../Controllers/site.controllers.js'
+import authenticateControllers from '../Controllers/authentication.controllers.js'
 const router = express.Router()
+
+// Auth API's
+router.post('/register', authenticateControllers.register)
+router.post('/login', authenticateControllers.LoginUser)
+router.post('/forgot/password', authenticateControllers.forgotPassword)
+router.post('/verify/token', authenticateControllers.chechUserIsAuthenticated)
 
 // HomePage Setting API's
 router.get('/get/tours', siteControllers.gethotTours)

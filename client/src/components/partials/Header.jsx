@@ -1,10 +1,19 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { NavLink, Link } from 'react-router-dom'
+import { Button } from '../componets'
 
 
 const Header = () => {
-    console.log("Header Render");
-    
+    console.log("Header Render")
+    const [showloginbtn, setloginbtn] = useState(false)
+    const token = localStorage.getItem('token')
+
+
+    const logout = () => {
+        localStorage.removeItem('token')
+        setloginbtn(false)
+    }
+    useEffect(() => { if (token) setloginbtn(true) }, [])
     return (
         <header id="fh5co-header-section" className="sticky-banner">
             <div className="container">
@@ -32,11 +41,22 @@ const Header = () => {
                             <li>
                                 <NavLink to='/posts'>Blogs</NavLink>
                             </li>
+                            <li>
+                                {
+                                    showloginbtn
+                                        ? (<Button
+                                            fn={() => logout()}
+                                            type={'button'}
+                                            text={'Logout'}
+                                        />)
+                                        : (<NavLink to='/login'>Login</NavLink>)
+                                }
+                            </li>
                         </ul>
                     </nav>
                 </div>
             </div>
-        </header>
+        </header >
     )
 }
 

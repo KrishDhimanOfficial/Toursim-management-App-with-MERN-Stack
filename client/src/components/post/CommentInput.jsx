@@ -5,14 +5,13 @@ const CommentInput = () => {
     const buttonRef = useRef()
     return (
         <>
-            <div className="form-floating">
+            <div className="form-floating" style={{ marginBottom: '20px' }}>
                 <textarea
-                    className="form-control pt-5"
+                    className="form-control"
                     placeholder="Leave a comment here"
                     id="floatingTextarea"
                     style={{ height: '100px', fontSize: '1.5rem' }}>
                 </textarea>
-                <label htmlFor="floatingTextarea">Comments</label>
             </div>
 
             <Button

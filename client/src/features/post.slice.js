@@ -25,5 +25,10 @@ const postSlice = createSlice({
     }
 })
 
-export const { allPosts, singlePost, categoryPost, setLoading } = postSlice.actions;
+export const {
+    allPosts,
+    singlePost,
+    categoryPost,
+    setLoading
+} = postSlice.actions;
 export const postreducer = postSlice.reducer;

@@ -16,6 +16,11 @@ import CategoryList from "./post/CategoryList"
 import Loader from "./partials/Loader"
 import CommentInput from "./post/CommentInput"
 import Button from "./partials/Button"
+import Login from "./partials/Auth/Login"
+import Signup from "./partials/Auth/Signup"
+import ErrorAlert from "./partials/ErrorAlert"
+import ForgotPassword from "./partials/Auth/ForgotPassword"
+import SuccessAlert from "./partials/SuccessAlert"
 
 export {
     Header,
@@ -35,5 +40,10 @@ export {
     CategoryList,
     Loader,
     CommentInput,
-    Button
+    Button,
+    Login,
+    Signup,
+    ErrorAlert,
+    ForgotPassword,
+    SuccessAlert
 }

@@ -1,9 +1,10 @@
 import React from 'react'
 
-const Button = ({ btnRef, text, type, classes }) => {
+const Button = ({ fn, text, type, classes }, ref) => {
     return (
         <button
-            ref={btnRef}
+            onClick={fn}
+            ref={ref}
             type={type}
             className={`btn btn-block btn-primary fs-4 ${classes}`}>
             {text}

@@ -18,7 +18,8 @@ function Banner() {
                                     <ul className="nav nav-tabs" role="tablist">
                                         <li role="presentation" className="active">
                                             <Link to='' aria-controls="flights" role="tab" data-toggle="tab">
-                                                Tours</Link>
+                                                Tours
+                                            </Link>
                                         </li>
                                     </ul>
                                     <SeachForm />
