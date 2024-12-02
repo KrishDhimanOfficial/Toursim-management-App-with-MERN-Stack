@@ -28,7 +28,7 @@ const Tour = () => {
                                     key={i}
                                     location={tour.location.location_name}
                                     imgPath={`${tours.location_img_url}/${tour.location.featured_img}`}
-                                    slug={`/tour/${tour.slug}`}
+                                    slug={tour.slug}
                                     price={tour.price}
                                 />
                             ))

@@ -1,11 +1,11 @@
 import React, { useRef } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useForm } from "react-hook-form"
-import { Button, ErrorAlert, SuccessAlert } from '../../componets'
+import { Button, ErrorAlert } from '../../componets'
 import axios from 'axios'
 import config from '../../../config/config'
 import { useDispatch, useSelector } from 'react-redux'
-import { loginUser, saveToken } from '../../../features/Auth.slice'
+import { loginUser } from '../../../features/Auth.slice'
 
 const Login = () => {
     const btnref = useRef(null)
@@ -62,11 +62,9 @@ const Login = () => {
                         <div className="flex-row">
                             <Link to='/forgot/password' className="span">Forgot password?</Link>
                         </div>
-                        {
-                            errorState
-                                ? <ErrorAlert message={errormessage} />
-                                : ''
-                        }
+
+                        {errorState ? <ErrorAlert message={errormessage} /> : ''}
+
                         <Button
                             ref={btnref}
                             text={'Login'}

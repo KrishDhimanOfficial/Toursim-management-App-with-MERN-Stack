@@ -21,6 +21,10 @@ import Signup from "./partials/Auth/Signup"
 import ErrorAlert from "./partials/ErrorAlert"
 import ForgotPassword from "./partials/Auth/ForgotPassword"
 import SuccessAlert from "./partials/SuccessAlert"
+import CommentList from "./post/CommentList"
+import Input from "./partials/Input"
+import BookTour from "./partials/Tour/BookTour"
+import SingleTourSection from "./partials/Tour/SingleTourSection"
 
 export {
     Header,
@@ -45,5 +49,9 @@ export {
     Signup,
     ErrorAlert,
     ForgotPassword,
-    SuccessAlert
+    SuccessAlert,
+    CommentList,
+    Input,
+    BookTour,
+    SingleTourSection
 }

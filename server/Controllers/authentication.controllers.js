@@ -102,8 +102,11 @@ const authenticateControllers = {
             const { token } = req.body;
             const user = await authenticateModel.findById(
                 { _id: getUser(token) },
-                { password: 0, role: 0, _id: 0 }
+                { password: 0, role: 0, }
             )
+            if (!user) return res.status(200).json({
+                error: 'User Not Found!'
+            })
             return res.status(200).json(user)
         } catch (error) {
             console.log('chechUserIsAuthenticated : ' + error.message)

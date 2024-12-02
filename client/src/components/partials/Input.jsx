@@ -1,13 +1,22 @@
 import React from 'react'
 
-const Input = () => {
+
+const Input = ({
+    type,
+    placeholder,
+    style,
+    ...props
+}, ref) => {
     return (
         <input
             type={type}
+            style={style}
+            ref={ref}
+            {...props}
             class="input"
-            placeholder="Enter your Password"
+            placeholder={placeholder}
             required />
     )
 }
 
-export default Input
+export default React.forwardRef(Input)

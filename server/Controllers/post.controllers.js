@@ -1,8 +1,11 @@
 import config from '../config/config.js'
 import deleteImage from '../services/deleteImg.js'
+import userModel from '../models/authenticate.model.js'
 import postcategoryModel from '../models/post.category.model.js'
+import postCommentModel from '../models/post.comment.model.js'
 import postModel from '../models/post.model.js'
 import mongoose from 'mongoose'
+import { getUser } from '../services/createToken.js'
 const ObjectId = mongoose.Types.ObjectId;
 
 const postControllers = {

@@ -1,19 +1,17 @@
-import React, { useEffect, useState } from 'react'
-import { NavLink, Link } from 'react-router-dom'
+import React, { useEffect, useRef, useState } from 'react'
+import { NavLink, Link, useNavigate } from 'react-router-dom'
 import { Button } from '../componets'
 
 
 const Header = () => {
+    const btnRef = useRef()
     console.log("Header Render")
-    const [showloginbtn, setloginbtn] = useState(false)
-    const token = localStorage.getItem('token')
+    const navigate = useNavigate()
 
-
-    const logout = () => {
-        localStorage.removeItem('token')
-        setloginbtn(false)
+    const login = () => {
+        navigate('/login')
     }
-    useEffect(() => { if (token) setloginbtn(true) }, [])
+
     return (
         <header id="fh5co-header-section" className="sticky-banner">
             <div className="container">
@@ -42,15 +40,12 @@ const Header = () => {
                                 <NavLink to='/posts'>Blogs</NavLink>
                             </li>
                             <li>
-                                {
-                                    showloginbtn
-                                        ? (<Button
-                                            fn={() => logout()}
-                                            type={'button'}
-                                            text={'Logout'}
-                                        />)
-                                        : (<NavLink to='/login'>Login</NavLink>)
-                                }
+                                <Button
+                                    ref={btnRef}
+                                    fn={() => login()}
+                                    type={'button'}
+                                    text={'Login'}
+                                />
                             </li>
                         </ul>
                     </nav>
@@ -60,4 +55,4 @@ const Header = () => {
     )
 }
 
-export default Header
+export default React.memo(Header)

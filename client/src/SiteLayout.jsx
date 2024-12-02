@@ -10,10 +10,12 @@ const SiteLayout = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
+    const token = async () => {
+        const res = await verifyToken()
+        if (res == 'Token Not Found') navigate('/login')
+        dispatch(saveUser(res))
+    }
 
-    useEffect(() => {
-        const a = verifyToken()
-    }, [])
     return (
         <div id="fh5co-wrapper">
             <div id="fh5co-page">

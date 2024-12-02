@@ -4,6 +4,8 @@ import axios from 'axios'
 import config from '../../config/config'
 
 const CategoryList = () => {
+    console.log('Category List');
+
     const [categories, setcategories] = useState([])
 
     const fetchPostCategories = async () => {
