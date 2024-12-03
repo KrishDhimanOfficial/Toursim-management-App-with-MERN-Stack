@@ -12,23 +12,18 @@ const SinglePost = () => {
     const { post_slug } = useParams()
     const dispatch = useDispatch()
     const [comments, setcomment] = useState([])
-
     const singlePostState = useSelector(state => state.posts)
     const loading = useSelector(state => state.posts.loading)
 
     const fetchSinglePost = async () => {
         dispatch(setLoading(true))
         const response = await axios.get(`${config.server_url}/single/post/${post_slug}`)
-        if (response && response.status == 200) {
-            setcomment(response.data.post.commentReplies)
+        if (response) {
+            setcomment(response.data.comments)
             dispatch(singlePost(response.data))
-
             dispatch(setLoading(false))
         }
     }
-    console.log(comments);
-
-
     useEffect(() => {
         fetchSinglePost()
     }, [])
@@ -71,19 +66,17 @@ const SinglePost = () => {
                     <div className="col-md-8">
                         <h3 style={{ margin: '20px 0' }}>Comments</h3>
                         {
-                            singlePostState.post?.comment?.map((comment, i) => (
-                                singlePostState.post?.replies.map(reply => (
-                                    <CommentList
-                                        key={i}
-                                        index={i}
-                                        parent_id={`${reply._id}`}
-                                        username={reply.username}
-                                        comment={reply.comment}
-                                        slug={post_slug}
-                                    />
-                                ))
+                            comments?.map((comment, i) => (
+                                <CommentList
+                                    key={i}
+                                    index={i}
+                                    parent_id={`${comment._id}`}
+                                    username={comment.username}
+                                    comment={comment.comment}
+                                    slug={post_slug}
+                                />
                             ))
-                            // console.log(singlePostState.post?.replies.length != 0)
+
                         }
                     </div>
                 </div>

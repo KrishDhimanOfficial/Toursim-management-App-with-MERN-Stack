@@ -31,7 +31,7 @@ router.post('/reply/comment', siteControllers.repliesComment)
 
 // Tour Checkout
 router.get('/checkout/:slug', siteControllers.gettourONcheckout)
-router.post('/tour/order', siteControllers.createOrder)
-router.post('/validate/order', siteControllers.validateOrder)
+router.post('/tour/order', siteControllers.createBooking)
+router.post('/validate/order', siteControllers.validateBooking)
 
 export default router

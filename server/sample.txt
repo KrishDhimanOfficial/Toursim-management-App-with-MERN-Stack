@@ -1,11 +1,13 @@
 PORT = 8000
-MONGO_URI = ''
+MONGO_URI = 'MongoDB Atlas URL'
 PRIVATE_KEY = ''
 
+COMPANY_LOGO_IMAGE_PATH = 'http://localhost:8000/uploads/logo'
+TOUR_LOCATION_IMAGE_PATH = 'http://localhost:8000/uploads/tour_location_images'
+TOUR_CATEGORY_IMAGE_PATH = 'http://localhost:8000/uploads/tour_category_images'
+POST_CATEGORY_IMAGE_PATH = 'http://localhost:8000/uploads/post_category_images'
+POST_IMAGE_PATH = 'http://localhost:8000/uploads/post_images'
+TOUR_IMAGE_PATH = 'http://localhost:8000/uploads/tour_images' 
 
-COMPANY_LOGO_IMAGE_PATH = ''
-TOUR_LOCATION_IMAGE_PATH = ''
-TOUR_CATEGORY_IMAGE_PATH = ''
-POST_CATEGORY_IMAGE_PATH = ''
-POST_IMAGE_PATH = ''
-TOUR_IMAGE_PATH = ''
+RAZORPAY_ID = 'Enter Your RAZORPAY_ID'
+RAZORPAY_KEY = 'Enter Your RAZORPAY_KEY'

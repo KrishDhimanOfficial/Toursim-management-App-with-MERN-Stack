@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>Dashboard</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    <%- include('../partials/header') %>
+</head>
+
+<body>
+
+    <!-- ======= Header ======= -->
+    <%- include('../partials/navbar') %>
+        <!-- End Header -->
+        <%- include('../partials/modal') %>
+
+            <!-- ======= Sidebar ======= -->
+            <%- include('../partials/sidebar') %>
+                <!-- End Sidebar-->
+
+                <main id="main" class="main">
+
+                    <div class="pagetitle">
+                        <h1>Dashboard</h1>
+                        <nav>
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="/admin/dashboard">Home</a></li>
+                                <li class="breadcrumb-item active">Tour Bookings</li>
+                            </ol>
+                        </nav>
+                    </div>
+                    <!-- End Page Title -->
+
+                    <section class="section dashboard">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="w-100 py-3 d-flex justify-content-between">
+                                            <h5 class="card-title p-0">All Bookings</h5>
+                                        </div>
+                                        <table class="table datatable">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">#</th>
+                                                    <th scope="col">Tour</th>
+                                                    <th scope="col">Name</th>
+                                                    <th scope="col">Location</th>
+                                                    <th scope="col">Total Persons</th>
+                                                    <th scope="col">Total Amount</th>
+                                                    <th scope="col">Date</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <%- include('../partials/loader') %>
+                                                    <% tour_bookings.forEach((booking,i)=> { %>
+                                                        <tr class="table-row">
+                                                            <td>
+                                                                <%= i+1 %>
+                                                            </td>
+                                                            <td>
+                                                                <img src="<%= tour_img_url %>/<%= booking.tour.featured_image %>"
+                                                                    style="width: 100px; height: 100px; object-fit: cover;"
+                                                                    alt="">
+                                                            </td>
+                                                            <td>
+                                                                <%= booking.tour.title %>
+                                                            </td>
+                                                            <td>
+                                                                <%= booking.location.location_name %>
+                                                            </td>
+                                                            <td>
+                                                                <%=  booking.total_seats %>
+                                                            </td>
+                                                            <td>
+                                                                $<%= booking.totalAmount %> 
+                                                            </td>
+                                                            <td>
+                                                                <%= booking.formattedDate %> 
+                                                            </td>
+                                                        </tr>
+                                                        <% }) %>
+                                            </tbody>
+                                        </table>
+                                        <!-- End Default Table Example -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                </main><!-- End #main -->
+
+                <!-- ======= Footer ======= -->
+                <%- include('../partials/footer') %>
+                    <!-- End Footer -->
+
+                    <a href="#" class="back-to-top d-flex align-items-center justify-content-center">
+                        <i class="bi bi-arrow-up-short"></i>
+                    </a>
+                    <%- include('../partials/script') %>
+                        <!-- <script async src="/assets/js/index.js" type="module"></script> -->
+</body>
+
+</html>

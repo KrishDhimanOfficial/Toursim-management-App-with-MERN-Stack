@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react'
-import { motion } from "motion/react"
+import React, { useEffect } from 'react'
 import { Sec_Heading, Post, ErrorBoundary, Pagination } from '../components/componets'
 import { useSelector, useDispatch } from 'react-redux'
 import { allPosts } from '../features/post.slice'

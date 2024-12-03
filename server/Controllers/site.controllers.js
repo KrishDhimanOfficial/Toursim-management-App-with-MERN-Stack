@@ -8,10 +8,13 @@ import postModel from '../models/post.model.js'
 import userModel from '../models/authenticate.model.js'
 import postcategoryModel from '../models/post.category.model.js'
 import postCommentModel from '../models/post.comment.model.js'
+import tour_booking_model from '../models/order.model.js'
 import Razorpay from 'razorpay'
 import config from '../config/config.js'
 import handleAggregatePagination from '../services/handlepagination.js'
 import { getUser } from '../services/createToken.js'
+import mongoose from 'mongoose'
+const ObjectId = mongoose.Types.ObjectId;
 
 const siteControllers = {
     gethotTours: async (req, res) => {
@@ -89,7 +92,8 @@ const siteControllers = {
     },
     getAllTOurs: async (req, res) => {
         try {
-            const response = await tourModel.aggregate([
+            const pipeline = [
+                { $match: { status: true } },
                 {
                     $lookup: {
                         from: 'tour-locations',
@@ -113,7 +117,10 @@ const siteControllers = {
                         }
                     }
                 }
-            ])
+            ]
+            const response = await handleAggregatePagination(tourModel, pipeline, req.query)
+            console.log(response);
+
             return res.status(200).json({
                 response,
                 location_img_url: config.server_tour_location_img_url
@@ -126,7 +133,15 @@ const siteControllers = {
         try {
             const response = await tourModel.aggregate([
                 {
-                    $match: { slug: req.params.tour_slug }
+                    $match: { slug: req.params.tour_slug, status: true }
+                },
+                {
+                    $lookup: {
+                        from: 'bookings',
+                        localField: '_id',
+                        foreignField: 'tour_id',
+                        as: 'booking'
+                    }
                 },
                 {
                     $lookup: {
@@ -147,10 +162,24 @@ const siteControllers = {
                 },
                 {
                     $unwind: '$category'
+                },
+                {
+                    $project: {
+                        'booking.totalAmount': 0,
+                        'booking.createdAt': 0,
+                        'booking.razorpay_payment_id': 0,
+                        'booking.razorpay_order_id': 0,
+                        'booking.userId': 0,
+                        'booking. tour_id': 0,
+                    }
                 }
             ])
+            let bookedSeats = 0;
+            response[0].booking?.map(item => bookedSeats += item.total_seats)
+
             if (response.length == 0) return res.status(200).json({ error: 'Not Found' })
             return res.status(200).json({
+                bookedSeats,
                 tour: response[0],
                 tour_img_url: config.server_tour_img_url
             })
@@ -245,13 +274,34 @@ const siteControllers = {
     },
     getSinglePost: async (req, res) => {
         try {
-            const response = await postModel.aggregate([
+            const postresponse = await postModel.aggregate([{ $match: { post_slug: req.params.post_slug } }])
+            const commentresponse = await postCommentModel.aggregate([
                 {
-                    $match: { post_slug: req.params.post_slug }
+                    $match: { post_id: postresponse[0]._id }
+                },
+                {
+                    $graphLookup: {
+                        from: 'comments',
+                        startWith: '$_id',
+                        connectFromField: '_id',
+                        connectToField: 'parentId',
+                        as: 'nestedComments',
+                        depthField: 'depth',
+                        restrictSearchWithMatch: {
+                            parentId: { $ne: null }
+                        }
+                    }
                 }
             ])
-            if (!response) return res.status(200).json({ error: 'Not Found' })
-            return res.status(200).json({ post: response[0], post_img_url: config.server_post_img_url })
+            console.log(commentresponse);
+            console.log(commentresponse[0].nestedComments);
+
+            if (postresponse.length == 0) return res.status(200).json({ error: 'Not Found' })
+            return res.status(200).json({
+                post: postresponse[0],
+                comments: commentresponse,
+                post_img_url: config.server_post_img_url
+            })
         } catch (error) {
             console.log('getSinglePost : ' + error.message)
         }
@@ -327,28 +377,19 @@ const siteControllers = {
         try {
             const { parentId, token, data, } = req.body;
             const user = await userModel.findById({ _id: getUser(token) }, { username: 1 })
-            const prevcomment = await postCommentModel.findById({ _id: parentId }, { replies: 1 })
-
             const createcomment = await postCommentModel.create({
                 username: user.username,
                 parentId: new Object(parentId),
                 comment: data.comment
             })
             if (!createcomment) return res.status(200).json({ error: 'Failed' })
-
-            const response = await postCommentModel.findByIdAndUpdate(
-                { _id: parentId },
-                { replies: [...prevcomment.replies, createcomment._id] },
-                { new: true }
-            )
-            if (!response) return res.status(200).json({ error: 'Failed' })
             return res.status(200).json({ message: 'Your comment under Approval.' })
         } catch (error) {
             console.log('repliesComment : ' + error.message)
         }
     },
     // Orders API's
-    createOrder: async (req, res) => {
+    createBooking: async (req, res) => {
         try {
             const razorpay = new Razorpay({
                 key_id: `${config.razorpay_ID}`,
@@ -356,8 +397,8 @@ const siteControllers = {
             })
             const { total_Amount } = req.body;
             const options = {
-                amount: total_Amount * 100, // Amount in INR
-                currency: "INR",
+                amount: total_Amount * 100, // Amount in USD
+                currency: "USD",
                 receipt: "qwsaq1",
             }
             const order = await razorpay.orders.create(options)
@@ -366,9 +407,22 @@ const siteControllers = {
             console.log('createOrder : ' + error.message)
         }
     },
-    validateOrder: async (req, res) => {
+    validateBooking: async (req, res) => {
         try {
-            console.log(req.body)
+            const token = req.headers['authorization'].split(' ')[1]
+            const { order_id, payment_id, seats, id, amount } = req.body;
+
+            const user = await userModel.findOne({ _id: getUser(token) })
+            const response = await tour_booking_model.create({
+                razorpay_order_id: order_id,
+                razorpay_payment_id: payment_id,
+                tour_id: new Object(id),
+                total_seats: parseInt(seats),
+                userId: user._id,
+                totalAmount: amount,
+            })
+            if (!response) return res.status(200).json({ error: 'Failed' })
+            return res.status(200).json({ message: 'Order Created Successfully' })
         } catch (error) {
             console.log('validateOrder : ' + error.message)
         }

@@ -4,12 +4,15 @@ import { useSelector, useDispatch } from 'react-redux'
 import axios from 'axios'
 import config from '../../config/config'
 import { allPosts, categoryPost } from '../../features/post.slice'
+import { alltours } from '../../features/tour.slice'
 
 const Pagination = ({ url, paginateurl, slug }) => {
-    console.log('Pagination Render');
-    
+    console.log('Pagination Render')
+
     const dispatch = useDispatch()
-    const pagination = useSelector(state => state.posts)
+    const pagination = paginateurl == '/posts'
+        ? useSelector(state => state.posts)
+        : useSelector(state => state.tours)
 
     const fetchpostswithPagination = async (i) => {
         const response = await axios.get(`${url}?page=${i}`)
@@ -18,6 +21,9 @@ const Pagination = ({ url, paginateurl, slug }) => {
         }
         if (url === `${config.server_url}/category/posts/${slug}`) {
             dispatch(categoryPost(response.data))
+        }
+        if (url === `${config.server_url}/all/tours`) {
+            dispatch(alltours(response.data))
         }
     }
 

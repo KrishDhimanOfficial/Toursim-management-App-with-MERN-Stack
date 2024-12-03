@@ -1,4 +1,5 @@
 import mongoose from 'mongoose'
+import aggregatePaginate from 'mongoose-aggregate-paginate-v2'
 
 const tourSchema = new mongoose.Schema({
     title: {
@@ -46,7 +47,7 @@ const tourSchema = new mongoose.Schema({
         required: true,
         default: 0
     },
-    featured_image:{
+    featured_image: {
         type: mongoose.Schema.Types.String,
         required: true,
     },
@@ -79,4 +80,6 @@ const tourSchema = new mongoose.Schema({
         required: true
     }
 })
+
+tourSchema.plugin(aggregatePaginate)
 export default mongoose.model('tourplan', tourSchema)

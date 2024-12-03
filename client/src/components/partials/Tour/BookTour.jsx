@@ -7,6 +7,9 @@ const BookTour = ({ singletour }) => {
     const [seats, setseats] = useState(1)
     const btnref = useRef()
     const navigate = useNavigate()
+    const [available_Seats, setavailable_Seats] = useState(0)
+
+
 
     const dep_date = new Date(singletour.tour?.deperature_date)
     const return_date = new Date(singletour.tour?.return_date)
@@ -46,7 +49,9 @@ const BookTour = ({ singletour }) => {
                 </div>
                 <div className="flex justify-between py-3 border-t border-gray-200">
                     <span className="font-bold text-gray-800">Available:</span>
-                    <span className="text-gray-800">16</span>
+                    <span className="text-gray-800">
+                        {singletour.tour?.total_Seats - singletour.bookedSeats}
+                    </span>
                 </div>
                 <div className="flex justify-between py-3 border-t border-gray-200">
                     <span className="font-bold text-gray-800">Persons</span>

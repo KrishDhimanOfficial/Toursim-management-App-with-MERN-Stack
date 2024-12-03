@@ -15,6 +15,7 @@ router.get('/logout', authenticateControllers.handleLogout)
 router.post('/authenticate', authenticateControllers.getAuthenticate)
 router.get('/dashboard', checkAdminIsLogged, admincontrollers.getAdminDashboard)
 router.get('/get/admin/details', admincontrollers.adminDetails)
+router.get('/tour/bookings', admincontrollers.renderTourBooking)
 
 
 // Render Routes for Tour Location
@@ -99,7 +100,7 @@ router.get('/general-settings', checkAdminIsLogged, admincontrollers.renderGener
 // Site Setting
 router.get('/site-settings', checkAdminIsLogged, admincontrollers.renderSiteSetting)
 router.post('/set/hot/tours', admincontrollers.setHotTours)
-router.post('/set/destinations',admincontrollers.setDestinations)
-router.post('/set/recent_posts',admincontrollers.setRecentPosts)
+router.post('/set/destinations', admincontrollers.setDestinations)
+router.post('/set/recent_posts', admincontrollers.setRecentPosts)
 
 export default router

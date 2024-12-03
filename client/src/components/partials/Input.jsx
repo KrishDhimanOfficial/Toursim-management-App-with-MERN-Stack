@@ -13,7 +13,7 @@ const Input = ({
             style={style}
             ref={ref}
             {...props}
-            class="input"
+            className="input"
             placeholder={placeholder}
             required />
     )

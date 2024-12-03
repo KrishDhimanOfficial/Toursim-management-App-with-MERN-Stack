@@ -32,14 +32,14 @@ const CheckOut = () => {
             })
             const options = {
                 key: config.razorpay_ID,
-                amount: response.data.amount * 100,
-                currency: 'INR',
+                amount: response.data.amount,
+                currency: 'USD',
                 name: 'Travel',
                 description: 'Test Transaction',
                 order_id: response.data.id,
-                handler: (response) => {
+                handler: (res) => {
                     // Function That validate order and save into the database
-                    validateOrder(response, token, seats, id)
+                    validateOrder(res, token, seats, id, checkout.tour?.price * seats)
                 },
                 theme: {
                     color: '#F37254',
@@ -52,17 +52,21 @@ const CheckOut = () => {
         }
     }
 
-    const validateOrder = async (res, token, seats, id) => {
+    const validateOrder = async (res, token, seats, id, amount) => {
         try {
             const response = await axios.post(`${config.server_url}/validate/order`, {
                 order_id: res.razorpay_order_id,
                 payment_id: res.razorpay_payment_id,
-                token, seats, id
-            })
+                seats, id, amount
+            },
+                {
+                    headers: { 'Authorization': `Bearer ${token}` }
+
+                })
             if (!response.ok) navigate('/cancel')
             navigate('/success')
         } catch (error) {
-            console.error('validateOrder : ' + error);
+            console.error('validateOrder : ' + error)
         }
     }
     useEffect(() => {

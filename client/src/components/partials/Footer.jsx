@@ -3,6 +3,8 @@ import { motion } from 'motion/react'
 import { Link } from 'react-router-dom'
 
 const Footer = () => {
+    console.log('Footer Render');
+
     return (
         <motion.div
             initial={{ opacity: 0 }}

@@ -9,9 +9,6 @@ const SingleTour = () => {
     const [singletour, settour] = useState({})
     const { tour_slug } = useParams()
     const navigate = useNavigate()
-    
-
-
 
     const fetchSingleTour = async () => {
         setloading(true)
@@ -20,6 +17,7 @@ const SingleTour = () => {
         settour(response.data)
         setloading(false)
     }
+
     useEffect(() => { fetchSingleTour() }, [])
     return (
         <div id="fh5co-blog-section" className="fh5co-section-gray">

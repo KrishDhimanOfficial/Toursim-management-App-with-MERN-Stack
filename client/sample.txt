@@ -1,0 +1,3 @@
+VITE_SERVER_URL = 'http://localhost:8000/api'
+
+RAZORPAY_ID = 'Enter Your RAZORPAY_ID'

@@ -14,22 +14,14 @@ const commentSchema = new mongoose.Schema({
         ref: 'comment',
         default: null
     },
-    replies: {
-        type: [
-            {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: "comment"
-            }
-        ],
-    },
     post_id: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'post',  
+        ref: 'post',
         default: null
     },
     status: {
         type: mongoose.Schema.Types.Boolean,
-        default: false
+        default: true
     },
     createdAt: {
         type: mongoose.Schema.Types.Date,

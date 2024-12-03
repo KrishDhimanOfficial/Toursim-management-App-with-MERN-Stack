@@ -1,17 +1,20 @@
-import React, { useEffect, useState } from 'react'
-import config from '../config/config'
-import { Sec_Heading, Tours, ErrorBoundary } from '../components/componets'
+import React, { useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { alltours } from '../features/tour.slice'
+import { Sec_Heading, Tours, ErrorBoundary, Pagination } from '../components/componets'
 import axios from 'axios'
+import config from '../config/config'
 
 
 const Tour = () => {
-    const [tours, setTours] = useState({})
-    // console.log(tours);
+    const dispatch = useDispatch()
+    const toursState = useSelector(state => state.tours)
+    const apiURL = `${config.server_url}/all/tours`;
+    const paginationURL = '/tours';
 
     const fetchTours = async () => {
-        const response = await axios.get(`${config.server_url}/all/tours`)
-        console.log(response);
-        setTours(response.data)
+        const response = await axios.get(apiURL)
+        if (response) dispatch(alltours(response.data))
     }
     useEffect(() => { fetchTours() }, [])
     return (
@@ -23,17 +26,28 @@ const Tour = () => {
                 <div className="row" style={{ display: 'flex', alignItems: 'stretch' }}>
                     <ErrorBoundary>
                         {
-                            tours.response?.map((tour, i) => (
+                            toursState.response?.collectionData?.map((tour, i) => (
                                 <Tours
                                     key={i}
                                     location={tour.location.location_name}
-                                    imgPath={`${tours.location_img_url}/${tour.location.featured_img}`}
+                                    imgPath={`${toursState.location_img_url}/${tour.location.featured_img}`}
                                     slug={tour.slug}
                                     price={tour.price}
                                 />
                             ))
                         }
                     </ErrorBoundary>
+                </div>
+            </div>
+            <div className="container">
+                <div className="row">
+                    <div className="col-12">
+                        <div className="text-center">
+                            <ErrorBoundary >
+                                <Pagination url={apiURL} paginateurl={paginationURL} />
+                            </ErrorBoundary>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

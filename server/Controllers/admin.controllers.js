@@ -4,11 +4,8 @@ import tourModel from '../models/product.model.js'
 import authenticateModel from '../models/authenticate.model.js'
 import tour_locationModel from '../models/tour_location.model.js'
 import general_settingModel from '../models/general_setting.model.js'
-import {
-    hot_tours_model,
-    top_destination_model,
-    recent_post_model
-} from '../models/site_setting.model.js'
+import tour_booking_model from '../models/order.model.js'
+import { hot_tours_model, top_destination_model, recent_post_model } from '../models/site_setting.model.js'
 import bcrypt from 'bcrypt'
 import config from '../config/config.js'
 const ObjectId = mongoose.Types.ObjectId;
@@ -60,7 +57,7 @@ const admincontrollers = {
             const { id, oldpassword, newpassword } = req.body;
             const admin = await authenticateModel.findById({ _id: id })
             const isMatch = await bcrypt.compare(oldpassword, admin.password)
-            
+
             if (!isMatch) {
                 return res.json({ error: 'Failed!' })
             } else {
@@ -196,6 +193,66 @@ const admincontrollers = {
             return res.redirect('/admin/site-settings')
         } catch (error) {
             console.log('setRecentPosts : ' + error.message)
+        }
+    },
+    renderTourBooking: async (req, res) => {
+        try {
+            const tour_bookings = await tour_booking_model.aggregate([
+                {
+                    $lookup: {
+                        from: 'users',
+                        localField: 'userId',
+                        foreignField: '_id',
+                        as: 'user'
+                    }
+                },
+                { $unwind: '$user' },
+                {
+                    $lookup: {
+                        from: 'tourplans',
+                        localField: 'tour_id',
+                        foreignField: '_id',
+                        as: 'tour'
+                    }
+                },
+                { $unwind: '$tour' },
+                {
+                    $lookup: {
+                        from: 'tour-locations',
+                        localField: 'tour.product_location_id',
+                        foreignField: '_id',
+                        as: 'location'
+                    }
+                },
+                { $unwind: '$location' },
+                {
+                    $addFields: {
+                        formattedDate: {
+                            $dateToString: {
+                                format: "%Y-%m-%d",
+                                date: "$createdAt"
+                            }
+                        }
+                    }
+                },
+                {
+                    $project: {
+                        total_seats: 1,
+                        totalAmount: 1,
+                        'location.location_name': 1,
+                        'tour.title': 1,
+                        'tour.featured_image': 1,
+                        formattedDate: 1
+                    }
+                }
+            ])
+            // console.log(tour_bookings)
+            return res.render('booking/bookings', { 
+                tour_bookings,
+                tour_img_url:config.server_tour_img_url
+             })
+        } catch (error) {
+            console.log('renderTourBooking : ' + error.message)
         }
     }
 }

@@ -8,6 +8,7 @@ import { useDispatch } from 'react-redux'
 
 const Layout = () => {
     const dispatch = useDispatch()
+    
     const authenicateUser = async () => {
         const res = await verifyToken()
         dispatch(saveUser(res))
