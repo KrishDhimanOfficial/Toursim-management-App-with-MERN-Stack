@@ -38,7 +38,7 @@ const Destinations_row = () => {
                                 <div className="title-bg">
                                     <div className="case-studies-summary">
                                         <h2>Most Popular Destinations</h2>
-                                        <span><Link to={`/tour/destinations`}>View All Destinations</Link></span>
+                                        <span><Link to={`/tours`}>View All Destinations</Link></span>
                                     </div>
                                 </div>
                             </li>

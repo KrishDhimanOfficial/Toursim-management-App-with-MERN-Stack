@@ -1,14 +1,11 @@
 import React, { useRef, useState } from 'react'
 import { Button } from '../../componets'
 import { useNavigate } from 'react-router'
-import verifyToken from '../../../Hooks/verifyToken'
 
 const BookTour = ({ singletour }) => {
     const [seats, setseats] = useState(1)
     const btnref = useRef()
     const navigate = useNavigate()
-    const [available_Seats, setavailable_Seats] = useState(0)
-
 
 
     const dep_date = new Date(singletour.tour?.deperature_date)
@@ -16,12 +13,13 @@ const BookTour = ({ singletour }) => {
 
     const bookTour = async () => {
         const token = localStorage.getItem('token')
-        const res = await verifyToken()
-        if (!token || !res) navigate('/login')
-
-        // Navigate the User if it verify
-        sessionStorage.setItem('details', JSON.stringify({ seats, id: singletour.tour._id }))
-        navigate(`/checkout/${singletour.tour.slug}`)
+        if (!token) {
+            navigate('/login')
+        } else {
+            // Navigate the User if it verify
+            sessionStorage.setItem('details', JSON.stringify({ seats, id: singletour.tour._id }))
+            navigate(`/checkout/${singletour.tour.slug}`)
+        }
     }
 
     return (
@@ -57,9 +55,15 @@ const BookTour = ({ singletour }) => {
                     <span className="font-bold text-gray-800">Persons</span>
                     <input
                         onChange={(e) => {
-                            e.target.value < 0
-                                ? setseats(0)
-                                : setseats(e.target.value)
+                            setseats(() => {
+                                if (e.target.value < 0) {
+                                    return 0
+                                } else if (e.target.value > singletour.tour?.total_Seats - singletour.bookedSeats) {
+                                    return singletour.tour?.total_Seats - singletour.bookedSeats
+                                } else {
+                                    return e.target.value
+                                }
+                            })
                         }}
                         value={seats}
                         type="number"

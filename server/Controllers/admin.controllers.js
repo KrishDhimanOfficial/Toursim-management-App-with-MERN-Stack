@@ -5,9 +5,11 @@ import authenticateModel from '../models/authenticate.model.js'
 import tour_locationModel from '../models/tour_location.model.js'
 import general_settingModel from '../models/general_setting.model.js'
 import tour_booking_model from '../models/order.model.js'
+import banner_setting_model from '../models/banner_setting.js'
 import { hot_tours_model, top_destination_model, recent_post_model } from '../models/site_setting.model.js'
 import bcrypt from 'bcrypt'
 import config from '../config/config.js'
+import deleteImage from '../services/deleteImg.js'
 const ObjectId = mongoose.Types.ObjectId;
 
 const admincontrollers = {
@@ -90,6 +92,8 @@ const admincontrollers = {
             const { id, company_name, company_address, company_copyright,
                 email, company_phone, company_description } = req.body;
 
+            // Find previous Image And Remove
+            const previmage = await general_settingModel.findById({ _id: id })
             const response = await general_settingModel.findByIdAndUpdate(
                 { _id: id },
                 {
@@ -99,9 +103,11 @@ const admincontrollers = {
                     logo: req.file?.filename
                 }
             )
+            if (req.file?.filename) deleteImage(`logo/${previmage.logo}`)
             if (!response) return res.redirect('/admin/general-settings')
             return res.redirect('/admin/general-settings')
         } catch (error) {
+            deleteImage(`logo/${req.file?.filename}`)
             console.log('setGeneralSetting : ' + error.message)
         }
     },
@@ -247,12 +253,44 @@ const admincontrollers = {
                 }
             ])
             // console.log(tour_bookings)
-            return res.render('booking/bookings', { 
+            return res.render('booking/bookings', {
                 tour_bookings,
-                tour_img_url:config.server_tour_img_url
-             })
+                tour_img_url: config.server_tour_img_url
+            })
         } catch (error) {
             console.log('renderTourBooking : ' + error.message)
+        }
+    },
+    getBannerSetting: async (req, res) => {
+        try {
+            const bannerSetting = await banner_setting_model.findOne({})
+            const tours = await tourModel.find({}, { title: 1, })
+            return res.render('settings/Banner-setting', {
+                tours, bannerSetting,
+                banner_img_url: config.server_banner_img_url
+            })
+        } catch (error) {
+            console.log('getBannerSetting : ' + error.message)
+        }
+    },
+    setBannerSetting: async (req, res) => {
+        try {
+            const { banner_link, banner_subtitle, banner_title, id } = req.body;
+            const image = await banner_setting_model.findById({ _id: id })
+            const response = await banner_setting_model.findByIdAndUpdate(
+                { _id: id },
+                {
+                    banner_link: new Object(banner_link), banner_subtitle, banner_title,
+                    banner_image: req.file?.filename
+                },
+                { new: true }
+            )
+            if (req.file?.filename) deleteImage(`banner_image/${image.banner_image}`)
+            if (!response) res.redirect('/admin/banner-settings')
+            return res.redirect('/admin/banner-settings')
+        } catch (error) {
+            deleteImage(`banner_image/${req.file?.filename}`)
+            console.log('setBannerSetting : ' + error.message)
         }
     }
 }

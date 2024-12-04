@@ -6,7 +6,7 @@ import admincontrollers from '../Controllers/admin.controllers.js'
 import postControllers from '../Controllers/post.controllers.js'
 import CheckmulterError from '../Middleware/handleMulterError.js'
 import categorycontrollers from '../Controllers/category.contollers.js'
-import { tour_location, tour_category, post_category, post, tour, logo } from '../Middleware/multer.middleware.js'
+import { tour_location, tour_category, post_category, post, tour, logo, banner_image } from '../Middleware/multer.middleware.js'
 
 const router = express.Router()
 
@@ -102,5 +102,10 @@ router.get('/site-settings', checkAdminIsLogged, admincontrollers.renderSiteSett
 router.post('/set/hot/tours', admincontrollers.setHotTours)
 router.post('/set/destinations', admincontrollers.setDestinations)
 router.post('/set/recent_posts', admincontrollers.setRecentPosts)
+
+// Banner Setting
+router.get('/banner-settings', checkAdminIsLogged, admincontrollers.getBannerSetting)
+router.post('/set/banner/setting', banner_image.single('banner_image'), admincontrollers.setBannerSetting)
+
 
 export default router

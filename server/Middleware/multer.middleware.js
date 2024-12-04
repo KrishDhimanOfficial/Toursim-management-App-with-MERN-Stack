@@ -55,3 +55,8 @@ export const logo = multer({
     limits: { fileSize: MAX_SIZE },
     fileFilter: fileFilter
 })
+export const banner_image = multer({
+    storage: createStorage('banner_image'),
+    limits: { fileSize: MAX_SIZE },
+    fileFilter: fileFilter
+})

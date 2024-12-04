@@ -1,12 +1,13 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useForm } from "react-hook-form"
 import { Button, ErrorAlert, SuccessAlert } from '../../componets'
 import axios from 'axios'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import config from '../../../config/config'
 
 const ForgotPassword = () => {
     const btnref = useRef()
+    const naviagte = useNavigate()
     const { register, handleSubmit } = useForm()
     const [error, seterror] = useState(null)
     const [success, setsuccess] = useState(null)
@@ -20,6 +21,10 @@ const ForgotPassword = () => {
             localStorage.removeItem('token')
         }
     }
+    useEffect(() => {
+        const token = localStorage.getItem('token')
+        if (!token) naviagte('/')
+    }, [])
     return (
         <div className="container" style={{ height: '100%', alignContent: 'center', }}>
             <div className="row" style={{ display: 'flex', justifyContent: 'center' }}>
@@ -76,7 +81,7 @@ const ForgotPassword = () => {
                             ref={btnref}
                             text={'Reset'}
                         />
-                        <Link to='/' className='btn btn-dark'>Home</Link>
+                        <Link to='/account' className='btn btn-dark'>Home</Link>
 
                         {error ? <ErrorAlert message={error} /> : ''}
                         {success ? <SuccessAlert message={success} /> : ''}

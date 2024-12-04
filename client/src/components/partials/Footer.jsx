@@ -1,10 +1,18 @@
-import React from 'react'
-import { motion } from 'motion/react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { motion } from 'motion/react'
+import axios from 'axios';
+import config from '../../config/config'
 
 const Footer = () => {
-    console.log('Footer Render');
+    console.log('Footer Render')
+    const [settings, setsetting] = useState({})
 
+    const fetch = async () => {
+        const response = await axios.get(`${config.server_url}/get/site-setting`)
+        setsetting(response.data)
+    }
+    useEffect(() => { fetch() }, [])
     return (
         <motion.div
             initial={{ opacity: 0 }}
@@ -15,23 +23,27 @@ const Footer = () => {
                 <div id="footer">
                     <div className="container">
                         <div className="row row-bottom-padded-md">
-                            <div className="col-md-2 col-sm-2 col-xs-12 fh5co-footer-link">
-                                <h3>About Travel</h3>
-                                <p>Far far away, behind the word mountains, far from the countries Vokalia and
-                                    Consonantia, there live the blind texts.</p>
+                            <div className="col-md-3 col-sm-3 col-xs-12 fh5co-footer-link">
+                                <h3>About {settings.siteSetting?.company_name}</h3>
+                                <p>{settings.siteSetting?.company_description}</p>
+                            </div>
+                            <div className="col-md-3 col-sm-3 col-xs-12 fh5co-footer-link">
+                                <h3>Company Info</h3>
+                                <p>Email : {settings.siteSetting?.email}</p>
+                                <p>Phone no : {settings.siteSetting?.company_phone}</p>
+                            </div>
+                            <div className="col-md-3 col-sm-3 col-xs-12 fh5co-footer-link">
+                                <h3>Address</h3>
+                                <p>{settings.siteSetting?.company_address}</p>
+                            </div>
+                            <div className="col-md-3 col-sm-3 col-xs-12 fh5co-footer-link">
+                                <h3>Account</h3>
+                                <Link to="/account">My Account</Link>
                             </div>
                         </div>
                         <div className="row">
                             <div className="col-md-6 col-md-offset-3 text-center">
-                                <p className="fh5co-social-icons">
-                                    <Link to="#"><i className="icon-twitter2"></i></Link>
-                                    <Link to="#"><i className="icon-facebook2"></i></Link>
-                                    <Link to="#"><i className="icon-instagram"></i></Link>
-                                    <Link to="#"><i className="icon-dribbble2"></i></Link>
-                                    <Link to="#"><i className="icon-youtube"></i></Link>
-                                </p>
-                                <p>Copyright 2016 All Rights Reserved.
-                                </p>
+                                <p>{settings.company_copyright}</p>
                             </div>
                         </div>
                     </div>
@@ -41,4 +53,4 @@ const Footer = () => {
     )
 }
 
-export default Footer
+export default React.memo(Footer)

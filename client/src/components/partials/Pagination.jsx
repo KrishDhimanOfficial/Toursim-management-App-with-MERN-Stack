@@ -25,6 +25,9 @@ const Pagination = ({ url, paginateurl, slug }) => {
         if (url === `${config.server_url}/all/tours`) {
             dispatch(alltours(response.data))
         }
+        if (url === `${config.server_url}/destination/${slug}`) {
+            dispatch(alltours(response.data))
+        }
     }
 
     return (

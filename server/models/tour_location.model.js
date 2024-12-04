@@ -1,4 +1,5 @@
 import mongoose from 'mongoose'
+import aggregatePaginate from 'mongoose-aggregate-paginate-v2'
 
 const tour_loaction_schema = new mongoose.Schema({
     featured_img: {
@@ -17,4 +18,5 @@ const tour_loaction_schema = new mongoose.Schema({
     }
 })
 
+tour_loaction_schema.plugin(aggregatePaginate)
 export default mongoose.model('tour-location', tour_loaction_schema)

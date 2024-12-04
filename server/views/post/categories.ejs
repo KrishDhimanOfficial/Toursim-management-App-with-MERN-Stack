@@ -59,50 +59,50 @@
                                             <tbody>
                                                 <%- include('../partials/loader') %>
                                                     <% categories?.forEach((category,i)=> { %>
-                                                            <tr class="table-row">
-                                                                <th scope="row">
-                                                                    <%= i + 1 %>
-                                                                </th>
-                                                                <td>
-                                                                    <img src="<%= post_category_img_url %>/<%= category.featured_image %>"
-                                                                        style="width: 100px; height: 100px;" alt=""
-                                                                        loading='lazy'>
-                                                                </td>
-                                                                <td>
-                                                                    <%= category.category_name %>
-                                                                </td>
-                                                                <td>
-                                                                    <%= category.slug %>
-                                                                </td>
-                                                                <td>
-                                                                    <label class="switch">
-                                                                        <input type="checkbox" <%=category.status
-                                                                            ? 'checked' : '' %>
-                                                                        class="status" data-id="<%= category._id %>" >
-                                                                            <span class="slider"></span>
-                                                                    </label>
-                                                                </td>
-                                                                <td>
-                                                                    <div class="d-flex gap-3">
-                                                                        <a href='/admin/post/category/<%= category._id %>'
-                                                                            class="rounded px-3 py-2 bg-blue text-white">
-                                                                            <i class="bi bi-pen"></i>
-                                                                            Edit
-                                                                        </a>
-                                                                        <% if (!postSet.has(category._id.toString())) { %>
-                                                                            <button type="button"
-                                                                                data-id="<%= category._id %>"
-                                                                                data-bs-toggle="modal"
-                                                                                data-bs-target=".modal"
-                                                                                class="btn btn-danger openModal">
-                                                                                <i class="bi bi-trash3"></i>
-                                                                                Delete
-                                                                            </button>
-                                                                            <% } %>
-                                                                    </div>
-                                                                </td>
-                                                            </tr>
-                                                            <% }) %>
+                                                        <tr class="table-row">
+                                                            <th scope="row">
+                                                                <%= i + 1 %>
+                                                            </th>
+                                                            <td>
+                                                                <img src="<%= post_category_img_url %>/<%= category.featured_image %>"
+                                                                    style="width: 100px; height: 100px;" alt=""
+                                                                    loading='lazy'>
+                                                            </td>
+                                                            <td>
+                                                                <%= category.category_name %>
+                                                            </td>
+                                                            <td>
+                                                                <%= category.slug %>
+                                                            </td>
+                                                            <td>
+                                                                <label class="switch">
+                                                                    <input type="checkbox" <%=category.status
+                                                                        ? 'checked' : '' %>
+                                                                    class="status" data-id="<%= category._id %>" >
+                                                                        <span class="slider"></span>
+                                                                </label>
+                                                            </td>
+                                                            <td>
+                                                                <div class="d-flex gap-3">
+                                                                    <a href='/admin/post/category/<%= category._id %>'
+                                                                        class="rounded px-3 py-2 bg-blue text-white">
+                                                                        <i class="bi bi-pen"></i>
+                                                                        Edit
+                                                                    </a>
+                                                                    <% if (!category._id.equals(posts[i].post_category_id)) { %>
+                                                                        <button type="button"
+                                                                            data-id="<%= category._id %>"
+                                                                            data-bs-toggle="modal"
+                                                                            data-bs-target=".modal"
+                                                                            class="btn btn-danger openModal">
+                                                                            <i class="bi bi-trash3"></i>
+                                                                            Delete
+                                                                        </button>
+                                                                        <% } %>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <% }) %>
                                             </tbody>
                                         </table>
                                     </div>

@@ -1,6 +1,15 @@
 import React from 'react'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import { Index, Posts, Tour, SinglePost, CategoryPosts, SingleTour, CheckOut, Success, Failure } from './pages/pages'
+import {
+  Index,
+  Posts,
+  Tour,
+  SinglePost,
+  CategoryPosts,
+  SingleTour, CheckOut,
+  Success, Failure, NoTFound,
+  LocationTours, UserAccount
+} from './pages/pages'
 import { Login, Signup, ForgotPassword, ErrorBoundary } from './components/componets'
 import SiteLayout from './SiteLayout'
 import Layout from './Layout'
@@ -34,6 +43,10 @@ const routes = [
         path: '/tours',
         element: <Tour />
       },
+      {
+        path: '/*',
+        element: <NoTFound />
+      }
     ]
   },
   {
@@ -60,12 +73,24 @@ const routes = [
           </ErrorBoundary>
       },
       {
+        path: '/destination/:location',
+        element: <LocationTours />
+      },
+      {
+        path: '/account',
+        element: <UserAccount />
+      },
+      {
         path: '/success',
         element: <Success />
       },
       {
         path: '/cancel',
         element: <Failure />
+      },
+      {
+        path: '/*',
+        element: <NoTFound />
       }
     ]
   }

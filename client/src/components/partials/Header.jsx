@@ -1,17 +1,32 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { NavLink, Link, useNavigate } from 'react-router-dom'
+import { NavLink, Link, useNavigate, useLocation } from 'react-router-dom'
 import { Button } from '../componets'
+import axios from 'axios'
+import config from '../../config/config'
 
 
 const Header = () => {
-    const btnRef = useRef()
     console.log("Header Render")
+    const btnRef = useRef()
     const navigate = useNavigate()
+    const [settings, setsetting] = useState({})
+    const [token, settoken] = useState(true)
 
-    const login = () => {
-        navigate('/login')
+    const fetch = async () => {
+        const response = await axios.get(`${config.server_url}/get/site-setting`)
+        setsetting(response.data)
     }
 
+    const handleloginsystem = () => {
+        localStorage.removeItem('token')
+        navigate('/login')
+    }
+    
+    useEffect(() => {
+        const token = localStorage.getItem('token')
+        if (!token) settoken(false)
+        fetch()
+    }, [])
     return (
         <header id="fh5co-header-section" className="sticky-banner">
             <div className="container">
@@ -21,8 +36,11 @@ const Header = () => {
                     </Link>
                     <h1 id="fh5co-logo">
                         <Link to='/'>
-                            <i className="icon-airplane">
-                            </i>Travel
+                            <img
+                                src={`${settings.logo_img_url}/${settings.siteSetting?.logo}`}
+                                alt=""
+                                style={{ width: '40px', height: '40px', marginRight: '10px' }} />
+                            {settings.siteSetting?.company_name}
                         </Link>
                     </h1>
                     <nav id="fh5co-menu-wrap" role="navigation">
@@ -42,9 +60,11 @@ const Header = () => {
                             <li>
                                 <Button
                                     ref={btnRef}
-                                    fn={() => login()}
+                                    fn={() => handleloginsystem()}
                                     type={'button'}
-                                    text={'Login'}
+                                    text={
+                                        token ? 'Logout' : 'Login'
+                                    }
                                 />
                             </li>
                         </ul>

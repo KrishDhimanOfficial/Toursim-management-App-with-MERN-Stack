@@ -37,10 +37,8 @@ const categorycontrollers = {
         try {
             const categories = await tourCategoryModel.find({})
             const tours = await tourModel.find({}, { product_category_id: 1 })
-            const tourSet = new Set()
-            tours.forEach(tour => tourSet.add(tour.product_category_id.toString()))
             return res.render('product/category', {
-                categories, tourSet,
+                categories, tours,
                 tour_category_img_url: config.server_tour_category_img_url
             })
         } catch (error) {
@@ -108,11 +106,9 @@ const categorycontrollers = {
         try {
             const posts = await postModel.find({}, { post_category_id: 1, _id: 0 })
             const categories = await postcategoryModel.find({})
-            const postSet = new Set()
-            posts.forEach(post => postSet.add(post.post_category_id.toString()))
             return res.render('post/categories', {
                 categories,
-                postSet,
+                posts,
                 post_category_img_url: config.server_post_category_img_url
             })
         } catch (error) {

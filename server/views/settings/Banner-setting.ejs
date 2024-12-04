@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>Dashboard</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    <%- include('../partials/header') %>
+</head>
+
+<body>
+
+    <!-- ======= Header ======= -->
+    <%- include('../partials/navbar') %>
+        <!-- End Header -->
+
+        <!-- ======= Sidebar ======= -->
+        <%- include('../partials/sidebar') %>
+            <!-- End Sidebar-->
+
+            <main id="main" class="main">
+
+                <div class="pagetitle">
+                    <h1>Dashboard</h1>
+                    <nav>
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="/admin/dashboard">Home</a></li>
+                            <li class="breadcrumb-item">Banner Setting</li>
+                        </ol>
+                    </nav>
+                </div>
+                <!-- End Page Title -->
+
+                <section class="section dashboard">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Banner Settings</h5>
+                                    <form action="/admin/set/banner/setting" method="post"
+                                        enctype="multipart/form-data">
+                                        <input type="text" hidden name="id" value="<%= bannerSetting._id %>">
+                                        <div class="row">
+                                            <div class="col-md-6 mb-3">
+                                                <div style="width: 400px; height: 300px; object-fit: cover;">
+                                                    <img src="<%= banner_img_url %>/<%= bannerSetting.banner_image %>"
+                                                        class="img-fluid" alt="">
+                                                </div>
+                                                <!-- Set Banner Image -->
+                                                <div class="form-group mb-3">
+                                                    <label for="banner_image">Banner Image</label>
+                                                    <input type="file" class="form-control" id="banner_image"
+                                                        name="banner_image">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <!-- Banner Title -->
+                                                <div class="form-group mb-3">
+                                                    <label for="bannertitle">Banner Title</label>
+                                                    <input type="text" class="form-control" id="bannertitle"
+                                                        value="<%= bannerSetting.banner_title %>" name="banner_title"
+                                                        required>
+                                                </div>
+                                                <!-- Banner Subtitle -->
+                                                <div class="form-group mb-3">
+                                                    <label for="bannersub">Banner SubTitle</label>
+                                                    <input type="text" class="form-control" id="bannersub"
+                                                        value="<%= bannerSetting.banner_subtitle %>"
+                                                        name="banner_subtitle" required>
+                                                </div>
+                                                <!-- Banner redirection link -->
+                                                <div class="form-group mb-3">
+                                                    <label for="bannerlink">Banner Redirection Link</label>
+                                                    <select class="form-control" name="banner_link" id="bannerlink">
+                                                        <% tours.forEach(tour=> { %>
+                                                            <option <% tour._id==bannerSetting.banner_link ? 'selected'
+                                                                :'' %>
+                                                                value="<%= tour._id %>">
+                                                                    <%= tour.title %>
+                                                            </option>
+                                                            <% }) %>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <button type="submit" class="btn btn-success bg-gradient submit">
+                                                    <i class="bi bi-upload"></i>
+                                                    Submit
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+            </main>
+            <!-- End #main -->
+
+            <!-- ======= Footer ======= -->
+            <%- include('../partials/footer') %>
+                <!-- End Footer -->
+
+                <a href="#" class="back-to-top d-flex align-items-center justify-content-center">
+                    <i class="bi bi-arrow-up-short"></i>
+                </a>
+                <%- include('../partials/script') %>
+                    <script async src="/assets/js/index.js" type="module"></script>
+</body>
+
+</html>

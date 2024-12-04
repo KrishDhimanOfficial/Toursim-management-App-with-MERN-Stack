@@ -7,6 +7,9 @@ import SingleTour from './SingleTour'
 import CheckOut from './CheckOut'
 import Success from './Success'
 import Failure from './Failure'
+import LocationTours from './LocationTours'
+import UserAccount from './UserAccount'
+import NoTFound from './NoTFound'
 
 export {
     Index,
@@ -17,5 +20,8 @@ export {
     SingleTour,
     CheckOut,
     Success,
-    Failure
+    Failure,
+    LocationTours,
+    UserAccount,
+    NoTFound
 }

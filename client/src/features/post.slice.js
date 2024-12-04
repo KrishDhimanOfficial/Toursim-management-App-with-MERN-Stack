@@ -21,7 +21,7 @@ const postSlice = createSlice({
         },
         categoryPost: (state, action) => {
             return action.payload
-        }
+        },
     }
 })
 

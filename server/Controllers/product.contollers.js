@@ -2,6 +2,7 @@ import config from '../config/config.js'
 import tourLocationModel from '../models/tour_location.model.js'
 import tourCategoryModel from '../models/product_category.model.js'
 import tourModel from '../models/product.model.js'
+import tour_booking_model from '../models/order.model.js'
 import deleteImage from '../services/deleteImg.js'
 import mongoose from 'mongoose'
 const ObjectId = mongoose.Types.ObjectId;
@@ -41,7 +42,9 @@ const productControllers = {
                     }
                 }
             ])
+            const bookings = await tour_booking_model.find({}, { tour_id: 1 })
             return res.render('product/tour', {
+                bookings,
                 tours, tour_locations, tour_categories,
                 tour_img_url: config.server_tour_img_url
             })
@@ -53,10 +56,8 @@ const productControllers = {
         try {
             const tour_locations = await tourLocationModel.find({})
             const tours = await tourModel.find({}, { product_location_id: 1 })
-            const tourSet = new Set()
-            tours.forEach(tour => tourSet.add(tour.product_location_id.toString()))
             return res.render('product/tour_location', {
-                tour_locations,tourSet,
+                tour_locations, tours,
                 tour_location_img_url: config.server_tour_location_img_url
             })
         } catch (error) {

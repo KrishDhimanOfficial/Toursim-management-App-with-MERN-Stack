@@ -21,4 +21,5 @@ const handleAggregatePagination = async (collectionName, aggregation, query) => 
         console.log('handelAggregatePagination :' + error.message)
     }
 }
-export default handleAggregatePagination
+
+export { handleAggregatePagination }

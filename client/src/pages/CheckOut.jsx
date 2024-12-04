@@ -2,12 +2,13 @@ import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router'
 import config from '../config/config'
-import { Button } from '../components/componets'
+import { Button, NoTFound } from '../components/componets'
 
 const CheckOut = () => {
     const { tour_slug } = useParams()
     const navigate = useNavigate()
     const [checkout, setcheckout] = useState({})
+    const [error, seterror] = useState(false)
     const { seats, id } = JSON.parse(sessionStorage.getItem('details'))
 
     const dep_date = new Date(checkout.tour?.deperature_date)
@@ -16,10 +17,9 @@ const CheckOut = () => {
 
     const fetch = async () => {
         const response = await axios.get(`${config.server_url}/checkout/${tour_slug}`)
-        if (response.data.error) navigate('/')
+        if (response.data.error) seterror(true)
         setcheckout(response.data)
     }
-
 
     // Handle Payment
     const handlePayment = async () => {
@@ -33,7 +33,7 @@ const CheckOut = () => {
             const options = {
                 key: config.razorpay_ID,
                 amount: response.data.amount,
-                currency: 'USD',
+                currency: 'INR',
                 name: 'Travel',
                 description: 'Test Transaction',
                 order_id: response.data.id,
@@ -80,81 +80,83 @@ const CheckOut = () => {
         return () => { document.body.removeChild(script) }
     }, [])
     return (
-        <div id="fh5co-blog-section" className="fh5co-section-gray">
-            <div className="container">
-                <div className="row">
-                    <div className="col-md-7">
-                        <h2>
-                            {checkout.tour?.title}
-                        </h2>
-                        <div style={{ width: '100%', height: '400px' }}>
-                            <img
-                                src={`${checkout.tour_img_url}/${checkout.tour?.featured_image}`}
-                                alt=""
-                                style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
-                        </div>
-                        <p style={{ margin: '20px 0' }}
-                            dangerouslySetInnerHTML={{ __html: checkout.tour?.description }}
-                        />
-                    </div>
-                    <div className="col-md-5">
-                        <div >
-                            <h2>Plans Details</h2>
-                        </div>
-                        <table>
-                            <tbody>
-                                <tr className='border-b'>
-                                    <td className="font-bold">Plan Name</td>
-                                    <td>{checkout.tour?.title}</td>
-                                </tr>
-                                <tr className='border-b'>
-                                    <td className="font-bold">Category</td>
-                                    <td>{checkout.tour?.category.category_name}</td>
-                                </tr>
-                                <tr className='border-b'>
-                                    <td className="font-bold">Location</td>
-                                    <td>{checkout.tour?.location.location_name}</td>
-                                </tr>
-                                <tr className='border-b'>
-                                    <td className="font-bold">Duration</td>
-                                    <td>
-                                        {return_date.getDate() - dep_date.getDate()} Days
-                                    </td>
-                                </tr>
-                                <tr className='border-b'>
-                                    <td className="font-bold">Dates</td>
-                                    <td>
-                                        {dep_date.toLocaleDateString()}
-                                        -
-                                        {return_date.toLocaleDateString()}
-                                    </td>
-                                </tr>
-                                <tr className='border-b'>
-                                    <td className="font-bold">Price</td>
-                                    <td>${checkout.tour?.price}</td>
-                                </tr>
-                                <tr className='border-b'>
-                                    <td className="font-bold">Seats</td>
-                                    <td>{seats}</td>
-                                </tr>
-                                <tr className='border-b'>
-                                    <td className="font-bold">Amount</td>
-                                    <td>${checkout.tour?.price * seats}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <div className="footer">
-                            <Button
-                                fn={() => handlePayment()}
-                                type={'submit'}
-                                text={'Confirm Booking'}
+        error
+            ? <NoTFound />
+            : <div id="fh5co-blog-section" className="fh5co-section-gray">
+                <div className="container">
+                    <div className="row">
+                        <div className="col-md-7">
+                            <h2>
+                                {checkout.tour?.title}
+                            </h2>
+                            <div style={{ width: '100%', height: '400px' }}>
+                                <img
+                                    src={`${checkout.tour_img_url}/${checkout.tour?.featured_image}`}
+                                    alt=""
+                                    style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                            </div>
+                            <p style={{ margin: '20px 0' }}
+                                dangerouslySetInnerHTML={{ __html: checkout.tour?.description }}
                             />
                         </div>
+                        <div className="col-md-5">
+                            <div >
+                                <h2>Plans Details</h2>
+                            </div>
+                            <table>
+                                <tbody>
+                                    <tr className='border-b'>
+                                        <td className="font-bold">Plan Name</td>
+                                        <td>{checkout.tour?.title}</td>
+                                    </tr>
+                                    <tr className='border-b'>
+                                        <td className="font-bold">Category</td>
+                                        <td>{checkout.tour?.category.category_name}</td>
+                                    </tr>
+                                    <tr className='border-b'>
+                                        <td className="font-bold">Location</td>
+                                        <td>{checkout.tour?.location.location_name}</td>
+                                    </tr>
+                                    <tr className='border-b'>
+                                        <td className="font-bold">Duration</td>
+                                        <td>
+                                            {return_date.getDate() - dep_date.getDate()} Days
+                                        </td>
+                                    </tr>
+                                    <tr className='border-b'>
+                                        <td className="font-bold">Dates</td>
+                                        <td>
+                                            {dep_date.toLocaleDateString()}
+                                            -
+                                            {return_date.toLocaleDateString()}
+                                        </td>
+                                    </tr>
+                                    <tr className='border-b'>
+                                        <td className="font-bold">Price</td>
+                                        <td>${checkout.tour?.price}</td>
+                                    </tr>
+                                    <tr className='border-b'>
+                                        <td className="font-bold">Seats</td>
+                                        <td>{seats}</td>
+                                    </tr>
+                                    <tr className='border-b'>
+                                        <td className="font-bold">Amount</td>
+                                        <td>${checkout.tour?.price * seats}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div className="footer">
+                                <Button
+                                    fn={() => handlePayment()}
+                                    type={'submit'}
+                                    text={'Confirm Booking'}
+                                />
+                            </div>
 
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
     )
 }
 

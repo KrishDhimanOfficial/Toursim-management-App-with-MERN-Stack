@@ -8,10 +8,13 @@ import postModel from '../models/post.model.js'
 import userModel from '../models/authenticate.model.js'
 import postcategoryModel from '../models/post.category.model.js'
 import postCommentModel from '../models/post.comment.model.js'
+import tourLocationModel from '../models/tour_location.model.js'
 import tour_booking_model from '../models/order.model.js'
+import sitesettingModel from '../models/general_setting.model.js'
+import banner_setting_model from '../models/banner_setting.js'
 import Razorpay from 'razorpay'
 import config from '../config/config.js'
-import handleAggregatePagination from '../services/handlepagination.js'
+import { handleAggregatePagination } from '../services/handlepagination.js'
 import { getUser } from '../services/createToken.js'
 import mongoose from 'mongoose'
 const ObjectId = mongoose.Types.ObjectId;
@@ -175,8 +178,7 @@ const siteControllers = {
                 }
             ])
             let bookedSeats = 0;
-            response[0].booking?.map(item => bookedSeats += item.total_seats)
-
+            if (response.length > 0) response[0].booking?.map(item => bookedSeats += item.total_seats)
             if (response.length == 0) return res.status(200).json({ error: 'Not Found' })
             return res.status(200).json({
                 bookedSeats,
@@ -235,6 +237,59 @@ const siteControllers = {
             console.log('gettourONcheckout : ' + error.message)
         }
     },
+    getToursBYLocation: async (req, res) => {
+        try {
+            const pipeline = [
+                {
+                    $match: {
+                        location_name: {
+                            $regex: `${req.params.location}`,
+                            $options: 'i'
+                        },
+                        status: true
+                    }
+                },
+                {
+                    $lookup: {
+                        from: 'tourplans',
+                        localField: '_id',
+                        foreignField: 'product_location_id',
+                        as: 'tours'
+                    }
+                },
+                {
+                    $unwind: '$tours',
+                },
+                {
+                    $replaceRoot: { newRoot: '$tours' }
+                },
+                {
+                    $project: {
+                        'tours.product_category_id': 0,
+                        'tours.product_location_id': 0,
+                        'tours.description': 0,
+                        'tours.travelling_plan': 0,
+                        'tours.product_images': 0,
+                        'tours.total_Seats': 0,
+                        'tours.product_excluded': 0,
+                        'tours.product_included': 0,
+                        location_name: 0,
+                        featured_img: 0,
+                        status: 0,
+                        _id: 0,
+                        __v: 0
+                    }
+                }
+            ]
+            const response = await handleAggregatePagination(tourLocationModel, pipeline, req.query)
+            return res.status(200).json({
+                response,
+                tour_img_url: config.server_tour_img_url
+            })
+        } catch (error) {
+            console.log('getToursBYLocation : ' + error.message)
+        }
+    },
     // Post API's For Frontend Site
     getTopPosts: async (req, res) => {
         try {
@@ -275,9 +330,11 @@ const siteControllers = {
     getSinglePost: async (req, res) => {
         try {
             const postresponse = await postModel.aggregate([{ $match: { post_slug: req.params.post_slug } }])
+            if (postresponse.length == 0) return res.status(200).json({ error: 'Not Found' })
+
             const commentresponse = await postCommentModel.aggregate([
                 {
-                    $match: { post_id: postresponse[0]._id }
+                    $match: { post_id: postresponse[0]?._id }
                 },
                 {
                     $graphLookup: {
@@ -287,16 +344,10 @@ const siteControllers = {
                         connectToField: 'parentId',
                         as: 'nestedComments',
                         depthField: 'depth',
-                        restrictSearchWithMatch: {
-                            parentId: { $ne: null }
-                        }
                     }
                 }
             ])
-            console.log(commentresponse);
-            console.log(commentresponse[0].nestedComments);
-
-            if (postresponse.length == 0) return res.status(200).json({ error: 'Not Found' })
+            // console.log(commentresponse);
             return res.status(200).json({
                 post: postresponse[0],
                 comments: commentresponse,
@@ -391,19 +442,24 @@ const siteControllers = {
     // Orders API's
     createBooking: async (req, res) => {
         try {
-            const razorpay = new Razorpay({
-                key_id: `${config.razorpay_ID}`,
-                key_secret: `${config.razorpay_key}`,
-            })
+            const razorpay = new Razorpay(
+                {
+                    key_id: config.razorpay_ID,
+                    key_secret: config.razorpay_key,
+                }
+            )
             const { total_Amount } = req.body;
+            console.log(total_Amount);
+
             const options = {
                 amount: total_Amount * 100, // Amount in USD
-                currency: "USD",
+                currency: "INR",
                 receipt: "qwsaq1",
             }
             const order = await razorpay.orders.create(options)
             return res.status(200).json(order)
         } catch (error) {
+            console.error(error);
             console.log('createOrder : ' + error.message)
         }
     },
@@ -426,7 +482,83 @@ const siteControllers = {
         } catch (error) {
             console.log('validateOrder : ' + error.message)
         }
-    }
+    },
+    // Site Setting API's
+    getSiteSetting: async (req, res) => {
+        try {
+            const siteSetting = await sitesettingModel.findOne({})
+            return res.status(200).json({
+                siteSetting,
+                logo_img_url: config.server_company_logo_img_url
+            })
+        } catch (error) {
+            console.log('getSiteSetting : ' + error.message)
+        }
+    },
+    getBannerSetting: async (req, res) => {
+        try {
+            const response = await banner_setting_model.findOne({})
+            const tour = await tourModel.findById({ _id: response.banner_link }, { slug: 1, price: 1 })
+            return res.status(200).json({
+                response, tour,
+                banner_img_url: config.server_banner_img_url
+            })
+        } catch (error) {
+            console.log('getBannerSetting : ' + error.message)
+        }
+    },
+    // User Account API's
+    getUserTourBooking: async (req, res) => {
+        try {
+            const token = req.headers['authorization'].split(' ')[1]
+            const user = await userModel.findById({ _id: getUser(token) })
+            const pipeline = [
+                {
+                    $match: { userId: user._id }
+                },
+                {
+                    $lookup: {
+                        from: 'tourplans',
+                        localField: 'tour_id',
+                        foreignField: '_id',
+                        as: 'tours'
+                    }
+                },
+                { $unwind: '$tours' },
+                {
+                    $lookup: {
+                        from: 'tour-locations',
+                        localField: 'tours.product_location_id',
+                        foreignField: '_id',
+                        as: 'location'
+                    }
+                },
+                { $unwind: '$location' },
+                {
+                    $project: {
+                        formattedDate: {
+                            $dateToString: {
+                                format: "%Y-%m-%d",
+                                date: "$createdAt"
+                            }
+                        },
+                        total_seats: 1,
+                        totalAmount: 1,
+                        'tours.title': 1,
+                        'tours.deperature_date': 1,
+                        'tours.return_date': 1,
+                        'tours.price': 1,
+                        'tours.total_seats': 1,
+                        'location.location_name': 1
+                    }
+                }
+            ]
+            const tourBooking = await handleAggregatePagination(tour_booking_model, pipeline, req.query)
+            return res.status(200).json(tourBooking)
+        } catch (error) {
+            console.log('getUserTourBooking : ' + error.message)
+        }
+    },
 }
 
 export default siteControllers
