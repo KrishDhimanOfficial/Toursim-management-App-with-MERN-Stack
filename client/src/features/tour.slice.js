@@ -11,8 +11,11 @@ const tourSlice = createSlice({
         alltours: (state, action) => {
             return action.payload
         },
+        searchedPackages: (state, action) => {
+            return action.payload
+        }
     }
 })
 
-export const { alltours } = tourSlice.actions;
+export const { alltours, searchedPackages } = tourSlice.actions;
 export const tourreducer = tourSlice.reducer;

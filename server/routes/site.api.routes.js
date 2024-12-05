@@ -16,6 +16,7 @@ router.get('/top/destination', siteControllers.getDestionation)
 router.get('/top/posts', siteControllers.getTopPosts)
 
 // Tour's Pages
+router.post('/search/result', siteControllers.searchTourPackages)
 router.get('/all/tours', siteControllers.getAllTOurs)
 router.get('/tour/:tour_slug', siteControllers.getTourBySlug)
 router.get('/destination/:location', siteControllers.getToursBYLocation)
@@ -37,8 +38,9 @@ router.post('/validate/order', siteControllers.validateBooking)
 
 // Site Setting
 router.get('/get/site-setting', siteControllers.getSiteSetting)
-router.get('/get/banner/setting',siteControllers.getBannerSetting)
+router.get('/get/banner/setting', siteControllers.getBannerSetting)
 
 // User Account
 router.get('/bookings', siteControllers.getUserTourBooking)
+
 export default router

@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import paris from '../../assets/images/paris.webp'
 
-const Tours = ({ imgPath, location, slug, price }) => {
+const Tour = ({ imgPath, location, slug, price }) => {
     console.log('Tour  Render')
     return (
         <div className="col-md-4 col-sm-6 fh5co-tours">
@@ -24,4 +24,4 @@ const Tours = ({ imgPath, location, slug, price }) => {
     )
 }
 
-export default Tours
+export default Tour

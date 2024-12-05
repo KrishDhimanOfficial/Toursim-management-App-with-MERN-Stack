@@ -1,22 +1,21 @@
 import React from 'react'
 
-
 const Input = ({
     type,
     placeholder,
-    style,
+    classs,
     ...props
 }, ref) => {
+
     return (
         <input
             type={type}
-            style={style}
             ref={ref}
-            {...props}
-            className="input"
+            className={`${classs}`}
             placeholder={placeholder}
+            {...props}
             required />
     )
 }
 
-export default React.forwardRef(Input)
+export default React.memo(React.forwardRef(Input))

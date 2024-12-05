@@ -36,14 +36,18 @@ const Footer = () => {
                                 <h3>Address</h3>
                                 <p>{settings.siteSetting?.company_address}</p>
                             </div>
-                            <div className="col-md-3 col-sm-3 col-xs-12 fh5co-footer-link">
+                            <div className="col-md-3 col-sm-3 col-xs-12  fh5co-footer-link">
                                 <h3>Account</h3>
-                                <Link to="/account">My Account</Link>
+                                <ul>
+                                    <li>
+                                        <Link to="/mybookings">My Bookings</Link>
+                                    </li>
+                                </ul>
                             </div>
                         </div>
                         <div className="row">
                             <div className="col-md-6 col-md-offset-3 text-center">
-                                <p>{settings.company_copyright}</p>
+                                <p>{settings.siteSetting?.company_copyright}</p>
                             </div>
                         </div>
                     </div>

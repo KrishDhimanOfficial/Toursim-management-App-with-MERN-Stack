@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import config from '../../config/config'
-import { motion } from "motion/react"
-import { Sec_Heading, Tours, NaviagteUser, ErrorBoundary } from '../componets'
+import { Sec_Heading, Tour, NaviagteUser, ErrorBoundary } from '../componets'
 
 const Tour_row = () => {
-    const [Tour, setTopTours] = useState([])
+    const [tours, setTopTours] = useState([])
     console.log('Tour row Render');
-
 
     const fetchHotToursAPI = async () => {
         const response = await axios.get(`${config.server_url}/get/tours`)
@@ -23,11 +21,11 @@ const Tour_row = () => {
                 <div className="row" style={{ display: 'flex', alignItems: 'stretch' }}>
                     <ErrorBoundary>
                         {
-                            Tour.hottours?.map((tour, i) => (
-                                <Tours
+                            tours.hottours?.map((tour, i) => (
+                                <Tour
                                     key={i}
                                     location={tour.location.location_name}
-                                    imgPath={`${Tour.location_img_url}/${tour.location.featured_img}`}
+                                    imgPath={`${tours.tour_img_url}/${tour.tourplan.featured_image}`}
                                     slug={`${tour.tourplan.slug}`}
                                     price={tour.tourplan.price}
                                 />

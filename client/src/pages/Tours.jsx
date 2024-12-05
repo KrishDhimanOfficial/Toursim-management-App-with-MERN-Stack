@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { alltours } from '../features/tour.slice'
-import { Sec_Heading, Tours, ErrorBoundary, Pagination } from '../components/componets'
+import { Sec_Heading, Tour, ErrorBoundary, Pagination } from '../components/componets'
 import axios from 'axios'
 import config from '../config/config'
 
 
-const Tour = () => {
+const Tours = () => {
     const dispatch = useDispatch()
     const toursState = useSelector(state => state.tours)
     const apiURL = `${config.server_url}/all/tours`;
@@ -27,10 +27,10 @@ const Tour = () => {
                     <ErrorBoundary>
                         {
                             toursState.response?.collectionData?.map((tour, i) => (
-                                <Tours
+                                <Tour
                                     key={i}
-                                    location={tour.location.location_name}
-                                    imgPath={`${toursState.location_img_url}/${tour.location.featured_img}`}
+                                    location={tour.location?.location_name}
+                                    imgPath={`${toursState.tour_img_url}/${tour.featured_image}`}
                                     slug={tour.slug}
                                     price={tour.price}
                                 />
@@ -54,4 +54,4 @@ const Tour = () => {
     )
 }
 
-export default Tour
+export default Tours

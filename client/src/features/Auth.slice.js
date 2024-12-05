@@ -19,12 +19,8 @@ const AuthSlice = createSlice({
             state.errorstate = true;
             state.errorMessage = action.payload;
         },
-        saveUser: (state, action) => {
-            state.user = action.payload;
-            state.userIsLoggedIn = true;
-        }
     }
 })
 
-export const { registerUser, loginUser, saveUser } = AuthSlice.actions;
+export const { registerUser, loginUser } = AuthSlice.actions;
 export const AuthSliceReducer = AuthSlice.reducer;

@@ -1,7 +1,7 @@
 import Header from "./partials/Header"
 import Banner from "./Banner"
 import Sec_Heading from "./partials/Sec_Heading"
-import Tours from "./Index/Tours"
+import Tour from "./Index/Tour"
 import Post from "./partials/Post"
 import Footer from "./partials/Footer"
 import Destination from './Index/Destination'
@@ -25,12 +25,13 @@ import Input from "./partials/Input"
 import NoTFound from "../pages/NoTFound"
 import BookTour from "./partials/Tour/BookTour"
 import SingleTourSection from "./partials/Tour/SingleTourSection"
+import SearchForm from "./partials/SearchForm"
 
 export {
     Header,
     Banner,
     Sec_Heading,
-    Tours,
+    Tour,
     Post,
     Footer,
     Destination,
@@ -53,5 +54,6 @@ export {
     Input,
     BookTour,
     NoTFound,
-    SingleTourSection
+    SingleTourSection,
+    SearchForm,
 }

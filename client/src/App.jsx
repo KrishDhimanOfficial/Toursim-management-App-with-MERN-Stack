@@ -3,12 +3,13 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import {
   Index,
   Posts,
-  Tour,
+  Tours,
   SinglePost,
   CategoryPosts,
   SingleTour, CheckOut,
   Success, Failure, NoTFound,
-  LocationTours, UserAccount
+  LocationTours,
+  MyBookings, SearchedPackage
 } from './pages/pages'
 import { Login, Signup, ForgotPassword, ErrorBoundary } from './components/componets'
 import SiteLayout from './SiteLayout'
@@ -41,12 +42,12 @@ const routes = [
       },
       {
         path: '/tours',
-        element: <Tour />
+        element: <Tours />
       },
       {
-        path: '/*',
-        element: <NoTFound />
-      }
+        path: '/search/packages',
+        element: <SearchedPackage />
+      },
     ]
   },
   {
@@ -77,8 +78,8 @@ const routes = [
         element: <LocationTours />
       },
       {
-        path: '/account',
-        element: <UserAccount />
+        path: '/mybookings',
+        element: <MyBookings />
       },
       {
         path: '/success',

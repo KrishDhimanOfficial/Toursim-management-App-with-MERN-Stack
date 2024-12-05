@@ -68,16 +68,18 @@ const SinglePost = () => {
                             <h3 style={{ margin: '20px 0' }}>Comments</h3>
                             {
                                 comments?.map((comment, i) => (
-                                    <CommentList
-                                        key={i}
-                                        index={i}
-                                        parent_id={`${comment._id}`}
-                                        username={comment.username}
-                                        comment={comment.comment}
-                                        slug={post_slug}
-                                    />
+                                    comment.parentId === null
+                                        ? <CommentList
+                                            key={i}
+                                            mL={0}
+                                            parent_id={`${comment._id}`}
+                                            post_id={singlePostState.post?._id}
+                                            username={comment.username}
+                                            comment={comment.comment}
+                                            replies={comments}
+                                        />
+                                        : ''
                                 ))
-
                             }
                         </div>
                     </div>

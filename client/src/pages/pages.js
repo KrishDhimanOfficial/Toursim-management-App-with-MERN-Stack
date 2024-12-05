@@ -1,6 +1,6 @@
 import Index from './Index'
 import Posts from './Posts'
-import Tour from './Tour'
+import Tours from './Tours'
 import SinglePost from './SinglePost'
 import CategoryPosts from './CategoryPosts'
 import SingleTour from './SingleTour'
@@ -8,13 +8,14 @@ import CheckOut from './CheckOut'
 import Success from './Success'
 import Failure from './Failure'
 import LocationTours from './LocationTours'
-import UserAccount from './UserAccount'
+import MyBookings from './MyBookings'
 import NoTFound from './NoTFound'
+import SearchedPackage from './SearchedPackage'
 
 export {
     Index,
     Posts,
-    Tour,
+    Tours,
     SinglePost,
     CategoryPosts,
     SingleTour,
@@ -22,6 +23,7 @@ export {
     Success,
     Failure,
     LocationTours,
-    UserAccount,
-    NoTFound
+    MyBookings,
+    NoTFound,
+    SearchedPackage
 }

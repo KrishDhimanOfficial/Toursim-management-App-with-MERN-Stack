@@ -4,25 +4,23 @@ import { useNavigate } from 'react-router'
 import { Link } from 'react-router-dom'
 import config from '../config/config'
 
-const UserAccount = () => {
-    console.log('UserAccount Render');
+const MyBookings = () => {
+    console.log('MyBookings Render');
 
     const naviagte = useNavigate()
     const [booking, setBooking] = useState({})
     const token = localStorage.getItem('token')
+    const apiURL = `${config.server_url}/bookings`;
+    const paginationURL = '/mybookings';
 
     const fetch = async () => {
-        const response = await axios.get(`${config.server_url}/bookings`, {
+        const response = await axios.get(apiURL, {
             headers: { 'authorization': `Bearer ${token}` }
         })
         if (response) setBooking(response.data)
     }
     useEffect(() => {
-        if (!token) {
-            naviagte('/login')
-        } else {
-            fetch()
-        }
+        !token ? naviagte('/login') : fetch()
     }, [])
     return (
         <div id="fh5co-tours" className="fh5co-section-gray">
@@ -35,7 +33,7 @@ const UserAccount = () => {
                 <div className="row">
                     <div className="col-md-12">
                         <div className="section-title text-center">
-                            <h2>User Account</h2>
+                            <h2>Bookings</h2>
                             <table>
                                 <thead>
                                     <tr>
@@ -51,7 +49,7 @@ const UserAccount = () => {
                                 </thead>
                                 <tbody style={{ marginBottom: '20px' }}>
                                     {
-                                        booking.collectionData?.map((tour, i) => (
+                                        booking.response?.collectionData?.map((tour, i) => (
                                             <tr key={i}>
                                                 <td className='p-0'>{tour._id}</td>
                                                 <td className='p-0'>{tour.tours.title}</td>
@@ -82,8 +80,8 @@ const UserAccount = () => {
                     </div>
                 </div>
             </div>
-        </div >
+        </div>
     )
 }
 
-export default UserAccount
+export default MyBookings

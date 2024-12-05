@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
+import { SearchForm } from '../components/componets'
 import config from '../config/config'
 
 
 function Banner() {
     const [setting, setsetting] = useState({})
-    
+
     const fetch = async () => {
         const response = await axios.get(`${config.server_url}/get/banner/setting`)
         if (response) setsetting(response.data)
@@ -14,7 +15,8 @@ function Banner() {
     useEffect(() => { fetch() }, [])
     return (
         <div className="fh5co-hero">
-            <div className="fh5co-overlay"></div>
+            <div className="fh5co-overlay">
+            </div>
             <div className="fh5co-cover" data-stellar-background-ratio="0.5" style={
                 {
                     backgroundImage: `url(${setting.banner_img_url}/${setting.response?.banner_image})`,
@@ -27,7 +29,7 @@ function Banner() {
                         <div className="row">
                             <div className="col-sm-5 col-md-5">
                                 <div className="tabulation animate-box">
-                                    {/* <SeachForm /> */}
+                                    <SearchForm />
                                 </div>
                             </div>
                             <div className="desc2 animate-box">

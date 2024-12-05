@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Sec_Heading, Tours, ErrorBoundary, Pagination } from '../components/componets'
+import { Sec_Heading, Tour, ErrorBoundary, Pagination } from '../components/componets'
 import { useDispatch, useSelector } from 'react-redux'
 import { alltours } from '../features/tour.slice'
 import { useParams } from 'react-router'
@@ -35,7 +35,7 @@ const LocationTours = () => {
                                     {location.toUpperCase()} Tours Unavailable
                                 </h1>
                                 : locationToursstate.response?.collectionData?.map((tour, i) => (
-                                    <Tours
+                                    <Tour
                                         key={i}
                                         location={location.toUpperCase()}
                                         imgPath={`${locationToursstate.tour_img_url}/${tour.featured_image}`}

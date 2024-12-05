@@ -58,14 +58,14 @@ const siteControllers = {
                 },
                 {
                     $project: {
-                        'location.featured_img': 1, 'location.location_name': 1,
+                        'tourplan.featured_image': 1, 'location.location_name': 1,
                         'tourplan.slug': 1, 'tourplan.price': 1
                     }
                 }
             ])
             return res.status(200).json({
                 hottours,
-                location_img_url: config.server_tour_location_img_url
+                tour_img_url: config.server_tour_img_url
             })
         } catch (error) {
             console.log('gethotTours : ' + error.message)
@@ -93,6 +93,85 @@ const siteControllers = {
             console.log('getDestionation : ' + error.message)
         }
     },
+    searchTourPackages: async (req, res) => {
+        try {
+            const { location, dep_date, return_date } = req.body;
+            const response = await tourModel.aggregate([
+                {
+                    $lookup: {
+                        from: 'tour-locations',
+                        localField: 'product_location_id',
+                        foreignField: '_id',
+                        as: 'location'
+                    }
+                },
+                {
+                    $unwind: '$location'
+                },
+                {
+                    $match: {
+                        'location.location_name': {
+                            $regex: `^${location}$`,
+                            $options: 'i'
+                        },
+                    }
+                },
+                {
+                    $addFields: {
+                        deperature_date: {
+                            $dateToString: {
+                                format: "%Y-%m-%d",
+                                date: "$deperature_date"
+                            }
+                        }
+                    }
+                },
+                {
+                    $addFields: {
+                        return_date: {
+                            $dateToString: {
+                                format: "%Y-%m-%d",
+                                date: "$return_date"
+                            }
+                        }
+                    }
+                },
+                {
+                    $match: {
+                        $and: [
+                            {
+                                deperature_date: {
+                                    $gte: dep_date
+                                }
+                            },
+                            {
+                                return_date: {
+                                    $lte: return_date
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    $project: {
+                        'location.location_name': 1,
+                        featured_image: 1,
+                        price: 1,
+                        slug: 1
+                    }
+                }
+            ])
+            // const response = await handleAggregatePagination(tourModel, pipeline, req.query)
+            console.log(response);
+
+            return res.status(200).json({
+                response,
+                tour_img_url: config.server_tour_img_url
+            })
+        } catch (error) {
+            console.log('searchTourPackages : ' + error.message)
+        }
+    },
     getAllTOurs: async (req, res) => {
         try {
             const pipeline = [
@@ -110,6 +189,7 @@ const siteControllers = {
                     $project: {
                         'price': 1,
                         'slug': 1,
+                        'featured_image': 1,
                         'location.featured_img': 1,
                         'location.location_name': 1,
                         formattedDate: {
@@ -122,11 +202,9 @@ const siteControllers = {
                 }
             ]
             const response = await handleAggregatePagination(tourModel, pipeline, req.query)
-            console.log(response);
-
             return res.status(200).json({
                 response,
-                location_img_url: config.server_tour_location_img_url
+                tour_img_url: config.server_tour_img_url
             })
         } catch (error) {
             console.log('getAllTOurs : ' + error.message)
@@ -331,23 +409,7 @@ const siteControllers = {
         try {
             const postresponse = await postModel.aggregate([{ $match: { post_slug: req.params.post_slug } }])
             if (postresponse.length == 0) return res.status(200).json({ error: 'Not Found' })
-
-            const commentresponse = await postCommentModel.aggregate([
-                {
-                    $match: { post_id: postresponse[0]?._id }
-                },
-                {
-                    $graphLookup: {
-                        from: 'comments',
-                        startWith: '$_id',
-                        connectFromField: '_id',
-                        connectToField: 'parentId',
-                        as: 'nestedComments',
-                        depthField: 'depth',
-                    }
-                }
-            ])
-            // console.log(commentresponse);
+            const commentresponse = await postCommentModel.find({ status: true })
             return res.status(200).json({
                 post: postresponse[0],
                 comments: commentresponse,
@@ -449,8 +511,6 @@ const siteControllers = {
                 }
             )
             const { total_Amount } = req.body;
-            console.log(total_Amount);
-
             const options = {
                 amount: total_Amount * 100, // Amount in USD
                 currency: "INR",
@@ -553,8 +613,8 @@ const siteControllers = {
                     }
                 }
             ]
-            const tourBooking = await handleAggregatePagination(tour_booking_model, pipeline, req.query)
-            return res.status(200).json(tourBooking)
+            const response = await handleAggregatePagination(tour_booking_model, pipeline, req.query)
+            return res.status(200).json({ response })
         } catch (error) {
             console.log('getUserTourBooking : ' + error.message)
         }

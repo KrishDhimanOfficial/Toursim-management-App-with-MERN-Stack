@@ -1,58 +1,102 @@
 import React, { useRef, useState } from 'react'
-import { Input, Button, CategoryList } from '../componets'
+import { Input, Button } from '../componets'
 import axios from 'axios'
+import { Link } from 'react-router-dom'
 import config from '../../config/config'
 import { useForm, useController } from 'react-hook-form'
 import { useNavigate } from 'react-router'
 
-const CommentList = ({ index, username, comment, parent_id, slug, leftgap }) => {
-    const inputcommentRef = useRef()
-    const btnRef = useRef()
+const CommentList = ({ username, comment, parent_id, post_id, replies, mL }) => {
+    const inputRef = useRef()
     const naviagte = useNavigate()
     const { control, handleSubmit } = useForm()
+    const [a, setA] = useState(0)
+    const [hidden, sethidden] = useState(true)
+    const [commentrep, displayrep] = useState(true)
     const { field } = useController({ name: 'comment', control })
+
+    const displayInput = () => { sethidden(prev => !prev) }
+    const showcomments = () => {
+        displayrep(prev => !prev)
+        setA(prev => prev + 1)
+        console.log(a);
+    }
+
 
     const replycomment = async (data) => {
         try {
-            console.log(data, parent_id)
             const token = localStorage.getItem('token')
             if (!token) naviagte('/login')
 
             // Sending Response
-            const response = await axios.post(`${config.server_url}/reply/comment`, {
-                data, token, parentId: parent_id, slug
-            })
-            console.log(response);
+            if (data.comment) {
+                const response = await axios.post(`${config.server_url}/reply/comment`, {
+                    data, token, parentId: parent_id, post_id
+                })
+            }
         } catch (error) {
             console.error(error)
         }
     }
 
     return (
-        <div style={{ width: '50%', background: '#fff', padding: '20px', borderRadius: '20px', margin: '1rem 0', marginLeft: `${leftgap}px` || 0 }}>
-            <form onSubmit={handleSubmit(replycomment)}>
-                <span>{username}{index}</span>
+        <>
+            <div style={{
+                width: '50%',
+                background: '#fff',
+                padding: '20px',
+                borderRadius: '20px',
+                margin: `10px ${mL}rem`,
+            }}>
+                <div style={{ display: 'flex', gap: '10px' }}>
+                    <p>user : </p>
+                    {username}
+                </div>
                 <p style={{ margin: '10px 12px' }}>
                     {comment}
                 </p>
-                <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-                    <Input
-                        ref={inputcommentRef}
-                        type={'text'}
-                        onChange={field.onChange}
-                        name={field.name}
-                        style={{ border: '1px solid #000', padding: '8px 5px' }}
-                        placeholder={'write a reply...'}
-                    />
-                    <Button
-                        ref={btnRef}
-                        type={'submit'}
-                        text={'reply'}
-                        style={{ width: '25%', marginTop: '0' }}
-                    />
-                </div>
-            </form>
-        </div>
+                <form onSubmit={handleSubmit(replycomment)}>
+                    <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                        <Input
+                            ref={inputRef}
+                            type={hidden ? 'hidden' : 'text'}
+                            onChange={field.onChange}
+                            name={fetch.name}
+                            classs={'form-control'}
+                            placeholder={'write a reply...'}
+                        />
+                        <Link
+                            onClick={() => displayInput()}
+                            to='#'>
+                            reply
+                        </Link>
+                    </div>
+                </form>
+            </div>
+            <Link to='#' onClick={() => showcomments()}>
+                {commentrep ? 'Load More' : 'Show Less'}
+            </Link>
+            {
+                commentrep
+                    ? ''
+                    : replies?.map((reply, i) => (
+                        (reply.parentId === parent_id &&
+                            <div key={i}>
+                                {setA(prev => prev+1)}
+                                <CommentList
+                                    // key={i}
+                                    mL={1 + i}
+                                    post_id={post_id}
+                                    parent_id={reply._id}
+                                    username={reply.username}
+                                    comment={reply.comment}
+                                    replies={replies}
+                                />
+                            </div>
+                        )
+                    ))
+            }
+        </>
     )
 }
 

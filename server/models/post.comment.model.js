@@ -17,7 +17,6 @@ const commentSchema = new mongoose.Schema({
     post_id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'post',
-        default: null
     },
     status: {
         type: mongoose.Schema.Types.Boolean,

@@ -13,4 +13,4 @@ const Button = ({ fn, text, type, classes, style }, ref) => {
     )
 }
 
-export default React.forwardRef(Button)
+export default React.memo(React.forwardRef(Button))
