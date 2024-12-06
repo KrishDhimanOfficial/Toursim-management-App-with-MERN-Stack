@@ -9,11 +9,8 @@
   "routes": [
     {
       "src": "/admin/(.*)",
-      "dest": "/admin"
-    },
-    {
-      "src": "/api/(.*)",
-      "dest": "/api"
+      "dest": "/admin/dashboard"
     }
-  ]
+  ],
+  "cleanUrls": true
 }
