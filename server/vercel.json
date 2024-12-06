@@ -11,6 +11,5 @@
       "src": "/admin/(.*)",
       "dest": "/admin/dashboard"
     }
-  ],
-  "cleanUrls": true
+  ]
 }
