@@ -15,7 +15,6 @@ const app = express()
 if (cluster.isPrimary) {
     for (let i = 0; i < numCPUs.availableParallelism(); ++i)  cluster.fork()
     console.log(`Primary ${process.pid} is running`)
-    cluster.fork().on('online', () => console.log(`worker online`))
     cluster.on('exit', (worker, code, signal) => console.log(`worker ${worker.process.pid} died`))
 } else {
     connectDB() // connection to mongoDB
