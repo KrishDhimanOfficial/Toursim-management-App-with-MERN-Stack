@@ -29,19 +29,19 @@ const CategoryPosts = () => {
             <div className="container">
                 <div className="row row-bottom-padded-md">
                     <ErrorBoundary>
-                            {
-                                categoryPosts.response?.collectionData?.map((category, i) => (
-                                    <Post
-                                        key={i}
-                                        title={category.post.title}
-                                        date={category.post.createdAt}
-                                        commentLength={21}
-                                        slug={`/post/${category.post.post_slug}`}
-                                        imgPath={`${categoryPosts.post_img_url}/${category.post.post_image}`}
-                                        description={category.post.description}
-                                    />
-                                ))
-                            }
+                        {
+                            categoryPosts.response?.collectionData?.map((category, i) => (
+                                <Post
+                                    key={i}
+                                    title={category.post.title}
+                                    date={category.post.createdAt}
+                                    commentLength={21}
+                                    slug={`/post/${category.post.post_slug}`}
+                                    imgPath={`${categoryPosts.post_img_url}/${category.post.post_image}`}
+                                    description={category.post.description}
+                                />
+                            ))
+                        }
                     </ErrorBoundary>
                 </div>
             </div>
@@ -49,7 +49,11 @@ const CategoryPosts = () => {
                 <div className="row">
                     <div className="col-12">
                         <div className="text-center">
-                            <Pagination url={apiURL} paginateurl={paginationURL} slug={category} />
+                            <Pagination
+                                url={apiURL}
+                                paginateurl={paginationURL}
+                                slug={category}
+                            />
                         </div>
                     </div>
                 </div>

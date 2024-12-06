@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import config from '../config/config'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { singlePost, setLoading } from '../features/post.slice'
 import { CategoryList, Loader, NoTFound, CommentInput, CommentList } from '../components/componets'
 
 const SinglePost = () => {
     console.log('SinglePost render')
-    const navigate = useNavigate()
     const { post_slug } = useParams()
     const dispatch = useDispatch()
     const [error, seterror] = useState(false)
@@ -18,14 +17,21 @@ const SinglePost = () => {
 
 
     const fetchSinglePost = async () => {
-        dispatch(setLoading(true))
         const response = await axios.get(`${config.server_url}/single/post/${post_slug}`)
-        if (response.data.error) seterror(true)
-        setcomment(response.data.comments)
-        dispatch(singlePost(response.data))
-        dispatch(setLoading(false))
+
+        if (response.data.error) {
+            seterror(true)
+        } else {
+            setcomment(response.data.comments)
+            dispatch(singlePost(response.data))
+        }
     }
-    useEffect(() => { fetchSinglePost() }, [])
+
+    useEffect(() => {
+        dispatch(setLoading(true))
+        fetchSinglePost()
+        dispatch(setLoading(false))
+    }, [])
     return (
         error
             ? <NoTFound />

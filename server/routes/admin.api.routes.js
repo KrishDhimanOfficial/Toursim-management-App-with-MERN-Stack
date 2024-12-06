@@ -67,6 +67,12 @@ router.route('/api/post/:id?')
     .patch(postControllers.updatePostStatus)
     .delete(postControllers.deletePost)
 
+// Render Routes for Post Comments
+router.get('/post/comments', checkAdminIsLogged, postControllers.renderPostComments)
+router.route('/post/comment/:id?')
+    .patch(postControllers.updateCommentStatus)
+    .get(postControllers.renderSingleComment)
+
 // Render Routes For Tour
 router.get('/tour', checkAdminIsLogged, productControllers.renderTourPage)
 router.get('/create/tour', checkAdminIsLogged, productControllers.renderCreateTour)

@@ -20,7 +20,7 @@ const commentSchema = new mongoose.Schema({
     },
     status: {
         type: mongoose.Schema.Types.Boolean,
-        default: true
+        default: false
     },
     createdAt: {
         type: mongoose.Schema.Types.Date,

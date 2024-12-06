@@ -17,6 +17,7 @@ import config from '../config/config.js'
 import { handleAggregatePagination } from '../services/handlepagination.js'
 import { getUser } from '../services/createToken.js'
 import mongoose from 'mongoose'
+import { loginUser } from '../../client/src/features/Auth.slice.js'
 const ObjectId = mongoose.Types.ObjectId;
 
 const siteControllers = {
@@ -161,9 +162,6 @@ const siteControllers = {
                     }
                 }
             ])
-            // const response = await handleAggregatePagination(tourModel, pipeline, req.query)
-            console.log(response);
-
             return res.status(200).json({
                 response,
                 tour_img_url: config.server_tour_img_url
@@ -407,9 +405,11 @@ const siteControllers = {
     },
     getSinglePost: async (req, res) => {
         try {
-            const postresponse = await postModel.aggregate([{ $match: { post_slug: req.params.post_slug } }])
+            const postresponse = await postModel.aggregate([
+                { $match: { post_slug: req.params.post_slug } }
+            ])
             if (postresponse.length == 0) return res.status(200).json({ error: 'Not Found' })
-            const commentresponse = await postCommentModel.find({ status: true })
+            const commentresponse = await postCommentModel.find({ post_id: postresponse[0]._id, status: true })
             return res.status(200).json({
                 post: postresponse[0],
                 comments: commentresponse,
@@ -474,26 +474,36 @@ const siteControllers = {
     createPostComment: async (req, res) => {
         try {
             const { post_id, token, comment } = req.body;
+            if (!comment) return res.status(200).json({ error: 'Empty Field' })
+
             const user = await userModel.findById({ _id: getUser(token) }, { username: 1 })
-            const response = await postCommentModel.create({
-                username: user.username,
-                post_id: new Object(post_id),
-                comment: comment.comment
-            })
-            if (!response) res.status(200).json({ error: 'Failed' })
-            return res.status(200).json({ message: 'Your Comment Has Been Under Approval!' })
+            const prevComment = await postCommentModel.findOne({ post_id })
+
+            // Check previous Comment match
+            if (prevComment.comment === comment) {
+                return res.status(200).json({ message: 'Your Comment Has Been Send Approval!' })
+            } else {
+                const response = await postCommentModel.create({
+                    username: user.username,
+                    post_id: new Object(post_id),
+                    comment
+                })
+                if (!response) res.status(200).json({ error: 'Failed' })
+                return res.status(200).json({ message: 'Your Comment Has Been Under Approval!' })
+            }
         } catch (error) {
             console.log('createPostComment : ' + error.message)
         }
     },
     repliesComment: async (req, res) => {
         try {
-            const { parentId, token, data, } = req.body;
+            const { parentId, token, comment, post_id } = req.body;
             const user = await userModel.findById({ _id: getUser(token) }, { username: 1 })
             const createcomment = await postCommentModel.create({
                 username: user.username,
                 parentId: new Object(parentId),
-                comment: data.comment
+                comment,
+                post_id,
             })
             if (!createcomment) return res.status(200).json({ error: 'Failed' })
             return res.status(200).json({ message: 'Your comment under Approval.' })

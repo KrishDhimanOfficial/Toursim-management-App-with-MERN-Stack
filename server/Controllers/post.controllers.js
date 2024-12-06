@@ -147,5 +147,62 @@ const postControllers = {
             console.log('renderUpdatePostPage : ' + error.message)
         }
     },
+    renderPostComments: async (req, res) => {
+        try {
+            const comments = await postCommentModel.aggregate([
+                {
+                    $lookup: {
+                        from: 'posts',
+                        localField: 'post_id',
+                        foreignField: '_id',
+                        as: 'post'
+                    }
+                },
+                {
+                    $unwind: {
+                        path: '$post',
+                        preserveNullAndEmptyArrays: true
+                    }
+                },
+                {
+                    $project: {
+                        status: 1,
+                        username: 1,
+                        'post.title': 1,
+                        formattedDate: {
+                            $dateToString: {
+                                format: "%Y-%m-%d",
+                                date: "$createdAt"
+                            }
+                        }
+                    }
+                }
+            ])
+            return res.render('post/postcomments', { comments })
+        } catch (error) {
+            console.log('renderPostComments : ' + error.message)
+        }
+    },
+    updateCommentStatus: async (req, res) => {
+        try {
+            const response = await postCommentModel.findByIdAndUpdate(
+                { _id: req.params.id },
+                { status: req.body.status },
+                { new: true }
+            )
+            if (!response) return res.status(204).json({ message: false })
+            return res.status(200).json({ message: true })
+        } catch (error) {
+            console.log('updateCommentStatus : ' + error.message)
+        }
+    },
+    renderSingleComment: async (req, res) => {
+        try {
+            const comment = await postCommentModel.findById({ _id: req.params.id })
+            return res.render('post/ViewSingleComment', { comment })
+        } catch (error) {
+            console.log('renderSingleComment : ' + error.message)
+        }
+    }
 }
 export default postControllers

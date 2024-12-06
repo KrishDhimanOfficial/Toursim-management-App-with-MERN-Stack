@@ -1,9 +1,11 @@
 import React from 'react'
-import { Sec_Heading, Tour} from '../components/componets'
+import { Sec_Heading, Tour } from '../components/componets'
 import { useSelector } from 'react-redux'
 
 const SearchedPackage = () => {
-    const tours = useSelector(state => state.tours)
+    const { searchedPackages } = useSelector(state => state.tours)
+    console.log(searchedPackages);
+
     return (
         <div id="fh5co-blog-section" className="fh5co-section-gray">
             <div className="container">
@@ -13,15 +15,15 @@ const SearchedPackage = () => {
                 <div className="row" style={{ display: 'flex', alignItems: 'stretch' }}>
 
                     {
-                        tours.response?.length == 0
+                        searchedPackages?.response?.length == 0
                             ? <div className="col-md-12 text-center">
                                 <h1>No Packages Available</h1>
                             </div>
-                            : tours.response?.map((tour, i) => (
+                            : searchedPackages?.response?.map((tour, i) => (
                                 <Tour
                                     key={i}
                                     location={tour.location?.location_name}
-                                    imgPath={`${tours.tour_img_url}/${tour.featured_image}`}
+                                    imgPath={`${searchedPackages.tour_img_url}/${tour.featured_image}`}
                                     price={tour.price}
                                     slug={tour.slug}
                                 />

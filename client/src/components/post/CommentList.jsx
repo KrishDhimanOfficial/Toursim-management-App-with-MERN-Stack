@@ -1,27 +1,19 @@
 import React, { useRef, useState } from 'react'
-import { Input, Button } from '../componets'
+import { Input } from '../componets'
 import axios from 'axios'
-import { Link } from 'react-router-dom'
 import config from '../../config/config'
 import { useForm, useController } from 'react-hook-form'
 import { useNavigate } from 'react-router'
+import AlertMessage from '../../Hooks/AlertMessage'
 
 const CommentList = ({ username, comment, parent_id, post_id, replies, mL }) => {
     const inputRef = useRef()
     const naviagte = useNavigate()
-    const { control, handleSubmit } = useForm()
-    const [a, setA] = useState(0)
+    const { control, handleSubmit, reset } = useForm()
     const [hidden, sethidden] = useState(true)
-    const [commentrep, displayrep] = useState(true)
     const { field } = useController({ name: 'comment', control })
 
     const displayInput = () => { sethidden(prev => !prev) }
-    const showcomments = () => {
-        displayrep(prev => !prev)
-        setA(prev => prev + 1)
-        console.log(a);
-    }
-
 
     const replycomment = async (data) => {
         try {
@@ -29,10 +21,16 @@ const CommentList = ({ username, comment, parent_id, post_id, replies, mL }) => 
             if (!token) naviagte('/login')
 
             // Sending Response
-            if (data.comment) {
-                const response = await axios.post(`${config.server_url}/reply/comment`, {
-                    data, token, parentId: parent_id, post_id
-                })
+            const response = await axios.post(`${config.server_url}/reply/comment`, {
+                comment: data.comment.trim(),
+                token,
+                parentId: parent_id,
+                post_id
+            })
+
+            if (response) {
+                AlertMessage(response.data.message, response.data.error)
+                reset()
             }
         } catch (error) {
             console.error(error)
@@ -41,61 +39,47 @@ const CommentList = ({ username, comment, parent_id, post_id, replies, mL }) => 
 
     return (
         <>
-            <div style={{
-                width: '50%',
-                background: '#fff',
-                padding: '20px',
-                borderRadius: '20px',
-                margin: `10px ${mL}rem`,
-            }}>
-                <div style={{ display: 'flex', gap: '10px' }}>
-                    <p>user : </p>
-                    {username}
-                </div>
-                <p style={{ margin: '10px 12px' }}>
-                    {comment}
-                </p>
-                <form onSubmit={handleSubmit(replycomment)}>
-                    <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-                        <Input
-                            ref={inputRef}
-                            type={hidden ? 'hidden' : 'text'}
-                            onChange={field.onChange}
-                            name={fetch.name}
-                            classs={'form-control'}
-                            placeholder={'write a reply...'}
-                        />
-                        <Link
-                            onClick={() => displayInput()}
-                            to='#'>
-                            reply
-                        </Link>
-                    </div>
-                </form>
-            </div>
-            <Link to='#' onClick={() => showcomments()}>
-                {commentrep ? 'Load More' : 'Show Less'}
-            </Link>
-            {
-                commentrep
-                    ? ''
-                    : replies?.map((reply, i) => (
-                        (reply.parentId === parent_id &&
-                            <div key={i}>
-                                {setA(prev => prev+1)}
-                                <CommentList
-                                    // key={i}
+            <div className="bg-white border border-gray-300 border-l-4 border-orange-600 p-4 mb-4"
+                style={{ margin: `1.5rem ${mL}rem` }}>
+                <div className='w-100'>
+                    <p className="font-bold text-xl text-gray-900">
+                        {username}
+                    </p>
+                    <p className="text-lg mb-4">
+                        {comment}
+                    </p>
+                    <form onSubmit={handleSubmit(replycomment)}>
+                        <div className='flex align-center'>
+                            <Input
+                                ref={inputRef}
+                                type={hidden ? 'hidden' : 'text'}
+                                onChange={field.onChange}
+                                name={fetch.name}
+                                classs={'form-control w-100 '}
+                                placeholder={'write a reply...'}
+                            />
+                            <button type='submit'
+                                onClick={() => displayInput()}
+                                className="btn-reply ms-2">
+                                Reply
+                            </button>
+                        </div>
+                    </form>
+                    {
+                        replies?.map((reply, i) => (
+                            (reply.parentId === parent_id &&
+                                <CommentList key={i}
                                     mL={1 + i}
                                     post_id={post_id}
                                     parent_id={reply._id}
                                     username={reply.username}
                                     comment={reply.comment}
-                                    replies={replies}
-                                />
-                            </div>
-                        )
-                    ))
-            }
+                                    replies={replies} />
+                            )
+                        ))
+                    }
+                </div>
+            </div>
         </>
     )
 }

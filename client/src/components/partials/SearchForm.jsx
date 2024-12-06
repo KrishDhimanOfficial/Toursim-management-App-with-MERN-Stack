@@ -17,7 +17,10 @@ const SearchForm = () => {
     const { field: returnDateField } = useController({ name: 'return_date', control })
 
     const searchPackage = async (data) => {
+        localStorage.removeItem('searchPackages')  // This Will remove the prevoius search Packages
+
         const response = await axios.post(`${config.server_url}/search/result`, data)
+
         if (response && response.status == 200) {
             dispatch(searchedPackages(response.data))
             navigate('/search/packages')

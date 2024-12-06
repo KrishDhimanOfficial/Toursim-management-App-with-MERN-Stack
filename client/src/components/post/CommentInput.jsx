@@ -1,25 +1,33 @@
 import React, { useRef } from 'react'
 import { Button } from '../componets'
-import { useSelector } from 'react-redux'
 import { useForm } from 'react-hook-form'
 import axios from 'axios'
 import config from '../../config/config'
-import { useNavigate, useParams } from 'react-router'
+import { useNavigate } from 'react-router'
+import AlertMessage from '../../Hooks/AlertMessage'
 
 
 const CommentInput = ({ post_id }) => {
-    const { post_slug } = useParams()
-    
+
     const buttonRef = useRef()
     const navigate = useNavigate()
-    const { register, handleSubmit } = useForm()
+    const { register, handleSubmit, reset } = useForm()
 
     const handlePostcomment = async (comment) => {
         const token = localStorage.getItem('token')
         if (!token) navigate('/login')
 
-        const response = await axios.post(`${config.server_url}/post/comment`, { token, comment, post_id })
-        console.log(response);
+        const response = await axios.post(`${config.server_url}/post/comment`, {
+            token,
+            comment: comment?.comment.trim(),
+            post_id
+        })
+
+        // Send Server And Reset Form
+        if (response) {
+            AlertMessage(response.data.message, response.data.error)
+            reset()
+        }
     }
     return (
         <>

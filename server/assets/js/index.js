@@ -8,6 +8,7 @@ import {
 const tour_location_table = document.querySelector('#tour-location-table')
 const tour_category_table = document.querySelector('#tour-category-table')
 const post_category_table = document.querySelector('#post-category-table')
+const post_comment_table = document.querySelector('#post-comment-table')
 const posts_table = document.querySelector('#post-table')
 const tours_table = document.querySelector('#tour_table')
 const description = document.querySelectorAll('.ql-editor')[0]
@@ -131,6 +132,15 @@ if (post_category_table) post_category_table.onclick = async (e) => {
 
 // Inject EventListener
 if (posts_table) posts_table.onclick = async (e) => {
+    if (e.target.closest('.openModal')) {
+        openModalToDeleteRequest(e, `${server_url}/${EndURL}/${e.target.dataset.id}`)
+    }
+    if (e.target.closest('.status')) {
+        updateDataStatus(e.target.checked, `${server_url}/${EndURL}/${e.target.dataset.id}`)
+    }
+}
+
+if (post_comment_table) post_comment_table.onclick = async (e) => {
     if (e.target.closest('.openModal')) {
         openModalToDeleteRequest(e, `${server_url}/${EndURL}/${e.target.dataset.id}`)
     }

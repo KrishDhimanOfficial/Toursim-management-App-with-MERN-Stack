@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
     tours: {},
+    searchedPackages: JSON.parse(localStorage.getItem('searchPackages')) || []
 }
 
 const tourSlice = createSlice({
@@ -12,7 +13,8 @@ const tourSlice = createSlice({
             return action.payload
         },
         searchedPackages: (state, action) => {
-            return action.payload
+            state.searchedPackages = action.payload
+            localStorage.setItem('searchPackages', JSON.stringify(action.payload))
         }
     }
 })

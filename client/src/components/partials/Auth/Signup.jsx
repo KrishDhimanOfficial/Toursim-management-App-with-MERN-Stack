@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { useForm } from "react-hook-form"
@@ -28,6 +28,11 @@ const Signup = () => {
             navigate('/login')
         }
     }
+
+    useEffect(() => {
+        const token = localStorage.getItem('token')
+        if (token) navigate('/')
+    }, [])
     return (
         <div className="container" style={{ height: '100%', alignContent: 'center', }}>
             <div className="row" style={{ display: 'flex', justifyContent: 'center' }}>
