@@ -175,3 +175,25 @@ const copyright = document.querySelector('.copyright')
         copyright.innerHTML = response.general_setting.company_copyright
     }
     )() //IIFE
+
+
+// update comment status
+const commentselectBox = document.querySelector('#status')
+const CommentStatusbtn = document.querySelector('#updateStatus')
+const id = document.querySelector('#commentId')
+
+if (CommentStatusbtn) CommentStatusbtn.onclick = async () => {
+    const api = await fetch(`${server_url}/${EndURL}/${id.value.trim()}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: commentselectBox.value.trim() })
+    })
+    const res = await api.json()
+    if (res.message) {
+        ErrorAlert.style.display = 'block';
+        ErrorAlert.innerHTML = 'update successfully!'
+    } else {
+        ErrorAlert.style.display = 'block';
+        ErrorAlert.innerHTML = 'Unable to update!'
+    }
+}

@@ -41,11 +41,34 @@
                         <div class="col-lg-12">
                             <div class="card">
                                 <div class="card-body">
-                                    <h5 class="card-title">Comment</h5>
+                                    <h5 class="card-title">Post Comment</h5>
                                     <div class="row">
+                                        <input type="text" hidden id="commentId" value="<%= comment._id %>">
                                         <div class="col-lg-6">
-                                            <textarea style="height: 300px;" readonly name="comment"
+                                            <textarea style="height: 200px;" readonly name="comment"
                                                 class="form-control" id="comment"><%= comment.comment %></textarea>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="mb-4">
+                                                <label for="status" class="mb-3"> Status</label>
+                                                <select name="status" id="status" class="form-control mb-3">
+                                                    <% if (comment.status) { %>
+                                                        <option value="true" selected>Active</option>
+                                                        <option value="false">InActive</option>
+                                                        <% } else { %>
+                                                            <option value="true">Active</option>
+                                                            <option value="false" selected>InActive</option>
+                                                            <% } %>
+                                                </select>
+                                                <%- include('../partials/success') %>
+                                                <%- include('../partials/alert') %>
+                                            </div>
+                                            <div>
+                                                <button type="button" id="updateStatus"
+                                                    class="border-0 rounded px-3 py-2 bg-blue text-white">
+                                                    update
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -64,10 +87,8 @@
                     <i class="bi bi-arrow-up-short"></i>
                 </a>
                 <%- include('../partials/script') %>
-                    <script>
-                        const EndURL = 'post/comment';
-                    </script>
-                    <script async src="/assets/js/index.js" type="module"></script>
+                    <script>const EndURL = 'post/comment'; </script>
+                    <script async type="module" src="/assets/js/index.js"></script>
 </body>
 
 </html>

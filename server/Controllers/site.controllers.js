@@ -17,7 +17,6 @@ import config from '../config/config.js'
 import { handleAggregatePagination } from '../services/handlepagination.js'
 import { getUser } from '../services/createToken.js'
 import mongoose from 'mongoose'
-import { loginUser } from '../../client/src/features/Auth.slice.js'
 const ObjectId = mongoose.Types.ObjectId;
 
 const siteControllers = {
