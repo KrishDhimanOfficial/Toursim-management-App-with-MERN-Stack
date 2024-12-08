@@ -196,4 +196,5 @@ if (CommentStatusbtn) CommentStatusbtn.onclick = async () => {
         ErrorAlert.style.display = 'block';
         ErrorAlert.innerHTML = 'Unable to update!'
     }
+    setTimeout(() => ErrorAlert.style.display = 'none', 2000)
 }
