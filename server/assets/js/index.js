@@ -70,6 +70,8 @@ if (ResetForm) ResetForm.onclick = () => {
     if (description) description.innerHTML = '';
     if (EndURL == 'api/tour') {
         travellingPlan.innerHTML = '';
+        previewMultipleImage.innerHTML = '';
+        document.querySelector('#featured_image').src = '/assets/images/upload_area.png';
     }
 }
 
