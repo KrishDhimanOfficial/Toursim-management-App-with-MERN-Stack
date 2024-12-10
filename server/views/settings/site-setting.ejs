@@ -47,19 +47,16 @@
                                         <div class="row mb-3">
                                             <div class="col-md-11">
                                                 <label for="hottours" class="form-label"> Select only Three</label>
-                                                <select id="hottours" name="hottours" class="form-select" multiple style="height: 200px;"
-                                                    required max="3" aria-label="multiple select example">
-                                                    <% locations.forEach((location,i)=> { %>
-                                                        <% if (HotTours.tours_id.includes(location._id)) { %>
-                                                            <option value="<%= location._id %>" selected>
-                                                                <%= location.location_name %>
-                                                            </option>
-                                                            <% } else { %>
-                                                                <option value="<%= location._id %>">
-                                                                    <%= location.location_name %>
-                                                                </option>
-                                                                <% } %>
-                                                                    <% }) %>
+                                                <select id="hottours" name="hottours" class="form-control select2bs4"
+                                                    multiple style="width: 100%;" required max="3"
+                                                    aria-label="multiple select example">
+                                                    <% hottours.forEach((tour,i)=> { %>
+                                                        <option value="<%= tour._id %>"
+                                                            <%=HotTours.tours_id.includes(tour._id)
+                                                            ? 'selected' : '' %>>
+                                                            <%= tour.title %>
+                                                        </option>
+                                                        <% }) %>
                                                 </select>
                                                 <div class="invalid-feedback">
                                                     Please select up to 3 tours
@@ -68,7 +65,8 @@
                                         </div>
                                         <div class="col-md-6">
                                             <button type="submit" class="btn btn-success bg-gradient">
-                                                Submit
+                                                <i class="bi bi-pencil-square"></i>
+                                                update
                                             </button>
                                         </div>
                                     </form>
@@ -90,24 +88,24 @@
                                         <input type="text" hidden name="id" value="<%= top_destination._id %>">
                                         <div class="row mb-3">
                                             <div class="col-md-11 mb-3">
-                                                <select id="destinations" class="form-select" multiple style="height: 200px;"
-                                                    name="destinations" aria-label="multiple select example" max="10">
+                                                <select id="destinations" class="form-control select2bs4" multiple
+                                                    style="width: 100%;" name="destinations"
+                                                    aria-label="multiple select example" max="10">
                                                     <% locations.forEach((location,i)=> { %>
-                                                        <% if (top_destination.destinations_id.includes(location._id)) {  %>
-                                                            <option value="<%= location._id %>" selected>
-                                                                <%= location.location_name %>
-                                                            </option>
-                                                            <% } else { %>
-                                                                <option value="<%= location._id %>">
-                                                                    <%= location.location_name %>
-                                                                </option>
-                                                                <% } %>
-                                                                    <% }) %>
+                                                        <option value="<%= location._id %>"
+                                                            <%=top_destination.destinations_id.includes(location._id)
+                                                            ? 'selected' :'' %>
+                                                            >
+                                                            <%= location.location_name %>
+                                                        </option>
+                                                        <% }) %>
+
                                                 </select>
                                             </div>
                                             <div class="col-md-6">
                                                 <button type="submit" class="btn btn-success bg-gradient">
-                                                    Submit
+                                                    <i class="bi bi-pencil-square"></i>
+                                                    update
                                                 </button>
                                             </div>
                                         </div>
@@ -129,24 +127,23 @@
                                         <input type="text" hidden name="id" value="<%= recents_posts._id %>">
                                         <div class="row mb-3">
                                             <div class="col-md-11 mb-3">
-                                                <select id="recent_posts" class="form-select" multiple name="recent_posts" style="height: 200px;"
+                                                <select id="recent_posts" class="form-control select2bs4" multiple
+                                                    name="recent_posts" style="width: 100%;"
                                                     aria-label="multiple select example">
                                                     <% posts.forEach((post,i)=> { %>
-                                                        <% if (recents_posts.posts_id.includes(post._id)) { %>
-                                                            <option selected value="<%= post._id %>">
-                                                                <%= post.title %>
-                                                            </option>
-                                                        <% } else { %>
-                                                            <option value="<%= post._id %>">    
-                                                                <%= post.title %>
-                                                            </option>
-                                                        <% }  %>
-                                                    <% }) %>
+                                                        <option selected value="<%= post._id %>"
+                                                            <%=recents_posts.posts_id.includes(post._id) ? 'selected'
+                                                            :'' %>
+                                                            >
+                                                            <%= post.title %>
+                                                        </option>
+                                                        <% }) %>
                                                 </select>
                                             </div>
                                             <div class="col-md-6">
                                                 <button type="submit" class="btn btn-success bg-gradient">
-                                                    Submit
+                                                    <i class="bi bi-pencil-square"></i>
+                                                    update
                                                 </button>
                                             </div>
                                         </div>

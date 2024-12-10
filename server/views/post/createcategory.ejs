@@ -51,13 +51,23 @@
                                             <p class="mb-0 mt-2"> File size must be less than 1MB!</p>
                                         </div>
                                         <div class="col-12">
-                                            <label for="textInput" class="form-label">Category</label>
+                                            <label for="textInput" class="form-label">Title</label>
                                             <input type="text" name="category_name" class="form-control" id="textInput"
-                                                required>
+                                                placeholder="Enter Title" required>
                                         </div>
                                         <div class="col-12">
                                             <label for="slug" class="form-label">Slug</label>
-                                            <input type="text" class="form-control" id="slug" required>
+                                            <input type="text" class="form-control" id="slug" placeholder="Enter Slug"
+                                                required>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="form-group d-flex flex-column">
+                                                <label for="status" class="form-label">Status</label>
+                                                <label class="switch">
+                                                    <input type="checkbox" id="status" class="status" checked>
+                                                    <span class="slider"></span>
+                                                </label>
+                                            </div>
                                         </div>
                                         <%- include('../partials/alert') %>
                                             <div class="d-flex gap-2 align-items-center justify-content-center">

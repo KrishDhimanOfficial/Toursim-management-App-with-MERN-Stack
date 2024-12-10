@@ -56,8 +56,8 @@ const BookTour = ({ singletour }) => {
                     <input
                         onChange={(e) => {
                             setseats(() => {
-                                if (e.target.value < 0) {
-                                    return 0
+                                if (e.target.value < 1) {
+                                    return 1
                                 } else if (e.target.value > singletour.tour?.total_Seats - singletour.bookedSeats) {
                                     return singletour.tour?.total_Seats - singletour.bookedSeats
                                 } else {

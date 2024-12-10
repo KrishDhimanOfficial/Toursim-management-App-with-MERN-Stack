@@ -86,7 +86,7 @@
                                                                         <i class="bi bi-pen"></i>
                                                                         Edit
                                                                     </a>
-                                                                    <% if (!location._id.equals(tours[i]?.product_location_id)){ %>
+                                                                    <% if (!locationSet.has(location._id.toString())){ %>
                                                                         <button type="button"
                                                                             data-id="<%= location._id %>"
                                                                             data-bs-toggle="modal"

@@ -20,7 +20,8 @@ const categorycontrollers = {
             } else {
                 const data = await tourCategoryModel.create({
                     featured_image: req.file.filename,
-                    category_name: req.body.category_name
+                    category_name: req.body.category_name,
+                    status: req.body.status
                 })
                 if (!data) {
                     await deleteImage(`tour_category_images/${req.file.filename}`)
@@ -36,9 +37,11 @@ const categorycontrollers = {
     renderTourCategories: async (req, res) => {
         try {
             const categories = await tourCategoryModel.find({})
-            const tours = await tourModel.find({}, { product_category_id: 1 })
+            const tours = await tourModel.find({}, { product_category_id: 1, _id: 0 })
+            const categorySet = new Set()
+            tours.forEach(category => categorySet.add(category.product_category_id.toString()))
             return res.render('product/category', {
-                categories, tours,
+                categories, categorySet,
                 tour_category_img_url: config.server_tour_category_img_url
             })
         } catch (error) {
@@ -67,6 +70,7 @@ const categorycontrollers = {
                 {
                     featured_image: req.file?.filename,
                     category_name: req.body.category_name,
+                    status: req.body.status
                 },
                 { new: true }
             )
@@ -106,9 +110,11 @@ const categorycontrollers = {
         try {
             const posts = await postModel.find({}, { post_category_id: 1, _id: 0 })
             const categories = await postcategoryModel.find({})
+            const postCategorySet = new Set()
+            posts.forEach(category => postCategorySet.add(category.post_category_id.toString()))
             return res.render('post/categories', {
+                postCategorySet,
                 categories,
-                posts,
                 post_category_img_url: config.server_post_category_img_url
             })
         } catch (error) {
@@ -130,17 +136,23 @@ const categorycontrollers = {
         try {
             if (!req.file) return res.status(400).json({ error: 'Please upload a image' })
 
-            const postCategoryExists = await postcategoryModel.findOne(
-                { category_name: { $regex: `^${req.body.category_name}$`, $options: 'i' } }
-            )
+            // check category is exists
+            const postCategoryExists = await postcategoryModel.findOne({
+                category_name: {
+                    $regex: `^${req.body.category_name}$`,
+                    $options: 'i'
+                }
+            })
+
+            const { category_name, status, slug } = req.body;
+
             if (postCategoryExists) {
                 await deleteImage(`post_category_images/${req.file.filename}`)
                 return res.status(200).json({ idlemessage: 'value Exists' });
             } else {
                 const data = await postcategoryModel.create({
                     featured_image: req.file.filename,
-                    category_name: req.body.category_name,
-                    slug: req.body.slug
+                    status, category_name, slug
                 })
                 if (!data) {
                     await deleteImage(`post_category_images/${req.file.filename}`)
@@ -164,14 +176,15 @@ const categorycontrollers = {
     updatePostCategory: async (req, res) => {
         try {
             const image = req.file?.filename;
+            const { category_name, slug, status } = req.body;
+
             const previousimg = await postcategoryModel.findOne({ _id: req.params.id })
             if (image) deleteImage(`post_category_images/${previousimg.featured_image}`)
             const data = await postcategoryModel.findByIdAndUpdate(
                 { _id: req.params.id },
                 {
                     featured_image: req.file?.filename,
-                    category_name: req.body.category_name,
-                    slug: req.body.slug
+                    category_name, slug, status
                 },
                 { new: true }
             )

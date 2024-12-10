@@ -55,9 +55,11 @@ const productControllers = {
     renderToursLocations: async (req, res) => {
         try {
             const tour_locations = await tourLocationModel.find({})
-            const tours = await tourModel.find({}, { product_location_id: 1 })
+            const tours = await tourModel.find({}, { product_location_id: 1, _id: 0 })
+            const locationSet = new Set()
+            tours.forEach(location => locationSet.add(location.product_location_id.toString()))
             return res.render('product/tour_location', {
-                tour_locations, tours,
+                tour_locations, locationSet,
                 tour_location_img_url: config.server_tour_location_img_url
             })
         } catch (error) {
@@ -87,7 +89,8 @@ const productControllers = {
             } else {
                 const data = await tourLocationModel.create({
                     featured_img: req.file.filename,
-                    location_name: req.body.location_name
+                    location_name: req.body.location_name,
+                    status: req.body.status
                 })
                 if (!data) {
                     await deleteImage(`tour_location_images/${req.file.filename}`)
@@ -111,6 +114,7 @@ const productControllers = {
                 {
                     featured_img: req.file?.filename,
                     location_name: req.body.location_name,
+                    status: req.body.status
                 },
                 { new: true }
             )

@@ -51,7 +51,7 @@
                                             <p class="mb-0 mt-2"> File size must be less than 1MB!</p>
                                         </div>
                                         <div class="col-12">
-                                            <label for="textInput" class="form-label">Category</label>
+                                            <label for="textInput" class="form-label">Title</label>
                                             <input type="text" name="category_name" class="form-control" id="textInput"
                                                 value="<%= category.category_name %>" required>
                                         </div>
@@ -60,11 +60,23 @@
                                             <input type="text" class="form-control" id="slug"
                                                 value="<%= category.slug %>" required>
                                         </div>
+                                        <div class="col-12">
+                                            <div class="form-group d-flex flex-column">
+                                                <label for="status" class="form-label">Status</label>
+                                                <label class="switch">
+                                                    <input type="checkbox" id="status" class="status"
+                                                        <%=category.status ? 'checked' : '' %>>
+                                                    <span class="slider"></span>
+                                                </label>
+                                            </div>
+                                        </div>
                                         <%- include('../partials/alert') %>
                                             <div class="d-flex gap-2 align-items-center justify-content-center">
                                                 <%- include('../partials/formLoader') %>
-                                                    <button type="submit"
-                                                        class="btn btn-primary submitbtn">Submit</button>
+                                                    <button type="submit" class="border-0 rounded px-3 py-2 bg-blue text-white submitbtn">
+                                                        <i class="bi bi-pencil-square"></i>
+                                                        update
+                                                    </button>
                                             </div>
                                     </form>
                                 </div>
@@ -76,8 +88,8 @@
                                     <div class="d-flex flex-column p-3">
                                         <label for="preview_featured_img" class="form-label fw-bold mx-auto"> Preview
                                             Image</label>
-                                        <img src="<%= post_category_img_url %>/<%= category.featured_image %>" id="preview_featured_img"
-                                            style="height: 400px;" alt="upload_area_img"
+                                        <img src="<%= post_category_img_url %>/<%= category.featured_image %>"
+                                            id="preview_featured_img" style="height: 400px;" alt="upload_area_img"
                                             class="img-fluid object-fit-contain">
                                     </div>
                                 </div>
@@ -96,9 +108,7 @@
                     <i class="bi bi-arrow-up-short"></i>
                 </a>
                 <%- include('../partials/script') %>
-                    <script>
-                        const EndURL = 'api/posts/category'; 
-                    </script>
+                    <script> const EndURL = 'api/posts/category'; </script>
                     <script async src="/assets/js/index.js" type="module"></script>
 </body>
 

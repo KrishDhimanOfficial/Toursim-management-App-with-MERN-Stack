@@ -42,6 +42,7 @@
                             <div class="card">
                                 <div class="card-body">
                                     <h5 class="card-title">Tour Location</h5>
+                                     <!-- Form Start -->
                                     <form id="submitForm" class="row g-3" enctype="multipart/form-data">
                                         <input type="hidden" id="updateID">
                                         <div class="col-12">
@@ -52,14 +53,17 @@
                                         <div class="col-12">
                                             <label for="textInput" class="form-label">Location</label>
                                             <input type="text" name="location_name" class="form-control" id="textInput"
+                                            placeholder="Enter Location"
                                                 required>
                                         </div>
-                                        <div class="col-12">
-                                            <label for="status" class="form-label">Status</label>
-                                            <select name="status" id="status" class="form-control">
-                                                <option value="true">Active</option>
-                                                <option value="false">Inactive</option>
-                                            </select>
+                                        <div class="col-12 mb-2">
+                                            <div class="form-group d-flex flex-column">
+                                                <label for="status" class="form-label">Status</label>
+                                                <label class="switch">
+                                                    <input type="checkbox" id="status" class="status" checked>
+                                                    <span class="slider"></span>
+                                                </label>
+                                            </div>
                                         </div>
                                         <%- include('../partials/alert') %>
                                             <div class="d-flex gap-2 align-items-center justify-content-center">
@@ -69,6 +73,7 @@
                                                     <button type="reset" class="btn btn-secondary reset">Reset</button>
                                             </div>
                                     </form>
+                                     <!-- Form End -->
                                 </div>
                             </div>
                         </div>

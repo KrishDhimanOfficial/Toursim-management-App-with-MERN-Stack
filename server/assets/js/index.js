@@ -21,6 +21,7 @@ const tagscontainer = document.querySelector('.tourTags')
 const tourInculdedContainer = document.querySelector('#tourIncludedTags')
 const tourExculdedContainer = document.querySelector('#tourExcludedTags')
 const pCategorySlug = document.querySelector('#slug')
+const status = document.querySelector('#status')
 
 //  preview image on screen
 if (Input_img) Input_img.onchange = (e) => { displayPreviewImage(e) }
@@ -78,26 +79,35 @@ if (ResetForm) ResetForm.onclick = () => {
 // Handle Form POST and PUT Operation
 if (Formbtn) Formbtn.onsubmit = async (e) => {
     e.preventDefault()
+
     const method = Formbtn.id === 'submitForm' ? 'POST' : 'PUT';
     const url = Formbtn.id === 'submitForm' ? `${server_url}/${EndURL}` : `${server_url}/${EndURL}/${dataID.value}`;
     const formData = new FormData(e.target)
 
-    if (EndURL === 'api/posts/category') {
+    if (EndURL === 'api/posts/category') {     // post category
         formData.append('slug', createSlug(`${pCategorySlug.value}`))
+        formData.append('status', status.checked)
     }
-    // Create Post
-    if (EndURL === 'api/post') {
+    if (EndURL === 'api/post') {  // Create Post
         formData.append('post_slug', createSlug(`${slug.value}`))
         formData.append('description', description.getHTML())
+        formData.append('status', status.checked)
     }
-    // Create Tour
-    if (EndURL === 'api/tour') {
+    if (EndURL === 'api/tour') {  // Create Tour
         formData.append('product_excluded', excludedTagsArray)
         formData.append('product_included', includedTagsArray)
         formData.append('slug', createSlug(`${slug.value}`))
         formData.append('description', description.getHTML())
         formData.append('travelling_plan', travellingPlan.getHTML())
+        formData.append('status', status.checked)
     }
+    if (EndURL === 'api/tour/category') { // Create Tour category
+        formData.append('status', status.checked)
+    }
+    if (EndURL === 'api/tour/location') { // Create Tour location
+        formData.append('status', status.checked)
+    }
+
     const response = await sendDataToServer(url, method, formData)
     if (response && Formbtn.id === 'updateFormData') window.location.reload()
 }
@@ -166,6 +176,8 @@ const role = document.querySelector('#profile span')
 const Name = document.querySelector('#profile h6')
 const adminName = document.querySelector('#adminName')
 const copyright = document.querySelector('.copyright')
+const companyName = document.querySelector('#companyName')
+const companylogo = document.querySelector('#companylogo')
 
     ; (async () => {
         const api = await fetch(`${server_url}/get/admin/details`, { method: 'GET' })
@@ -175,6 +187,7 @@ const copyright = document.querySelector('.copyright')
         adminName.innerHTML = response.admin.name
         companyName.innerHTML = response.general_setting.company_name
         copyright.innerHTML = response.general_setting.company_copyright
+        companylogo.src = `${response.logo_img_url}/${response.general_setting.logo}`
     }
     )() //IIFE
 

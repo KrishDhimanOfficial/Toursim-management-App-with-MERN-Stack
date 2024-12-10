@@ -29,7 +29,7 @@
                     <nav>
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="/admin/dashboard">Home</a></li>
-                            <li class="breadcrumb-item"><a href="/admin/create/tour">Tour</a></li>
+                            <li class="breadcrumb-item"><a href="/admin/tour">Tour</a></li>
                             <li class="breadcrumb-item">Create</li>
                         </ol>
                     </nav>
@@ -42,6 +42,7 @@
                             <div class="card">
                                 <div class="card-body">
                                     <h5 class="card-title">Tour</h5>
+                                     <!-- Form Start -->
                                     <form id="submitForm" class="row g-3" enctype="multipart/form-data">
                                         <input type="hidden" id="updateID">
                                         <div class="row">
@@ -54,7 +55,7 @@
                                                 <div class="col-12 mb-2">
                                                     <label for="slug" class="form-label">Slug</label>
                                                     <input type="text" name="slug" class="form-control" id="slug"
-                                                        required>
+                                                        autocomplete="off" required>
                                                 </div>
                                                 <div class="col-12 mb-2">
                                                     <label for="product_category_id" class="form-label">Category</label>
@@ -132,25 +133,24 @@
                                                         class="form-control" required>
                                                 </div>
                                                 <div class="col-md-3">
-                                                    <label for="status" class="col-form-label">Status</label>
-                                                    <select id="status" class="form-select" name="status"
-                                                        aria-label="Default select example" required>
-                                                        <option selected value="true">Active</option>
-                                                        <option value="false">Disabled</option>
-                                                    </select>
-                                                </div>
-                                                <div class="col-md-3">
                                                     <label for="price" class="col-form-label">Price Per
                                                         Person</label>
                                                     <input type="number" name="price" id="price" class="form-control"
-                                                        min="0" required>
+                                                        autocomplete="off" min="0" required>
                                                 </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-3">
+                                                <div class="col-md-2">
                                                     <label for="total_Seats" class="col-form-label">Total Seats</label>
                                                     <input type="number" name="total_Seats" id="total_Seats"
-                                                        class="form-control" min="0" required>
+                                                        autocomplete="off" class="form-control" min="0" required>
+                                                </div>
+                                                <div class="col-md-1">
+                                                    <div class="form-group d-flex flex-column">
+                                                        <label for="status" class="form-label">Status</label>
+                                                        <label class="switch">
+                                                            <input type="checkbox" id="status" class="status" checked>
+                                                            <span class="slider"></span>
+                                                        </label>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="row mt-2 tourTags">
@@ -196,10 +196,15 @@
                                         </div>
                                         <div class="d-flex gap-2 align-items-center justify-content-center">
                                             <%- include('../partials/formLoader') %>
-                                                <button type="submit" class="btn btn-primary submitbtn">Submit</button>
-                                                <button type="reset" class="btn btn-secondary reset">Reset</button>
+                                                <button type="submit" class="btn btn-primary submitbtn">
+                                                    Submit
+                                                </button>
+                                                <button type="reset" class="btn btn-secondary reset">
+                                                    Reset
+                                                </button>
                                         </div>
                                     </form>
+                                     <!-- Form End -->
                                 </div>
                             </div>
                         </div>

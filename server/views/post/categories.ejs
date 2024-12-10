@@ -89,7 +89,7 @@
                                                                         <i class="bi bi-pen"></i>
                                                                         Edit
                                                                     </a>
-                                                                    <% if (!category._id.equals(posts[i].post_category_id)) { %>
+                                                                    <% if (!postCategorySet.has(category._id.toString())) { %>
                                                                         <button type="button"
                                                                             data-id="<%= category._id %>"
                                                                             data-bs-toggle="modal"

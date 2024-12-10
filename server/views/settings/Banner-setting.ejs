@@ -75,10 +75,10 @@
                                                 <!-- Banner redirection link -->
                                                 <div class="form-group mb-3">
                                                     <label for="bannerlink">Banner Redirection Link</label>
-                                                    <select class="form-control" name="banner_link" id="bannerlink">
+                                                    <select class="form-control select2bs4" style="width: 100%;"
+                                                        name="banner_link" id="bannerlink">
                                                         <% tours.forEach(tour=> { %>
-                                                            <option <% tour._id==bannerSetting.banner_link ? 'selected'
-                                                                :'' %>
+                                                            <option <% tour._id==bannerSetting.banner_link ? 'selected' :'' %>
                                                                 value="<%= tour._id %>">
                                                                     <%= tour.title %>
                                                             </option>
@@ -90,8 +90,8 @@
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <button type="submit" class="btn btn-success bg-gradient submit">
-                                                    <i class="bi bi-upload"></i>
-                                                    Submit
+                                                    <i class="bi bi-pencil-square"></i>
+                                                    update
                                                 </button>
                                             </div>
                                         </div>

@@ -51,7 +51,7 @@ export const sendDataToServer = async (url, method, formData) => {
 
 // Function that's  Confirm Delete Request
 export const openModalToDeleteRequest = (e, url) => {
-    confirmDeletRequestBtn.onclick = () => { deleteDataRequestToServer(e, url) }
+    confirmDeletRequestBtn.onclick = () => deleteDataRequestToServer(e, url)
     return;
 }
 

@@ -1,8 +1,4 @@
-import {
-    hot_tours_model,
-    top_destination_model,
-    recent_post_model
-} from '../models/site_setting.model.js'
+import { hot_tours_model, top_destination_model, recent_post_model } from '../models/site_setting.model.js'
 import tourModel from '../models/product.model.js'
 import postModel from '../models/post.model.js'
 import userModel from '../models/authenticate.model.js'
@@ -16,8 +12,6 @@ import Razorpay from 'razorpay'
 import config from '../config/config.js'
 import { handleAggregatePagination } from '../services/handlepagination.js'
 import { getUser } from '../services/createToken.js'
-import mongoose from 'mongoose'
-const ObjectId = mongoose.Types.ObjectId;
 
 const siteControllers = {
     gethotTours: async (req, res) => {
@@ -25,41 +19,36 @@ const siteControllers = {
             const hottours = await hot_tours_model.aggregate([
                 {
                     $lookup: {
-                        from: 'tourplans', localField: 'tours_id',
-                        foreignField: 'product_location_id', as: 'tourplan'
+                        from: 'tourplans',
+                        localField: 'tours_id',
+                        foreignField: '_id',
+                        as: 'tourplan'
                     }
                 },
                 { $unwind: '$tourplan' },
                 {
                     $lookup: {
-                        from: 'tour-locations', localField: 'tours_id',
-                        foreignField: '_id', as: 'tour_location'
+                        from: 'tour-locations',
+                        localField: 'tourplan.product_location_id',
+                        foreignField: '_id',
+                        as: 'tour_location'
                     }
                 },
-                {
-                    $addFields: {
-                        location: {
-                            $filter: {
-                                input: '$tour_location',
-                                as: 'location',
-                                cond: { $eq: ['$$location._id', '$tourplan.product_location_id'] }
-                            }
-                        }
-                    }
-                },
-                { $unwind: '$location' },
+                { $unwind: '$tour_location' },
                 {
                     $match: {
                         $and: [
-                            { 'tourplan.status': true },
-                            { 'location.status': true }
+                            { 'tour_location.status': true },
+                            { 'tourplan.status': true }
                         ]
                     }
                 },
                 {
                     $project: {
-                        'tourplan.featured_image': 1, 'location.location_name': 1,
-                        'tourplan.slug': 1, 'tourplan.price': 1
+                        'tourplan.featured_image': 1,
+                        'tour_location.location_name': 1,
+                        'tourplan.slug': 1,
+                        'tourplan.price': 1
                     }
                 }
             ])
@@ -82,13 +71,12 @@ const siteControllers = {
                         as: 'destinations'
                     }
                 },
-                {
-                    $match: {
-                        'destinations.status': true
-                    }
-                }
+                { $match: { 'destinations.status': true } }
             ])
-            return res.status(200).json({ array: response[0].destinations, location_img_url: config.server_tour_location_img_url })
+            return res.status(200).json({
+                array: response[0].destinations,
+                location_img_url: config.server_tour_location_img_url
+            })
         } catch (error) {
             console.log('getDestionation : ' + error.message)
         }
@@ -378,10 +366,20 @@ const siteControllers = {
                     }
                 },
                 {
-                    $match: { 'post.status': true }
+                    $lookup: {
+                        from: 'postcategories',
+                        localField: 'post.post_category_id',
+                        foreignField: '_id',
+                        as: 'category'
+                    }
+                },
+                {
+                    $match: {
+                        'post.status': true,
+                        'category.status': true
+                    }
                 }
             ])
-            // console.log(response[0])
             return res.status(200).json({
                 array: response[0].post,
                 post_img_url: config.server_post_img_url

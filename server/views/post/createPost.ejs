@@ -49,12 +49,13 @@
                                                 <div class="col-12 mb-2">
                                                     <label for="title" class="form-label">Title</label>
                                                     <input type="text" name="title" class="form-control title"
-                                                        id="title" required>
+                                                        autocomplete="off" id="title" placeholder="Enter Title"
+                                                        required>
                                                 </div>
                                                 <div class="col-12 mb-2">
                                                     <label for="slug" class="form-label">Slug</label>
                                                     <input type="text" name="post_slug" class="form-control" id="slug"
-                                                        required>
+                                                        autocomplete="off" placeholder="Enter Slug" required>
                                                 </div>
                                                 <div class="col-12 mb-2">
                                                     <label for="postcategory" class="form-label">Category</label>
@@ -70,18 +71,19 @@
                                                     </select>
                                                 </div>
                                                 <div class="col-12 mb-2">
-                                                    <label for="status" class="form-label">Status</label>
-                                                    <select id="status" class="form-select" name="status"
-                                                        aria-label="Default select example" required>
-                                                        <option selected value="true">Active</option>
-                                                        <option value="false">Draft</option>
-                                                    </select>
-                                                </div>
-                                                <div class="col-12 mb-2">
                                                     <label for="Input_img" class="form-label">Image</label>
                                                     <input type="file" name="post_image" class="form-control mb-2"
                                                         id="Input_img">
                                                     <%- include('../partials/alert') %>
+                                                </div>
+                                                <div class="col-12 mb-2">
+                                                    <div class="form-group d-flex flex-column">
+                                                        <label for="status" class="form-label">Status</label>
+                                                        <label class="switch">
+                                                            <input type="checkbox" id="status" class="status" checked>
+                                                            <span class="slider"></span>
+                                                        </label>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="col-lg-6">
@@ -95,7 +97,7 @@
                                                 <div class="card">
                                                     <div class="card-body pt-3">
                                                         <h5 class="form-label">Description</h5>
-                                                        <div class="quill-editor-full" id="description">
+                                                        <div class="quill-editor-full" id="description" style="height: 300px;">
                                                         </div>
                                                     </div>
                                                 </div>

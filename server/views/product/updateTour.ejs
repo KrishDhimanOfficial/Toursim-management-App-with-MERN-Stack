@@ -42,6 +42,7 @@
                             <div class="card">
                                 <div class="card-body">
                                     <h5 class="card-title">Tour</h5>
+                                    <!-- Form Start -->
                                     <form id="updateFormData" class="row g-3" enctype="multipart/form-data">
                                         <input type="hidden" id="updateID" value="<%= tour._id %>">
                                         <div class="row">
@@ -65,8 +66,7 @@
                                                             <%= tour.category.category_name %>
                                                         </option>
                                                         <% tour_categories?.forEach(category=> { %>
-                                                            <% if (tour.category.category_name !=category.category_name)
-                                                                { %>
+                                                            <% if (tour.category.category_name !=category.category_name){ %>
                                                                 <option value="<%= category._id %>">
                                                                     <%= category.category_name %>
                                                                 </option>
@@ -83,8 +83,7 @@
                                                             <%= tour.location.location_name %>
                                                         </option>
                                                         <% tour_locations?.forEach(location=> { %>
-                                                            <% if (tour.location.location_name !=location.location_name)
-                                                                { %>
+                                                            <% if (tour.location.location_name !=location.location_name){ %>
                                                                 <option value="<%= location._id %>">
                                                                     <%= location.location_name %>
                                                                 </option>
@@ -154,31 +153,26 @@
                                                         required>
                                                 </div>
                                                 <div class="col-md-3">
-                                                    <label for="status" class="col-form-label">Status</label>
-                                                    <select id="status" class="form-select" name="status"
-                                                        aria-label="Default select example" required>
-                                                        <% if (tour.status) { %>
-                                                            <option selected value="true">Active</option>
-                                                            <option value="false">InActive</option>
-                                                            <% } else {%>
-                                                                <option value="true">Active</option>
-                                                                <option selected value="false">InActive</option>
-                                                                <% } %>
-                                                    </select>
-                                                </div>
-                                                <div class="col-md-3">
                                                     <label for="price" class="col-form-label">Price Per
                                                         Person</label>
                                                     <input type="number" name="price" id="price" class="form-control"
                                                         value="<%= tour.price %>" min="0" required>
                                                 </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-3">
+                                                <div class="col-md-2">
                                                     <label for="total_Seats" class="col-form-label">Total Seats</label>
                                                     <input type="number" name="total_Seats" id="total_Seats"
                                                         class="form-control" min="0" value="<%= tour.total_Seats %>"
                                                         required>
+                                                </div>
+                                                <div class="col-md-1">
+                                                    <div class="form-group d-flex flex-column">
+                                                        <label for="status" class="form-label">Status</label>
+                                                        <label class="switch">
+                                                            <input type="checkbox" id="status" class="status"
+                                                                <%=tour.status? 'checked' : '' %>>
+                                                            <span class="slider"></span>
+                                                        </label>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="row mt-2 tourTags">
@@ -242,9 +236,14 @@
                                         </div>
                                         <div class="d-flex gap-2 align-items-center justify-content-center">
                                             <%- include('../partials/formLoader') %>
-                                                <button type="submit" class="btn btn-primary submitbtn">Submit</button>
+                                                <button type="submit"
+                                                    class="border-0 rounded px-3 py-2 bg-blue text-white submitbtn">
+                                                    <i class="bi bi-pencil-square"></i>
+                                                    update
+                                                </button>
                                         </div>
                                     </form>
+                                    <!-- Form End -->
                                 </div>
                             </div>
                         </div>
@@ -254,74 +253,73 @@
 
             </main>
             <!-- End #main -->
-            <%console.log(tour.product_included); %>
-                <!-- ======= Footer ======= -->
-                <%- include('../partials/footer') %>
-                    <!-- End Footer -->
+            <!-- ======= Footer ======= -->
+            <%- include('../partials/footer') %>
+                <!-- End Footer -->
 
-                    <a href="#" class="back-to-top d-flex align-items-center justify-content-center">
-                        <i class="bi bi-arrow-up-short"></i>
-                    </a>
-                    <%- include('../partials/script') %>
-                        <script defer>
-                            const serverURL = 'http://localhost:8000/admin'
-                            let excludedTagsArray = '<%= tour.product_excluded %>'
-                            let includedTagsArray = '<%= tour.product_included %>'
-                            includedTagsArray = includedTagsArray.split(',')
-                            excludedTagsArray = excludedTagsArray.split(',')
+                <a href="#" class="back-to-top d-flex align-items-center justify-content-center">
+                    <i class="bi bi-arrow-up-short"></i>
+                </a>
+                <%- include('../partials/script') %>
+                    <script defer>
+                        const serverURL = 'http://localhost:8000/admin'
+                        let excludedTagsArray = '<%= tour.product_excluded %>'
+                        let includedTagsArray = '<%= tour.product_included %>'
+                        includedTagsArray = includedTagsArray.split(',')
+                        excludedTagsArray = excludedTagsArray.split(',')
 
 
-                            const EndURL = 'api/tour';
-                            const tourFeaturedImgINput = document.querySelector('#tourFeatured_img')
-                            const tourFeaturedImg = document.querySelector('#featured_image')
-                            const previewContainer = document.querySelector('#previewMultipleImage')
-                            const InputField = document.querySelector('#multipleImagesInput')
+                        const EndURL = 'api/tour';
+                        const tourFeaturedImgINput = document.querySelector('#tourFeatured_img')
+                        const tourFeaturedImg = document.querySelector('#featured_image')
+                        const previewContainer = document.querySelector('#previewMultipleImage')
+                        const InputField = document.querySelector('#multipleImagesInput')
 
-                            tourFeaturedImgINput.onchange = (e) => {
-                                const file = e.target.files[0]
-                                const reader = new FileReader()
-                                reader.onload = () => tourFeaturedImg.src = reader.result;
-                                reader.readAsDataURL(file)
+                        tourFeaturedImgINput.onchange = (e) => {
+                            const file = e.target.files[0]
+                            const reader = new FileReader()
+                            reader.onload = () => tourFeaturedImg.src = reader.result;
+                            reader.readAsDataURL(file)
+                        }
+                        window.onload = () => {
+                            const previewImages = previewContainer.childNodes.length - 1
+                            if (previewImages == 0) document.querySelector('#preview_featured_img').style.display = 'block';
+                        }
+                        previewContainer.onclick = async (e) => {
+                            const image = e.target.closest('.cross').dataset?.tourimage;
+                            const imageName = e.target.closest('.cross').dataset?.image;
+                            const previewImages = previewContainer.children.length - 1;
+
+                            clearField(e, imageName)
+
+                            if (previewImages == 0) {
+                                document.querySelector('#preview_featured_img').style.display = 'block';
+                                document.querySelector('#multipleImagesInput').value = ''
                             }
-                            window.onload = () => {
-                                const previewImages = previewContainer.childNodes.length - 1
-                                if (previewImages == 0) document.querySelector('#preview_featured_img').style.display = 'block';
-                            }
-                            previewContainer.onclick = async (e) => {
-                                const image = e.target.closest('.cross').dataset?.tourimage;
-                                const imageName = e.target.closest('.cross').dataset?.image;
-                                const previewImages = previewContainer.children.length - 1;
 
-                                clearField(e, imageName)
+                            const response = await fetch(`${serverURL}/api/tour/image/<%= tour._id %>`, {
+                                method: 'PUT',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ image: image })
+                            })
+                            const data = await response.json()
+                            if (data.message) e.target.closest('.imgbox').remove()
 
-                                if (previewImages == 0) {
-                                    document.querySelector('#preview_featured_img').style.display = 'block';
-                                    document.querySelector('#multipleImagesInput').value = ''
-                                }
+                        }
+                        function clearField(e, imageName) {
+                            const InputImageArray = Array.from(InputField.files)
+                            const updatedImages = InputImageArray.filter(image => image.name != imageName)
 
-                                const response = await fetch(`${serverURL}/api/tour/image/<%= tour._id %>`, {
-                                    method: 'PUT',
-                                    headers: { 'Content-Type': 'application/json' },
-                                    body: JSON.stringify({ image: image })
-                                })
-                                const data = await response.json()
-                                if (data.message) e.target.closest('.imgbox').remove()
+                            // // Create a new FileList
+                            const dataTransfer = new DataTransfer();
+                            updatedImages.forEach(file => dataTransfer.items.add(file))
 
-                            }
-                            function clearField(e, imageName) {
-                                const InputImageArray = Array.from(InputField.files)
-                                const updatedImages = InputImageArray.filter(image => image.name != imageName)
-
-                                // // Create a new FileList
-                                const dataTransfer = new DataTransfer();
-                                updatedImages.forEach(file => dataTransfer.items.add(file))
-
-                                // // Update the file input
-                                InputField.files = dataTransfer.files;
-                                e.target.closest('.imgbox').remove()
-                            }
-                        </script>
-                        <script async src="/assets/js/index.js" type="module"></script>
+                            // // Update the file input
+                            InputField.files = dataTransfer.files;
+                            e.target.closest('.imgbox').remove()
+                        }
+                    </script>
+                    <script async src="/assets/js/index.js" type="module"></script>
 </body>
 
 </html>

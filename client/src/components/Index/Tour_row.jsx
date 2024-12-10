@@ -5,7 +5,7 @@ import { Sec_Heading, Tour, NaviagteUser, ErrorBoundary } from '../componets'
 
 const Tour_row = () => {
     const [tours, setTopTours] = useState([])
-    console.log('Tour row Render');
+    console.log('Tour row Render')
 
     const fetchHotToursAPI = async () => {
         const response = await axios.get(`${config.server_url}/get/tours`)
@@ -24,7 +24,7 @@ const Tour_row = () => {
                             tours.hottours?.map((tour, i) => (
                                 <Tour
                                     key={i}
-                                    location={tour.location.location_name}
+                                    location={tour.tour_location.location_name}
                                     imgPath={`${tours.tour_img_url}/${tour.tourplan.featured_image}`}
                                     slug={`${tour.tourplan.slug}`}
                                     price={tour.tourplan.price}

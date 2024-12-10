@@ -79,9 +79,12 @@ const admincontrollers = {
     },
     adminDetails: async (req, res) => {
         try {
-            const general_setting = await general_settingModel.findOne({}, { company_name: 1, company_copyright: 1 })
+            const general_setting = await general_settingModel.findOne({}, { company_name: 1, company_copyright: 1, logo: 1 })
             const admin = await authenticateModel.findOne({ role: 'admin' }, { name: 1, role: 1 })
-            return res.json({ admin, general_setting })
+            return res.json({
+                admin, general_setting,
+                logo_img_url: config.server_company_logo_img_url
+            })
         } catch (error) {
             console.log('adminDetails : ' + error.message)
         }
@@ -124,13 +127,11 @@ const admincontrollers = {
     },
     renderSiteSetting: async (req, res) => {
         try {
-            const tours = await hot_tours_model.find({})
-            const destinations = await top_destination_model.find({})
-            const post = await recent_post_model.find({})
-            const locations = await tour_locationModel.find(
-                { status: true },
-                { location_name: 1, _id: 1 }
-            )
+            const tours = await hot_tours_model.find({}, { _id: 0 })
+            const destinations = await top_destination_model.find({}, { _id: 0 })
+            const post = await recent_post_model.find({}, { _id: 0 })
+            const locations = await tour_locationModel.find({ status: true }, { location_name: 1, _id: 1 })
+            const hottours = await tourModel.find({}, { title: 1, _id: 1 })
             const posts = await postModel.aggregate([
                 {
                     $lookup: {
@@ -138,11 +139,16 @@ const admincontrollers = {
                         foreignField: '_id', as: 'category'
                     }
                 },
-                { $match: { 'category.status': true } },
-                { $match: { status: true } },
+                {
+                    $match: {
+                        'category.status': true,
+                        status: true
+                    }
+                },
                 { $project: { title: 1 } }
             ])
             return res.render('settings/site-setting', {
+                hottours,
                 locations,
                 HotTours: tours[0],
                 top_destination: destinations[0],
@@ -252,7 +258,6 @@ const admincontrollers = {
                     }
                 }
             ])
-            // console.log(tour_bookings)
             return res.render('booking/bookings', {
                 tour_bookings,
                 tour_img_url: config.server_tour_img_url
@@ -280,7 +285,8 @@ const admincontrollers = {
             const response = await banner_setting_model.findByIdAndUpdate(
                 { _id: id },
                 {
-                    banner_link: new Object(banner_link), banner_subtitle, banner_title,
+                    banner_link: new Object(banner_link),
+                    banner_subtitle, banner_title,
                     banner_image: req.file?.filename
                 },
                 { new: true }
@@ -289,7 +295,7 @@ const admincontrollers = {
             if (!response) res.redirect('/admin/banner-settings')
             return res.redirect('/admin/banner-settings')
         } catch (error) {
-            deleteImage(`banner_image/${req.file?.filename}`)
+            await deleteImage(`banner_image/${req.file?.filename}`)
             console.log('setBannerSetting : ' + error.message)
         }
     }

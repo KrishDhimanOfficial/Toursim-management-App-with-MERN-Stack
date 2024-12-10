@@ -42,6 +42,7 @@
                             <div class="card">
                                 <div class="card-body">
                                     <h5 class="card-title">Tour Category</h5>
+                                    <!-- Form  Start -->
                                     <form id="updateFormData" class="row g-3" enctype="multipart/form-data">
                                         <input type="hidden" id="updateID" value="<%= category._id %>">
                                         <div class="col-12">
@@ -55,13 +56,26 @@
                                             <input type="text" name="category_name" class="form-control" id="textInput"
                                                 value="<%= category.category_name %>" required>
                                         </div>
+                                        <div class="col-12 mb-2">
+                                            <div class="form-group d-flex flex-column">
+                                                <label for="status" class="form-label">Status</label>
+                                                <label class="switch">
+                                                    <input type="checkbox" id="status" class="status" <%=category.status
+                                                        ? 'checked' :'' %> >
+                                                    <span class="slider"></span>
+                                                </label>
+                                            </div>
+                                        </div>
                                         <%- include('../partials/alert') %>
                                             <div class="d-flex gap-2 align-items-center justify-content-center">
                                                 <%- include('../partials/formLoader') %>
-                                                    <button type="submit"
-                                                        class="btn btn-primary submitbtn">Submit</button>
+                                                <button type="submit" class="border-0 rounded px-3 py-2 bg-blue text-white submitbtn">
+                                                    <i class="bi bi-pencil-square"></i>
+                                                    update
+                                                </button>
                                             </div>
                                     </form>
+                                      <!-- Form End -->
                                 </div>
                             </div>
                         </div>
