@@ -131,7 +131,7 @@
                                                     name="recent_posts" style="width: 100%;"
                                                     aria-label="multiple select example">
                                                     <% posts.forEach((post,i)=> { %>
-                                                        <option selected value="<%= post._id %>"
+                                                        <option value="<%= post._id %>"
                                                             <%=recents_posts.posts_id.includes(post._id) ? 'selected'
                                                             :'' %>
                                                             >

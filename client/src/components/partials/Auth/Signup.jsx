@@ -47,6 +47,7 @@ const Signup = () => {
                                 {...register('name', { pattern: /[a-z]/ })}
                                 type="text"
                                 className="input"
+                                autoComplete='off'
                                 placeholder="Enter your Name"
                                 required />
                         </div>
@@ -58,6 +59,7 @@ const Signup = () => {
                                 {...register('username')}
                                 type="text"
                                 className="input"
+                                autoComplete='off'
                                 placeholder="Enter your Username"
                                 required />
                         </div>
@@ -69,6 +71,7 @@ const Signup = () => {
                                 {...register('email', { pattern: /^[a-z0-9]+@gmail.com$/ })}
                                 type="email"
                                 className="input"
+                                autoComplete='off'
                                 placeholder="Enter your Email"
                                 required />
                         </div>
@@ -80,6 +83,7 @@ const Signup = () => {
                                 {...register('password')}
                                 type={password ? 'text' : 'password'}
                                 className="input"
+                                autoComplete='off'
                                 placeholder="Enter your Password"
                                 required />
                             <svg style={{ cursor: 'pointer' }}

@@ -97,6 +97,7 @@ const categorycontrollers = {
         try {
             const data = await tourCategoryModel.findOne({ _id: req.params.id })
             const response = await tourCategoryModel.findByIdAndDelete({ _id: req.params.id })
+            if (!response) return res.json({ error: 'failed' })
             if (response) {
                 deleteImage(`tour_category_images/${data.featured_image}`)
                 return res.status(200).json({ message: 'successfully deleted' })
@@ -211,6 +212,7 @@ const categorycontrollers = {
         try {
             const data = await postcategoryModel.findOne({ _id: req.params.id })
             const response = await postcategoryModel.findByIdAndDelete({ _id: req.params.id })
+            if (!response) return res.json({ error: 'failed' })
             if (response) {
                 await deleteImage(`post_category_images/${data.featured_image}`)
                 return res.status(200).json({ message: 'successfully deleted' })

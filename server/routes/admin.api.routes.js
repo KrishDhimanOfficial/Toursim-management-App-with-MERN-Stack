@@ -72,6 +72,7 @@ router.get('/post/comments', checkAdminIsLogged, postControllers.renderPostComme
 router.route('/post/comment/:id?')
     .patch(postControllers.updateCommentStatus)
     .get(postControllers.renderSingleComment)
+    .delete(postControllers.deleteComment)
 
 // Render Routes For Tour
 router.get('/tour', checkAdminIsLogged, productControllers.renderTourPage)

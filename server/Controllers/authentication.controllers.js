@@ -79,7 +79,6 @@ const authenticateControllers = {
             if (!checkUser) return res.status(200).json({ error: 'User Not Found!' })
             // Find User With Email
             const isMatch = await bcrypt.compare(oldpassword, checkUser.password)
-            console.log(isMatch);
 
             if (!isMatch && checkUser.role == 'user') {
                 return res.status(200).json({ error: 'Check Input Fields' })

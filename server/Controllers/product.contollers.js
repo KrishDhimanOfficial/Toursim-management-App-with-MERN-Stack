@@ -141,6 +141,7 @@ const productControllers = {
         try {
             const data = await tourLocationModel.findOne({ _id: req.params.id })
             const response = await tourLocationModel.findByIdAndDelete({ _id: req.params.id })
+            if (!response) return res.json({ error: 'failed!' })
             if (response) {
                 deleteImage(`tour_location_images/${data.featured_img}`)
                 return res.status(200).json({ message: 'successfully deleted' })
@@ -368,12 +369,11 @@ const productControllers = {
             const response = await tourModel.findByIdAndDelete({ _id: req.params.id })
             if (data && response) {
                 deleteImage(`tour_images/${data.featured_image}`)
-                response.product_images.forEach(async (image) => {
-                    await deleteImage(`tour_images/${image}`)
-                })
+                response.product_images.forEach(async (image) => { await deleteImage(`tour_images/${image}`) })
+                
                 return res.status(200).json({ message: 'successfully deleted' })
             } else {
-                return res.status(204).json({ error: 'failed' })
+                return res.json({ error: 'failed' })
             }
         } catch (error) {
             console.log('deleteTour : ' + error.message)

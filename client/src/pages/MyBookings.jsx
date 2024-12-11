@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
 import { Link } from 'react-router-dom'
 import config from '../config/config'
+import { Pagination } from '../components/componets'
 
 const MyBookings = () => {
     console.log('MyBookings Render');
@@ -10,13 +11,11 @@ const MyBookings = () => {
     const naviagte = useNavigate()
     const [booking, setBooking] = useState({})
     const token = localStorage.getItem('token')
-    const apiURL = `${config.server_url}/bookings`;
-    const paginationURL = '/mybookings';
+    const apiURL = `${config.server_url}/bookings?page`;
+    const paginationURL = '/mybookings?page';
 
     const fetch = async () => {
-        const response = await axios.get(apiURL, {
-            headers: { 'authorization': `Bearer ${token}` }
-        })
+        const response = await axios.get(apiURL, { headers: { 'authorization': `Bearer ${token}` } })
         if (response) setBooking(response.data)
     }
     useEffect(() => {
@@ -27,7 +26,7 @@ const MyBookings = () => {
             <div className="container">
                 <div className="row">
                     <div className="col-md-5">
-                        <Link to='/forgot/password'>Reset Password</Link>
+                        <Link to='/reset/password'>Reset Password</Link>
                     </div>
                 </div>
                 <div className="row">
@@ -49,7 +48,7 @@ const MyBookings = () => {
                                 </thead>
                                 <tbody style={{ marginBottom: '20px' }}>
                                     {
-                                        booking.response?.collectionData?.map((tour, i) => (
+                                        booking.response?.map((tour, i) => (
                                             <tr key={i}>
                                                 <td className='p-0'>{tour._id}</td>
                                                 <td className='p-0'>{tour.tours.title}</td>
@@ -76,6 +75,18 @@ const MyBookings = () => {
                                     }
                                 </tbody>
                             </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div className="container">
+                <div className="row">
+                    <div className="col-12">
+                        <div className="text-center">
+                            <Pagination
+                                api={apiURL}
+                                paginateurl={paginationURL}
+                            />
                         </div>
                     </div>
                 </div>

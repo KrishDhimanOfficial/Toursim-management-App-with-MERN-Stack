@@ -48,6 +48,7 @@ const SinglePost = () => {
                                             <img
                                                 src={`${singlePostState.post_img_url}/${singlePostState.post?.post_image}`}
                                                 alt=""
+                                                loading='lazy'
                                                 style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
                                         </div>
                                         <div

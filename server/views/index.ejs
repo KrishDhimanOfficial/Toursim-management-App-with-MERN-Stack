@@ -31,10 +31,9 @@
 
                 <section class="section dashboard">
                     <div class="row">
-                        <!-- Left side columns -->
                         <div class="col-lg-8">
                             <div class="row">
-                                <!-- Sales Card -->
+                                <!-- Tours Card -->
                                 <div class="col-xxl-4 col-md-6">
                                     <div class="card info-card sales-card">
                                         <div class="card-body">
@@ -43,7 +42,7 @@
                                             <div class="d-flex align-items-center">
                                                 <div
                                                     class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                                    <i class="bi bi-cart"></i>
+                                                    <i class="bi bi-airplane"></i>
                                                 </div>
                                                 <div class="ps-3">
                                                     <h6>
@@ -53,11 +52,52 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div><!-- End Sales Card -->
+                                </div>
+                                <!-- Tours Card -->
+                                <!-- Booking card -->
+                                <div class="col-xxl-4 col-md-6">
+                                    <div class="card info-card sales-card">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Booking </h5>
+
+                                            <div class="d-flex align-items-center">
+                                                <div
+                                                    class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                                    <i class="bi bi-cart"></i>
+                                                </div>
+                                                <div class="ps-3">
+                                                    <h6>
+                                                        <%= bookings.length %>
+                                                    </h6>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- End Booking card -->
+                                <!-- Posts card -->
+                                <div class="col-xxl-4 col-md-6">
+                                    <div class="card info-card sales-card">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Posts </h5>
+
+                                            <div class="d-flex align-items-center">
+                                                <div
+                                                    class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                                    <i class="bi bi-file-earmark-post"></i>
+                                                </div>
+                                                <div class="ps-3">
+                                                    <h6>
+                                                        <%= posts.length %>
+                                                    </h6>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- End Posts card -->
                             </div>
                         </div>
-                        <!-- End Left side columns -->
-
                     </div>
                 </section>
 
@@ -71,6 +111,7 @@
                     <i class="bi bi-arrow-up-short"></i>
                 </a>
                 <%- include('./partials/script') %>
+                    <script async src="/assets/js/index.js" type="module"></script>
 
 </body>
 

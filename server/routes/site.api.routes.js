@@ -1,7 +1,6 @@
 import express from 'express'
 import siteControllers from '../Controllers/site.controllers.js'
 import authenticateControllers from '../Controllers/authentication.controllers.js'
-import postContollers from '../Controllers/post.controllers.js'
 const router = express.Router()
 
 // Auth API's
@@ -16,7 +15,7 @@ router.get('/top/destination', siteControllers.getDestionation)
 router.get('/top/posts', siteControllers.getTopPosts)
 
 // Tour's Pages
-router.post('/search/result', siteControllers.searchTourPackages)
+router.get('/search', siteControllers.searchTourPackages)
 router.get('/all/tours', siteControllers.getAllTOurs)
 router.get('/tour/:tour_slug', siteControllers.getTourBySlug)
 router.get('/destination/:location', siteControllers.getToursBYLocation)

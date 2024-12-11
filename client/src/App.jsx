@@ -25,7 +25,7 @@ const routes = [
     element: <Signup />
   },
   {
-    path: '/forgot/password',
+    path: '/reset/password',
     element: <ForgotPassword />
   },
   {
@@ -37,15 +37,11 @@ const routes = [
         element: <Index />
       },
       {
-        path: '/posts',
-        element: <Posts />
-      },
-      {
         path: '/tours',
         element: <Tours />
       },
       {
-        path: '/search/packages',
+        path: '/search',
         element: <SearchedPackage />
       },
     ]
@@ -54,6 +50,10 @@ const routes = [
     path: '/',
     element: <Layout />,
     children: [
+      {
+        path: '/posts',
+        element: <Posts />
+      },
       {
         path: '/post/:post_slug',
         element: <SinglePost />
@@ -68,10 +68,7 @@ const routes = [
       },
       {
         path: '/checkout/:tour_slug',
-        element:
-          <ErrorBoundary>
-            <CheckOut />
-          </ErrorBoundary>
+        element: <ErrorBoundary> <CheckOut /> </ErrorBoundary>
       },
       {
         path: '/destination/:location',

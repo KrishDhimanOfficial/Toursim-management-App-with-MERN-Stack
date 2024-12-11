@@ -1,23 +1,19 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-const initialState = {
-    tours: {},
-    searchedPackages: JSON.parse(localStorage.getItem('searchPackages')) || []
-}
+const initialState = { tours: {} }
 
 const tourSlice = createSlice({
     name: 'tour',
     initialState,
     reducers: {
         alltours: (state, action) => {
-            return action.payload
+            return action.payload;
         },
-        searchedPackages: (state, action) => {
-            state.searchedPackages = action.payload
-            localStorage.setItem('searchPackages', JSON.stringify(action.payload))
+        bookings: (state, action) => {
+            return action.payload;
         }
     }
 })
 
-export const { alltours, searchedPackages } = tourSlice.actions;
+export const { alltours, bookings } = tourSlice.actions;
 export const tourreducer = tourSlice.reducer;

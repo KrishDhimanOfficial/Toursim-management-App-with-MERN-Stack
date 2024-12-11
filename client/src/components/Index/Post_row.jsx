@@ -27,7 +27,7 @@ const Post_row = () => {
                                         date={post.createdAt}
                                         slug={`/post/${post.post_slug}`}
                                         imgPath={`${posts.post_img_url}/${post.post_image}`}
-                                        commentLength={21}
+                                        commentLength={post.comment_count}
                                         description={post.description}
                                     />
                                 ))

@@ -16,7 +16,10 @@ const admincontrollers = {
     getAdminDashboard: async (req, res) => {
         try {
             const Toursdata = await tourModel.find({}, { _id: 1 })
-            return res.render('index', { Toursdata })
+            const bookings = await tour_booking_model.find({}, { _id: 1 })
+            const posts = await postModel.find({}, { _id: 1 })
+
+            return res.render('index', { Toursdata, bookings, posts })
         } catch (error) {
             console.log('getAdminDashboard : ' + error.message)
         }
@@ -110,13 +113,13 @@ const admincontrollers = {
             if (!response) return res.redirect('/admin/general-settings')
             return res.redirect('/admin/general-settings')
         } catch (error) {
-            deleteImage(`logo/${req.file?.filename}`)
+            await deleteImage(`logo/${req.file?.filename}`)
             console.log('setGeneralSetting : ' + error.message)
         }
     },
     renderGeneralSetting: async (req, res) => {
         try {
-            const generalSetting = await general_settingModel.find()
+            const generalSetting = await general_settingModel.find({})
             return res.render('settings/general-setting', {
                 setting: generalSetting[0],
                 logo_url: config.server_company_logo_img_url
@@ -127,11 +130,12 @@ const admincontrollers = {
     },
     renderSiteSetting: async (req, res) => {
         try {
-            const tours = await hot_tours_model.find({}, { _id: 0 })
-            const destinations = await top_destination_model.find({}, { _id: 0 })
-            const post = await recent_post_model.find({}, { _id: 0 })
+            const tours = await hot_tours_model.find({})
+            const destinations = await top_destination_model.find({})
+            const post = await recent_post_model.find({})
             const locations = await tour_locationModel.find({ status: true }, { location_name: 1, _id: 1 })
-            const hottours = await tourModel.find({}, { title: 1, _id: 1 })
+            const hottours = await tourModel.find({ status: true }, { title: 1, _id: 1 })
+
             const posts = await postModel.aggregate([
                 {
                     $lookup: {
@@ -147,6 +151,7 @@ const admincontrollers = {
                 },
                 { $project: { title: 1 } }
             ])
+
             return res.render('settings/site-setting', {
                 hottours,
                 locations,
@@ -161,12 +166,13 @@ const admincontrollers = {
     },
     setHotTours: async (req, res) => {
         try {
+            const { id, hottours } = req.body;
             const response = await hot_tours_model.findByIdAndUpdate(
-                { _id: req.body.id },
+                { _id: id },
                 {
-                    tours_id: Array.isArray(req.body.hottours)
-                        ? req.body.hottours.map(id => new Object(id))
-                        : [new Object(req.body.hottours)]
+                    tours_id: Array.isArray(hottours)
+                        ? hottours.map(id => new Object(id))
+                        : hottours ? [new Object(hottours)] : []
                 }
             )
             if (!response) return res.redirect('/admin/site-settings')
@@ -177,12 +183,13 @@ const admincontrollers = {
     },
     setDestinations: async (req, res) => {
         try {
+            const { id, destinations } = req.body;
             const response = await top_destination_model.findByIdAndUpdate(
-                { _id: req.body.id },
+                { _id: id },
                 {
-                    destinations_id: Array.isArray(req.body.destinations)
-                        ? req.body.destinations.map(id => new Object(id))
-                        : [new Object(req.body.destinations)]
+                    destinations_id: Array.isArray(destinations)
+                        ? destinations.map(id => new Object(id))
+                        : destinations ? [new Object(destinations)] : []
                 }
             )
             if (!response) return res.redirect('/admin/site-settings')
@@ -198,7 +205,7 @@ const admincontrollers = {
                 {
                     posts_id: Array.isArray(req.body.recent_posts)
                         ? req.body.recent_posts.map(id => new Object(id))
-                        : [new Object(req.body.recent_posts)]
+                        : req.body.recent_posts ? [new Object(req.body.recent_posts)] : []
                 }
             )
             if (!response) return res.redirect('/admin/site-settings')

@@ -83,8 +83,8 @@ const siteControllers = {
     },
     searchTourPackages: async (req, res) => {
         try {
-            const { location, dep_date, return_date } = req.body;
-            const response = await tourModel.aggregate([
+            const { loc, dep_date, re_date, page } = req.query;
+            const pipeline = [
                 {
                     $lookup: {
                         from: 'tour-locations',
@@ -99,7 +99,7 @@ const siteControllers = {
                 {
                     $match: {
                         'location.location_name': {
-                            $regex: `^${location}$`,
+                            $regex: `^${loc}$`,
                             $options: 'i'
                         },
                     }
@@ -134,7 +134,7 @@ const siteControllers = {
                             },
                             {
                                 return_date: {
-                                    $lte: return_date
+                                    $lte: re_date
                                 }
                             }
                         ]
@@ -148,7 +148,9 @@ const siteControllers = {
                         slug: 1
                     }
                 }
-            ])
+            ]
+            const response = await handleAggregatePagination(tourModel, pipeline, req.query)
+
             return res.status(200).json({
                 response,
                 tour_img_url: config.server_tour_img_url
@@ -378,6 +380,13 @@ const siteControllers = {
                         'post.status': true,
                         'category.status': true
                     }
+                },
+                {
+                    $project: {
+                        _id: 0, posts_id: 0,
+                        'category.featured_image': 0,
+                        'category.category_name': 0,
+                    }
                 }
             ])
             return res.status(200).json({
@@ -471,22 +480,20 @@ const siteControllers = {
     createPostComment: async (req, res) => {
         try {
             const { post_id, token, comment } = req.body;
-            if (!comment) return res.status(200).json({ error: 'Empty Field' })
-
             const user = await userModel.findById({ _id: getUser(token) }, { username: 1 })
             const prevComment = await postCommentModel.findOne({ post_id })
 
             // Check previous Comment match
-            if (prevComment.comment === comment) {
-                return res.status(200).json({ message: 'Your Comment Has Been Send Approval!' })
+            if (prevComment?.comment === comment) {
+                return res.json({ message: 'Your Comment Has Been Under Approval!' })
             } else {
                 const response = await postCommentModel.create({
                     username: user.username,
                     post_id: new Object(post_id),
                     comment
                 })
-                if (!response) res.status(200).json({ error: 'Failed' })
-                return res.status(200).json({ message: 'Your Comment Has Been Under Approval!' })
+                if (!response) res.json({ error: 'Failed' })
+                return res.json({ message: 'Your Comment Has Been Under Approval!' })
             }
         } catch (error) {
             console.log('createPostComment : ' + error.message)
@@ -508,7 +515,7 @@ const siteControllers = {
             console.log('repliesComment : ' + error.message)
         }
     },
-    // Orders API's
+    // Bokking API's
     createBooking: async (req, res) => {
         try {
             const razorpay = new Razorpay(
@@ -579,7 +586,8 @@ const siteControllers = {
         try {
             const token = req.headers['authorization'].split(' ')[1]
             const user = await userModel.findById({ _id: getUser(token) })
-            const pipeline = [
+
+            const response = await tour_booking_model.aggregate([
                 {
                     $match: { userId: user._id }
                 },
@@ -619,8 +627,8 @@ const siteControllers = {
                         'location.location_name': 1
                     }
                 }
-            ]
-            const response = await handleAggregatePagination(tour_booking_model, pipeline, req.query)
+            ])
+            // const response = await handleAggregatePagination(tour_booking_model, pipeline, req.query)
             return res.status(200).json({ response })
         } catch (error) {
             console.log('getUserTourBooking : ' + error.message)

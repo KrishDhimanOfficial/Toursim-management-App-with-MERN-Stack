@@ -9,8 +9,8 @@ import config from '../config/config'
 const Tours = () => {
     const dispatch = useDispatch()
     const toursState = useSelector(state => state.tours)
-    const apiURL = `${config.server_url}/all/tours`;
-    const paginationURL = '/tours';
+    const apiURL = `${config.server_url}/all/tours?page`;
+    const paginationURL = '/tours?page';
 
     const fetchTours = async () => {
         const response = await axios.get(apiURL)
@@ -44,7 +44,10 @@ const Tours = () => {
                     <div className="col-12">
                         <div className="text-center">
                             <ErrorBoundary >
-                                <Pagination url={apiURL} paginateurl={paginationURL} />
+                                <Pagination
+                                    api={apiURL}
+                                    paginateurl={paginationURL}
+                                />
                             </ErrorBoundary>
                         </div>
                     </div>

@@ -2,13 +2,8 @@ import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Button, Input } from '../componets'
 import { useForm, useController } from 'react-hook-form'
-import { useDispatch } from 'react-redux'
-import { searchedPackages } from '../../features/tour.slice'
-import axios from 'axios'
-import config from '../../config/config'
 
 const SearchForm = () => {
-    const dispatch = useDispatch()
     const navigate = useNavigate()
     const { control, handleSubmit } = useForm()
 
@@ -16,15 +11,9 @@ const SearchForm = () => {
     const { field: depDateField } = useController({ name: 'dep_date', control })
     const { field: returnDateField } = useController({ name: 'return_date', control })
 
-    const searchPackage = async (data) => {
+    const searchPackage = async () => {
         localStorage.removeItem('searchPackages')  // This Will remove the prevoius search Packages
-
-        const response = await axios.post(`${config.server_url}/search/result`, data)
-
-        if (response && response.status == 200) {
-            dispatch(searchedPackages(response.data))
-            navigate('/search/packages')
-        }
+        navigate(`/search?loc=${locationField.value}&dep_date=${depDateField.value}&re_date=${returnDateField.value}`)
     }
 
     return (
@@ -85,7 +74,6 @@ const SearchForm = () => {
                                     type={'submit'}
                                     classes={'btn-block'}
                                     text={'Search Packages'}
-
                                 />
                             </div>
                         </div>

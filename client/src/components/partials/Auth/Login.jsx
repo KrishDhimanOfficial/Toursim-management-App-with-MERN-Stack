@@ -52,6 +52,7 @@ const Login = () => {
                                     required: true
                                 })}
                                 type="text"
+                                autoComplete='off'
                                 className="input"
                                 placeholder="Enter your Email"
                             />
@@ -66,6 +67,7 @@ const Login = () => {
                                 {...register('password', { required: true })}
                                 type={password ? 'text' : 'password'}
                                 className="input"
+                                autoComplete='off'
                                 placeholder="Enter your Password"
                             />
                             <svg viewBox="0 0 576 512"
@@ -76,9 +78,9 @@ const Login = () => {
 
                         <div className="flex-row">
                             <Link
-                                to='/forgot/password'
+                                to='/reset/password'
                                 className="span">
-                                Forgot password?
+                                Reset password?
                             </Link>
                         </div>
 

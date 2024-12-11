@@ -10,11 +10,8 @@ const LocationTours = () => {
     const { location } = useParams()
     const dispatch = useDispatch()
     const locationToursstate = useSelector(state => state.tours)
-    const apiURL = `${config.server_url}/destination/${location}`;
-    const paginationURL = `/destination/${location}`;
-
-    console.log(locationToursstate);
-
+    const apiURL = `${config.server_url}/destination/${location}?page`;
+    const paginationURL = `/destination/${location}?page`;
 
     const fetch = async () => {
         const response = await axios.get(apiURL)
@@ -52,7 +49,7 @@ const LocationTours = () => {
                     <div className="col-12">
                         <div className="text-center">
                             <ErrorBoundary>
-                                <Pagination url={apiURL} paginateurl={paginationURL} slug={location} />
+                                <Pagination api={apiURL} paginateurl={paginationURL} slug={location} />
                             </ErrorBoundary>
                         </div>
                     </div>

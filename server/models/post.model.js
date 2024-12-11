@@ -32,6 +32,11 @@ const postSchema = new mongoose.Schema({
         required: true,
         trim: true
     },
+    comment_count: {
+        type: mongoose.Schema.Types.Number,
+        required: true,
+        default: 0
+    },
     createdAt: {
         type: mongoose.Schema.Types.Date
     }

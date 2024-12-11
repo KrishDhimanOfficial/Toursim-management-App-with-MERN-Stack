@@ -10,8 +10,8 @@ const CategoryPosts = () => {
     const { category } = useParams()
     const dispatch = useDispatch()
     const categoryPosts = useSelector(state => state.posts)
-    const apiURL = `${config.server_url}/category/posts/${category}`;
-    const paginationURL = `/posts/${category}`;
+    const apiURL = `${config.server_url}/category/posts/${category}?page`;
+    const paginationURL = `/posts/${category}?page`;
 
     const fetchPosts = async () => {
         const response = await axios.get(apiURL)
@@ -24,7 +24,8 @@ const CategoryPosts = () => {
             <div className="container">
                 <Sec_Heading
                     heading={'Our Blogs'}
-                    description={'Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.'} />
+                    description={'Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.'}
+                />
             </div>
             <div className="container">
                 <div className="row row-bottom-padded-md">
@@ -35,7 +36,7 @@ const CategoryPosts = () => {
                                     key={i}
                                     title={category.post.title}
                                     date={category.post.createdAt}
-                                    commentLength={21}
+                                    commentLength={category.post.comment_count}
                                     slug={`/post/${category.post.post_slug}`}
                                     imgPath={`${categoryPosts.post_img_url}/${category.post.post_image}`}
                                     description={category.post.description}
@@ -50,7 +51,7 @@ const CategoryPosts = () => {
                     <div className="col-12">
                         <div className="text-center">
                             <Pagination
-                                url={apiURL}
+                                api={apiURL}
                                 paginateurl={paginationURL}
                                 slug={category}
                             />

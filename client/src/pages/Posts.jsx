@@ -7,10 +7,11 @@ import axios from 'axios'
 
 const Posts = () => {
     console.log('Post Page Render')
+
     const dispatch = useDispatch()
     const poststate = useSelector(state => state.posts)
-    const apiURL = `${config.server_url}/all/posts`;
-    const paginationURL = '/posts';
+    const apiURL = `${config.server_url}/all/posts?page`;
+    const paginationURL = '/posts?page';
 
 
     const fetchPosts = async () => {
@@ -34,7 +35,7 @@ const Posts = () => {
                                     key={i}
                                     title={post.title}
                                     date={post.createdAt}
-                                    commentLength={21}
+                                    commentLength={post.comment_count}
                                     slug={`/post/${post.post_slug}`}
                                     imgPath={`${poststate.post_img_url}/${post.post_image}`}
                                     description={post.description}
@@ -48,7 +49,10 @@ const Posts = () => {
                 <div className="row">
                     <div className="col-12">
                         <div className="text-center">
-                            <Pagination url={apiURL} paginateurl={paginationURL} />
+                            <Pagination
+                                api={apiURL}
+                                paginateurl={paginationURL}
+                            />
                         </div>
                     </div>
                 </div>

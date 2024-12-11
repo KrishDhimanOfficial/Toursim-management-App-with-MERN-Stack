@@ -70,8 +70,8 @@ const postControllers = {
             const previewImg = await postModel.findById({ _id: req.params.id })
             if (previewImg) await deleteImage(`post_images/${previewImg.post_image}`)
 
-            const data = await postModel.findByIdAndDelete({ _id: req.params.id })
-            if (!data) return res.status(204).json({ error: 'failed' })
+            const response = await postModel.findByIdAndDelete({ _id: req.params.id })
+            if (!response) return res.json({ error: 'failed' })
             return res.status(200).json({ message: 'successfully deleted' })
         } catch (error) {
             console.log('deletePost : ' + error.message)
@@ -190,6 +190,22 @@ const postControllers = {
                 { status: req.body.status },
                 { new: true }
             )
+
+            // update post comment
+            if (req.body.status) {
+                await postModel.findByIdAndUpdate(
+                    { _id: response.post_id },
+                    { $inc: { comment_count: 1 } },
+                    { new: true }
+                )
+            } else {
+                await postModel.findByIdAndUpdate(
+                    { _id: response.post_id },
+                    { $inc: { comment_count: -1 } },
+                    { new: true }
+                )
+            }
+
             if (!response) return res.status(204).json({ message: false })
             return res.status(200).json({ message: true })
         } catch (error) {
@@ -202,6 +218,25 @@ const postControllers = {
             return res.render('post/ViewSingleComment', { comment })
         } catch (error) {
             console.log('renderSingleComment : ' + error.message)
+        }
+    },
+    deleteComment: async (req, res) => {
+        try {
+            const response = await postCommentModel.findByIdAndDelete({ _id: req.params.id })
+
+            if (!response) {
+                return res.status(200).json({ error: false })
+            } else {
+                const post = await postModel.findById({ _id: response.post_id }, { comment_count: 1 })
+                if (post.comment_count > 0) await postModel.findByIdAndUpdate(
+                    { _id: response.post_id },
+                    { $inc: { comment_count: -1 } },
+                    { new: true }
+                )
+                return res.status(200).json({ message: true })
+            }
+        } catch (error) {
+            console.log('deleteComment : ' + error.message)
         }
     }
 }
