@@ -47,7 +47,17 @@ const SingleTourSection = ({ singletour }) => {
             <div style={{ margin: '3rem 0' }}>
                 <h2 style={{ marginBottom: '10px', color: '#000' }} className='font-semibold'>Included</h2>
                 <div style={{ width: '100%', height: '1px', background: '#000' }}></div>
-                <ul style={{ fontSize: '1.8rem', listStyle: 'circle', fontWeight: 'lighter', marginBlock: '10px' }}>
+                <ul style={
+                    {
+                        display: 'flex',
+                        flexWrap: 'wrap',
+                        justifyContent: 'flex-start',
+                        gap: '0 30px',
+                        fontSize: '1.8rem',
+                        listStyle: 'circle',
+                        fontWeight: 'lighter',
+                        marginBlock: '10px'
+                    }}>
                     {
                         singletour.tour?.product_included.map((included, i) => (
                             <li key={i}>
@@ -60,7 +70,18 @@ const SingleTourSection = ({ singletour }) => {
             <div style={{ margin: '3rem 0' }}>
                 <h2 style={{ marginBottom: '10px', color: '#000' }} className='font-semibold'>Excluded</h2>
                 <div style={{ width: '100%', height: '1px', background: '#000' }}></div>
-                <ul style={{ listStyle: 'circle', fontSize: '1.8rem', fontWeight: 'lighter', marginBlock: '10px' }}>
+                <ul style={
+                    {
+                        display: 'flex',
+                        flexWrap: 'wrap',
+                        justifyContent: 'flex-start',
+                        gap: '0 30px',
+                        listStyle: 'circle',
+                        fontSize: '1.8rem',
+                        fontWeight: 'lighter',
+                        marginBlock: '10px'
+                    }
+                }>
                     {
                         singletour.tour?.product_excluded.map((included, i) => (
                             <li key={i}>
