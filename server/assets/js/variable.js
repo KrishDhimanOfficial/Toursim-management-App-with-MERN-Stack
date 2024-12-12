@@ -11,7 +11,6 @@ export const Loader = document.querySelector('#loader')
 export const FormLoader = document.querySelector('#formLoader')
 export const ErrorAlert = document.querySelector('#errorAlert')
 const confirmDeletRequestBtn = document.querySelector('.delete')
-const controller = new AbortController()
 
 export function createSlug(str) {
     return str.toLowerCase()
@@ -60,11 +59,7 @@ export const openModalToDeleteRequest = (e, url) => {
 // Function that handle delete request to server
 const deleteDataRequestToServer = async (e, url) => {
     try {
-        console.log(url);
-        const response = await fetch(url,
-            { method: 'DELETE' },
-            { signal: controller.signal }
-        )
+        const response = await fetch(url, { method: 'DELETE' })
         const data = await response.json()
         if (data.message) e.target.closest('.table-row').remove()
     } catch (error) {

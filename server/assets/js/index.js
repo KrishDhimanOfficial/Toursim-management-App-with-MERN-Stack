@@ -26,9 +26,8 @@ const status = document.querySelector('#status')
 //  preview image on screen
 if (Input_img) Input_img.onchange = (e) => { displayPreviewImage(e) }
 //  preview images on screen
-if (multipleImagesInput) multipleImagesInput.onchange = (e) => {
-    displayPreviewImages(e)
-}
+if (multipleImagesInput) multipleImagesInput.onchange = (e) => { displayPreviewImages(e) }
+
 // Clear Multiple Input Files
 if (Formbtn?.id === 'submitForm' && previewMultipleImage) {
     previewMultipleImage.onclick = (e) => clearInputFiles(e)
@@ -152,6 +151,7 @@ if (posts_table) posts_table.onclick = async (e) => {
     }
 }
 
+// Inject EventListener
 if (post_comment_table) post_comment_table.onclick = async (e) => {
     if (e.target.closest('.openModal')) {
         openModalToDeleteRequest(e, `${server_url}/${EndURL}/${e.target.dataset.id}`)

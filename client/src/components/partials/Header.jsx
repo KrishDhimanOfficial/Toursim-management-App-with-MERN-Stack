@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { NavLink, Link, useNavigate, useLocation } from 'react-router-dom'
 import { Button } from '../componets'
 import axios from 'axios'
+import { motion } from 'motion/react'
 import config from '../../config/config'
 
 
@@ -21,14 +22,20 @@ const Header = () => {
         localStorage.removeItem('token')
         navigate('/login')
     }
-    
+
     useEffect(() => {
         const token = localStorage.getItem('token')
         if (!token) settoken(false)
         fetch()
     }, [])
     return (
-        <header id="fh5co-header-section" className="sticky-banner">
+        <motion.header
+            id="fh5co-header-section"
+            className="sticky-banner"
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: 'linear', delay: 0.6 }}
+        >
             <div className="container">
                 <div className="nav-header">
                     <Link to='/' className="js-fh5co-nav-toggle fh5co-nav-toggle dark">
@@ -39,7 +46,8 @@ const Header = () => {
                             <img
                                 src={`${settings.logo_img_url}/${settings.siteSetting?.logo}`}
                                 alt=""
-                                style={{ width: '40px', height: '40px', marginRight: '10px' }} />
+                                style={{ width: '40px', height: '40px', marginRight: '10px' }}
+                            />
                             {settings.siteSetting?.company_name}
                         </Link>
                     </h1>
@@ -62,6 +70,7 @@ const Header = () => {
                                     ref={btnRef}
                                     fn={() => handleloginsystem()}
                                     type={'button'}
+                                    classes={'m-0'}
                                     text={
                                         token ? 'Logout' : 'Login'
                                     }
@@ -71,7 +80,7 @@ const Header = () => {
                     </nav>
                 </div>
             </div>
-        </header >
+        </motion.header >
     )
 }
 

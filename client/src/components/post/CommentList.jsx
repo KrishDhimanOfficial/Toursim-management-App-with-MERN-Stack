@@ -1,12 +1,12 @@
 import React, { useRef, useState } from 'react'
-import { Input } from '../componets'
+import { Button, Input } from '../componets'
 import axios from 'axios'
 import config from '../../config/config'
 import { useForm, useController } from 'react-hook-form'
 import { useNavigate } from 'react-router'
 import AlertMessage from '../../Hooks/AlertMessage'
 
-const CommentList = ({ username, comment, parent_id, post_id, replies, mL }) => {
+const CommentList = ({ username, comment, parent_id, post_id, replies, }) => {
     const inputRef = useRef()
     const naviagte = useNavigate()
     const { control, handleSubmit, reset } = useForm()
@@ -40,7 +40,7 @@ const CommentList = ({ username, comment, parent_id, post_id, replies, mL }) => 
     return (
         <>
             <div className="bg-white border border-gray-300 border-l-4 border-orange-600 p-4 mb-4"
-                style={{ margin: `1.5rem ${mL}rem` }}>
+                style={{ margin: `1.5rem ${2}rem` }}>
                 <div className='w-100'>
                     <p className="font-bold text-xl text-gray-900">
                         {username}
@@ -58,7 +58,8 @@ const CommentList = ({ username, comment, parent_id, post_id, replies, mL }) => 
                                 classs={'form-control w-100 '}
                                 placeholder={'write a reply...'}
                             />
-                            <button type='submit'
+                            <button
+                                type='submit'
                                 onClick={() => displayInput()}
                                 className="btn-reply ms-2">
                                 Reply
@@ -69,7 +70,6 @@ const CommentList = ({ username, comment, parent_id, post_id, replies, mL }) => 
                         replies?.map((reply, i) => (
                             (reply.parentId === parent_id &&
                                 <CommentList key={i}
-                                    mL={1 + i}
                                     post_id={post_id}
                                     parent_id={reply._id}
                                     username={reply.username}

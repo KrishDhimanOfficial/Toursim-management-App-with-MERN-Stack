@@ -30,7 +30,7 @@
                         <nav>
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="/admin/dashboard">Home</a></li>
-                                <li class="breadcrumb-item">Category</li>
+                                <li class="breadcrumb-item">Comments</li>
                             </ol>
                         </nav>
                     </div>
@@ -42,7 +42,7 @@
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="w-100 py-3 d-flex justify-content-between">
-                                            <h5 class="card-title p-0">All Category</h5>
+                                            <h5 class="card-title p-0">All comments</h5>
                                             <a href="/admin/create/category" class="btn btn-primary">Add New</a>
                                         </div>
                                         <table id="post-comment-table" class="table datatable">
@@ -64,7 +64,7 @@
                                                                 <%= i+1 %>
                                                             </th>
                                                             <td>
-                                                                <%= comment.post.title %>
+                                                                <%= comment.post?.title %>
                                                             </td>
                                                             <td>
                                                                 <%= comment.username %>
@@ -83,7 +83,7 @@
                                                             <td>
                                                                 <div class="d-flex gap-3">
                                                                     <a href='/admin/post/comment/<%= comment._id %>'
-                                                                        class="rounded px-3 py-2 bg-blue text-white">
+                                                                        class="btn rounded px-3 py-2 bg-blue text-white">
                                                                         <i class="bi bi-pen"></i>
                                                                         update
                                                                     </a>
