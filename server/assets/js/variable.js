@@ -1,4 +1,4 @@
-export const server_url = `http://localhost:8000/admin`;
+export const server_url = `https://travel-admin-h3wk.onrender.com/admin`;
 export const Formbtn = document.querySelector('#submitForm') || document.querySelector('#updateFormData')
 export const previewImg = document.querySelector('#preview_featured_img')
 export const Input_img = document.querySelector('#Input_img')
