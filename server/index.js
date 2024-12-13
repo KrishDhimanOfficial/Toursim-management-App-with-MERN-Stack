@@ -22,7 +22,7 @@ if (cluster.isPrimary) {
     // middlewares
     app.use(cors(
         {
-            origin: ['https://travelsite-three.vercel.app/'],
+            origin: ['https://travel-admin-h3wk.onrender.com/'],
             methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
             allowedHeaders: ['Content-Type', 'Authorization'],
             credentials: true,
