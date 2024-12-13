@@ -44,7 +44,7 @@ if (cluster.isPrimary) {
     app.use('/admin', adminRoutes)
     app.use('/*', (req, res) => res.render('404'))
 
-    app.listen(config, () => {
+    app.listen(config.port, () => {
         try {
             console.log(`Running on http://localhost:${config.port}`)
         } catch (error) {
