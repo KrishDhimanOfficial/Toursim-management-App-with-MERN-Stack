@@ -22,7 +22,7 @@ if (cluster.isPrimary) {
     // middlewares
     app.use(cors(
         {
-            origin: ['https://toursim-management-app-with-mern-stack.vercel.app'],
+            origin: ['https://toursim-management-app-with-mern-stack.vercel.app/'],
             methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
             allowedHeaders: ['Content-Type', 'Authorization'],
             credentials: true,
