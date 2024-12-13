@@ -22,7 +22,7 @@ if (cluster.isPrimary) {
     // middlewares
     app.use(cors(
         {
-            origin: ['https://travel-admin-h3wk.onrender.com'],
+            origin: ['https://travel-dzl4yuqvv-krishdhimanofficials-projects.vercel.app'],
             methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
             allowedHeaders: ['Content-Type', 'Authorization'],
             credentials: true,
