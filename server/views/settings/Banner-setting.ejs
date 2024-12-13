@@ -78,11 +78,13 @@
                                                     <select class="form-control select2bs4" style="width: 100%;"
                                                         name="banner_link" id="bannerlink">
                                                         <% tours.forEach(tour=> { %>
-                                                            <option <% tour._id==bannerSetting.banner_link ? 'selected' :'' %>
-                                                                value="<%= tour._id %>">
+                                                                <option value="<%= tour._id %>" <%=
+                                                                    tour._id.toString()===bannerSetting.banner_link.toString()
+                                                                    ? 'selected' : '' %>
+                                                                    >
                                                                     <%= tour.title %>
-                                                            </option>
-                                                            <% }) %>
+                                                                </option>
+                                                                <% }) %>
                                                     </select>
                                                 </div>
                                             </div>
