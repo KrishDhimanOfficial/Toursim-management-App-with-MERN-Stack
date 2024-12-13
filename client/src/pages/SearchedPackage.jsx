@@ -32,11 +32,11 @@ const SearchedPackage = () => {
                 />
                 <div className="row" style={{ display: 'flex', alignItems: 'stretch' }}>
                     {
-                        tours?.response?.length == 0
+                        tours.response && tours.response.length == 0
                             ? <div className="col-md-12 text-center">
                                 <h1>No Packages Available</h1>
                             </div>
-                            : tours.response?.collectionData?.map((tour, i) => (
+                            : tours.response && tours.response.collectionData?.map((tour, i) => (
                                 <Tour
                                     key={i}
                                     location={tour.location?.location_name}

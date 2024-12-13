@@ -30,7 +30,7 @@ const Posts = () => {
                 <div className="row row-bottom-padded-md">
                     <ErrorBoundary>
                         {
-                            poststate.response?.collectionData?.map((post, i) => (
+                            poststate.response && poststate.response.collectionData?.map((post, i) => (
                                 <Post
                                     key={i}
                                     title={post.title}

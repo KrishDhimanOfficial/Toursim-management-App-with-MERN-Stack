@@ -27,11 +27,11 @@ const LocationTours = () => {
                 <div className="row" style={{ display: 'flex', alignItems: 'stretch' }}>
                     <ErrorBoundary>
                         {
-                            locationToursstate.response?.collectionData.length == 0
+                            locationToursstate.response.collectionData.length == 0
                                 ? <h1 style={{ textAlign: 'center', width: '100%' }}>
                                     {location.toUpperCase()} Tours Unavailable
                                 </h1>
-                                : locationToursstate.response?.collectionData?.map((tour, i) => (
+                                : locationToursstate.response && locationToursstate.response.collectionData?.map((tour, i) => (
                                     <Tour
                                         key={i}
                                         location={location.toUpperCase()}

@@ -26,7 +26,7 @@ const Tours = () => {
                 <div className="row" style={{ display: 'flex', alignItems: 'stretch' }}>
                     <ErrorBoundary>
                         {
-                            toursState.response?.collectionData?.map((tour, i) => (
+                            toursState.response && toursState.response.collectionData?.map((tour, i) => (
                                 <Tour
                                     key={i}
                                     location={tour.location?.location_name}

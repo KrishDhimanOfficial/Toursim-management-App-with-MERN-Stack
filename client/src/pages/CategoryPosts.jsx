@@ -31,7 +31,7 @@ const CategoryPosts = () => {
                 <div className="row row-bottom-padded-md">
                     <ErrorBoundary>
                         {
-                            categoryPosts.response?.collectionData?.map((category, i) => (
+                            categoryPosts.response && categoryPosts.response.collectionData?.map((category, i) => (
                                 <Post
                                     key={i}
                                     title={category.post.title}
