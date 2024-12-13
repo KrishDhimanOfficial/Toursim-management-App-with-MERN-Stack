@@ -103,6 +103,7 @@ function App() {
       v7_normalizeFormMethod: true,
       v7_partialHydration: true,
       v7_skipActionStatusRevalidation: true,
+      v7_skipActionErrorRevalidation: true
     }
   })
   return <RouterProvider router={router} />
